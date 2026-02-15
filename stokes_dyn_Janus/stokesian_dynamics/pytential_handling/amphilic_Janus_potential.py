@@ -163,13 +163,11 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     from pytential.linalg.gmres import gmres
 
-    blockPrint()
     gmres_result = gmres(
             bound_op.scipy_op(actx, sigma_sym.name, dtype=np.complex128, k=k),
             bvp_rhs, tol=1e-8, progress=True,
             stall_iterations=0,
             hard_failure=True) # figure out gmres
-    enablePrint()
 
     print("gmres succeeded")
 

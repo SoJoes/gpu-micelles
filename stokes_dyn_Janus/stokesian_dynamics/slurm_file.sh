@@ -28,4 +28,4 @@ export PYOPENCL_CTX='0'
 pip list | grep -E "numpy|pytential|sumpy|pyopencl"
 
 # Run your script
-python3.11 -u run_simulation.py 11 10 1 2 fte
+python3.11 -O run_simulation.py 11 10 1 2 fte
