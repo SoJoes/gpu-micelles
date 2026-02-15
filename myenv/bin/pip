@@ -1,4 +1,4 @@
-#!/home/homeblue01/6/dbxl46/pytential_stokes/myenv/bin/python3
+#!/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
