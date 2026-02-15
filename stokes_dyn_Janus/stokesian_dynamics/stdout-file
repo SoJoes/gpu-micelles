@@ -1,0 +1,5 @@
+[<pyopencl.Platform 'NVIDIA CUDA' at 0x1b8d760>]
+numpy             1.26.4
+pyopencl          2026.1.2
+pytential         2024.0
+sumpy             2024.0
