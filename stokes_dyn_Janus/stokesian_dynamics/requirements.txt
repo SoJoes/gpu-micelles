@@ -28,7 +28,7 @@ pyopencl==2026.1.2
 -e git+https://github.com/inducer/pytential.git@899e233a4e7146ae12a731740410bbfbd7198580#egg=pytential
 pytest==7.4.4
 python-apt==0.0.0
-pyvisfile @ git+https://github.com/inducer/pyvisfile.git@e4fe73599dba408d1b3c77604520d8a633666a1a
+pyvisfile @github.com/inducer/pyvisfile.git@e4fe73599dba408d1b3c77604520d8a633666a1a
 scipy==1.11.4
 sumpy @ git+https://github.com/inducer/sumpy.git@b6d0310b5bcb2bff941f75d6604ac3ce3883a016
 sympy==1.13.1
