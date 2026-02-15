@@ -6,7 +6,9 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=debug
-#SBATCH --job-name=dbxl46_pytential
+#SBATCH --job-name=micelle_formation
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user dbxl46@durham.ac.uk
 
 #SBATCH -e stderr-file
 #SBATCH -o stdout-file
