@@ -25,7 +25,7 @@ python -c "import pyopencl as cl; print(cl.get_platforms())"
 
 export PYOPENCL_CTX='0'
 
-pip list | grep -E "numpy|pytential|sumpy|pyopencl"
+pip list
 
 # Run your script
 python3.11 -O run_simulation.py 11 10 1 2 fte
