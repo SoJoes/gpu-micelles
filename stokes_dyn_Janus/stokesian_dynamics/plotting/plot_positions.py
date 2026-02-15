@@ -21,7 +21,7 @@ from functions.graphics import (plot_all_spheres, plot_all_dumbbells,
                                 plot_all_angular_velocity_lines)
 
 
-filename = '/home/homeblue01/6/dbxl46/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/output/2602101115-s11-i10-2fr-t1p0-M1-amphilic Janus particles.npz'
+filename = 'C:\\Users\sj000\PycharmProjects\gpu-micelles\stokes_dyn_Janus\stokesian_dynamics\output\\2602151524-s11-i10-2fr-t1p0-M1-amphilic Janus particles.npz'
 graph_title = "testing"
 frameno = 15
 viewing_angle = (0, -90)

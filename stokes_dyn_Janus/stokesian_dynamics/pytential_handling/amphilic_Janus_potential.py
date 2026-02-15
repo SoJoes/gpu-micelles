@@ -237,8 +237,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
       # Return components of the stress tensor as a tuple
       return (T_xx_sym, T_xy_sym, T_yx_sym, T_yy_sym)
 
-    T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad)
-
     # Get normal vectors for the density discretization
     mv_normal = bind(density_discr, sym.normal(2))(actx)
     normal = mv_normal.as_vector(object)

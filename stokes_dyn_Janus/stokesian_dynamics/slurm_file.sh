@@ -22,10 +22,7 @@ source $VENV/bin/activate
 export PATH="$VENV/bin:$PATH"
 
 python -c "import pyopencl as cl; print(cl.get_platforms())"
-
 export PYOPENCL_CTX='0'
 
-pip list
-
 # Run your script
-python3.11 -O run_simulation.py 11 10 1 2 fte
+python3.11 -O run_simulation.py 11 10 0.1 200 fte
