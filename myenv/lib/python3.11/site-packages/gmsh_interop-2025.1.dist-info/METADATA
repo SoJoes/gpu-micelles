@@ -1,0 +1,67 @@
+Metadata-Version: 2.4
+Name: gmsh_interop
+Version: 2025.1
+Summary: A parser for GMSH's .msh format
+Project-URL: Documentation, https://documen.tician.de/gmsh_interop
+Project-URL: Homepage, https://github.com/inducer/gmsh_interop
+Author-email: Andreas Kloeckner <inform@tiker.net>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Other Audience
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Utilities
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.6.0
+Requires-Dist: packaging>=20.0
+Requires-Dist: pytools>=2022.1.14
+Provides-Extra: doc
+Requires-Dist: furo; extra == 'doc'
+Requires-Dist: sphinx-copybutton; extra == 'doc'
+Requires-Dist: sphinx>=4; extra == 'doc'
+Provides-Extra: test
+Requires-Dist: pytest; extra == 'test'
+Requires-Dist: ruff; extra == 'test'
+Description-Content-Type: text/x-rst
+
+Interoperability between Python and Gmsh
+========================================
+
+.. image:: https://gitlab.tiker.net/inducer/gmsh_interop/badges/main/pipeline.svg
+    :alt: Gitlab Build Status
+    :target: https://gitlab.tiker.net/inducer/gmsh_interop/commits/main
+.. image:: https://github.com/inducer/gmsh_interop/actions/workflows/ci.yml/badge.svg
+    :alt: Github Build Status
+    :target: https://github.com/inducer/gmsh_interop/actions/workflows/ci.yml
+.. image:: https://badge.fury.io/py/gmsh_interop.svg
+    :alt: Python Package Index Release Page
+    :target: https://pypi.org/project/gmsh_interop/
+.. image:: https://zenodo.org/badge/113488057.svg
+   :alt: Zenodo DOI for latest release
+   :target: https://zenodo.org/doi/10.5281/zenodo.11075135
+
+This package allows Python to interoperate with the `gmsh <http://gmsh.info/>`__
+mesh generator.
+
+This package contains:
+
+* ``gmsh_interop.reader`` to read gmsh's ``.msh`` file format.
+* ``gmsh_interop.runner`` to run gmsh under program control and process its output.
+
+Its contents was extracted from `meshpy <https://github.com/inducer/meshpy>`__
+to escape its obnoxious licensing.
+
+Links:
+
+* `Github <https://github.com/inducer/gmsh_interop>`__
+* `Python Package Index <https://pypi.org/project/gmsh_interop/>`__
+* `Documentation <https://documen.tician.de/gmsh_interop>`__

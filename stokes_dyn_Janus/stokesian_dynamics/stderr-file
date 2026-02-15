@@ -1,0 +1,34 @@
+Loading vtune version 2022.0.0
+
+Loading intel-oneapi/2022.1.2/vtune
+  Loading requirement: vtune/latest
+Loading mpi version 2021.5.1
+
+Loading intel-oneapi/2022.1.2/mpi
+  Loading requirement: mpi/latest
+Loading compiler version 2022.0.2
+Loading tbb version 2021.5.1
+Loading compiler-rt version 2022.0.2
+Loading oclfpga version 2022.0.2
+  Load "debugger" to debug DPC++ applications with the gdb-oneapi debugger.
+  Load "dpl" for additional DPC++ APIs: https://github.com/oneapi-src/oneDPL
+
+Loading intel-oneapi/2022.1.2/compiler
+  Loading requirement: tbb/latest compiler-rt/latest oclfpga/latest
+    compiler/latest
+Traceback (most recent call last):
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/run_simulation.py", line 763, in <module>
+    box_bottom_left, box_top_right, mu) = input_ftsuoe(
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/setups/inputs.py", line 231, in input_ftsuoe
+    from pytential_handling.amphilic_Janus_potential import amphilics
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py", line 10, in <module>
+    from pytential import bind, sym
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.10/site-packages/pytential/__init__.py", line 32, in <module>
+    import pytential.symbolic.primitives as sym
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.10/site-packages/pytential/symbolic/primitives.py", line 70, in <module>
+    from sumpy.kernel import Kernel
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.10/site-packages/sumpy/__init__.py", line 42, in <module>
+    from sumpy.p2p import P2P, P2PFromCSR
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.10/site-packages/sumpy/p2p.py", line 792
+    print(kwargs)
+TabError: inconsistent use of tabs and spaces in indentation

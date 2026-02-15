@@ -1,0 +1,254 @@
+from __future__ import annotations
+
+
+__copyright__ = "Copyright (C) 2010-2012 Andreas Kloeckner"
+
+__license__ = """
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+"""
+
+
+from typing import TYPE_CHECKING
+
+import numpy as np
+import numpy.linalg as la
+
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
+    from modepy.typing import ArrayF
+
+
+__doc__ = """Estimate the smoothness of a function represented in a basis
+returned by :func:`modepy.orthonormal_basis_for_space`.
+
+The method implemented in this module follows this article:
+
+    A. Kloeckner, T. Warburton, and J. S. Hesthaven. "Viscous Shock Capturing
+    in a Time-Explicit Discontinuous Galerkin Method". Mathematical Modelling
+    of Natural Phenomena 6, No. 3 (May 16, 2011): 57-83.
+    http://dx.doi.org/10.1051/mmnp/20116303
+    http://arxiv.org/abs/1102.3190
+
+.. versionadded:: 2013.2
+
+.. autofunction:: simplex_interp_error_coefficient_estimator_matrix
+.. autofunction:: fit_modal_decay
+.. autofunction:: estimate_relative_expansion_residual
+"""
+
+
+def simplex_interp_error_coefficient_estimator_matrix(
+        unit_nodes: ArrayF,
+        order: int,
+        n_tail_orders: int) -> ArrayF:
+    """Return a matrix :math:`C` that, when multiplied by a vector of nodal values,
+    yields the coeffiicients belonging to the basis functions of the *n_tail_orders*
+    highest orders.
+
+    The 2-norm of the resulting coefficients can be used as an estimate of the
+    interpolation error.
+
+    .. versionadded:: 2018.1
+    """
+    dim, _nunit_nodes = unit_nodes.shape
+
+    from modepy.shapes import Simplex
+    from modepy.spaces import space_for_shape
+    shape = Simplex(dim)
+    space = space_for_shape(shape, order)
+
+    from modepy.modes import orthonormal_basis_for_space
+    basis = orthonormal_basis_for_space(space, shape)
+
+    from modepy.matrices import vandermonde
+    vdm = vandermonde(basis.functions, unit_nodes)
+    vdm_inv = la.inv(vdm)
+
+    if dim > 1:
+        order_vector = np.array([
+            # NOTE: basis.mode_ids are declared as `Tuple[Hashable, ...]`, which
+            # cannot be summed
+            sum(mode_id) for mode_id in basis.mode_ids
+            ])
+    else:
+        order_vector = np.array(basis.mode_ids)
+
+    max_order = np.max(order_vector)
+    assert max_order == order
+
+    return vdm_inv[order_vector > max_order-n_tail_orders]
+
+
+def make_mode_number_vector(
+        mode_order_tuples: tuple[tuple[int, ...], ...],
+        ignored_modes: int) -> NDArray[np.integer]:
+    node_cnt = len(mode_order_tuples)
+
+    mode_number_vector = np.zeros(node_cnt-ignored_modes, dtype=np.int32)
+    for i, mid in enumerate(mode_order_tuples):
+        if i < ignored_modes:
+            continue
+        mode_number_vector[i-ignored_modes] = sum(mid)
+
+    return mode_number_vector
+
+
+def create_decay_baseline(
+        mode_number_vector: NDArray[np.integer],
+        n: int) -> ArrayF:
+    """Create a vector of modal coefficients that exhibit 'optimal'
+    (:math:`k^{-N}`) decay.
+    """
+
+    zeros = mode_number_vector == 0
+
+    modal_coefficients = np.asarray(mode_number_vector, dtype=np.float64)**(-n)
+    modal_coefficients[zeros] = 1.0  # irrelevant, just keeps log from NaNing
+    modal_coefficients = modal_coefficients / la.norm(modal_coefficients)
+
+    return modal_coefficients
+
+
+def get_decay_fit_matrix(
+        mode_number_vector: NDArray[np.integer],
+        ignored_modes: int,
+        weight_vector: ArrayF) -> ArrayF:
+    a = np.zeros((len(mode_number_vector), 2), dtype=np.float64)
+    a[:, 0] = weight_vector
+    a[:, 1] = weight_vector * np.log(mode_number_vector)
+
+    if ignored_modes == 0:
+        assert not np.isfinite(a[0, 1])
+        a[0, 1] = 0
+
+    return la.pinv(a)
+
+
+def skyline_pessimize(modal_values: ArrayF) -> ArrayF:
+    nelements, nmodes = modal_values.shape
+
+    result = np.empty_like(modal_values)
+
+    for iel in range(nelements):
+        my_modes = modal_values[iel]
+        cur_val = max(my_modes[-1], my_modes[-2])
+
+        for imode in range(nmodes-1, -1, -1):
+            if my_modes[imode] > cur_val:
+                cur_val = my_modes[imode]
+
+            result[iel, imode] = cur_val
+
+    return result
+
+
+def fit_modal_decay(
+        coeffs: ArrayF, dims: int, n: int,
+        ignored_modes: int = 1) -> tuple[ArrayF, ArrayF]:
+    """Fit a curve to the modal decay on each element.
+
+    :arg coeffs: an array of shape ``(num_elements, num_modes)`` containing modal
+        coefficients of the functions to be analyzed.
+    :arg dims: number of dimensions.
+    :arg ignored_modes: the number of modal coefficients to ignore at the
+        beginning. The default value of '1' ignores the constant.
+
+    :returns: a tuple ``(expn, constant)`` of arrays of length *num_elements*,
+        where the modal decay is fit to the curve
+        ``constant * total_degree**exponent``. ``-exponent-1`` can be used as
+        a rough indicator of how many continuous derivatives the underlying
+        function possesses.
+    """
+    from pytools import (
+        generate_nonnegative_integer_tuples_summing_to_at_most as gnitstam,
+    )
+    mode_number_vector = make_mode_number_vector(
+            tuple(gnitstam(n, dims)), ignored_modes
+            )
+    mode_number_vector_real = make_mode_number_vector(
+            tuple(gnitstam(n, dims)), ignored_modes
+            ).astype(np.float64)
+    weight_vector = np.ones_like(mode_number_vector_real)
+
+    fit_mat = get_decay_fit_matrix(mode_number_vector, ignored_modes, weight_vector)
+
+    coeffs_squared = skyline_pessimize(coeffs**2)
+    el_norm_squared = np.sum(coeffs_squared, axis=-1)
+    scaled_baseline = (
+            create_decay_baseline(mode_number_vector, n)
+            * el_norm_squared[:, np.newaxis])**2
+    log_modal_coeffs = np.log(coeffs_squared[:, ignored_modes:] + scaled_baseline)/2
+
+    assert fit_mat.shape[0] == 2  # exponent and log(constant)
+
+    fit_values = np.dot(fit_mat, (weight_vector*log_modal_coeffs).T).T
+
+    exponent = fit_values[:, 1]
+    const = np.exp(fit_values[:, 0])
+
+    if 0:
+        import matplotlib.pyplot as pt
+        pt.plot(log_modal_coeffs.flat, "o-")
+
+        fit = np.log(const[:, np.newaxis]
+                * mode_number_vector**exponent[:, np.newaxis])
+
+        pt.plot(fit.flat)
+
+        # plot_expt = np.zeros_like(log_modal_coeffs)
+        # plot_expt[:] = exponent[:, np.newaxis]
+        # pt.plot(plot_expt.flat)
+
+        pt.show()
+
+    return exponent, const
+
+
+def estimate_relative_expansion_residual(
+        coeffs: ArrayF, dims: int, n: int,
+        ignored_modes: int = 1) -> ArrayF:
+    """Use the modal fit to estimate the relative residual of the expansion.
+    The arguments to this function exactly match :func:`fit_modal_decay`.
+
+    :returns: An array of estimates of the fraction of the :math:`L^2` norm
+        contained in the (unrepresented) tail of
+
+    An idea like this is described in this article:
+
+        H. Feng and C. Mavriplis, "Adaptive Spectral Element Simulations of Thin
+        Premixed Flame Sheet Deformations", Journal of Scientific Computing, Volume
+        17, Nr. 1, S. 385-395, Dec. 2002.
+        http://dx.doi.org/10.1023/A:1015137722700
+
+    For this function, however, the decay curve is fitted using the
+    Kloeckner/Warburton/Hesthaven technique (see above).
+    """
+
+    l2_norms = np.sqrt(np.sum(coeffs**2, axis=-1))
+
+    exponent, const = fit_modal_decay(coeffs, dims, n, ignored_modes)
+
+    # sqrt(integral from (n+1) to infty : (x**exponent)**2)
+    residuals = const * np.sqrt(-(n+1)**(2*exponent+1)/(2*exponent+1))
+
+    result = residuals/l2_norms
+    result[result > 1] = 0
+    return result

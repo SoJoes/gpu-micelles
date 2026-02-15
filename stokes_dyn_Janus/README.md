@@ -1,0 +1,1 @@
+Code adapted from [https://github.com/Pecnut/stokesian-dynamics/blob/6b9117d1601c5e50dfea0475fd4f10d53447174a/stokesian_dynamics/functions/shared.py#L293](https://github.com/Pecnut/stokesian-dynamics/tree/6b9117d1601c5e50dfea0475fd4f10d53447174a)

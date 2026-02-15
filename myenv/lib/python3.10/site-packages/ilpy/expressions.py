@@ -1,0 +1,515 @@
+from __future__ import annotations
+
+import ast
+import sys
+from contextlib import contextmanager
+from typing import TYPE_CHECKING, Any, ClassVar, Union
+
+from ._constants import Relation, Sense
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator, Sequence
+
+    from ._components import Constraint, Objective
+
+Number = Union[float, int]
+
+
+@contextmanager
+def recursion_limit_raised_by(N: int = 5000) -> Iterator[None]:
+    """Temporarily increase the recursion limit by N."""
+    old_limit = sys.getrecursionlimit()
+    sys.setrecursionlimit(old_limit + N)
+    try:
+        yield
+    finally:
+        sys.setrecursionlimit(old_limit)
+
+
+class Expression(ast.expr):
+    """Base class for all expression nodes.
+
+    Expressions allow ilpy to represent mathematical expressions in an
+    intuitive syntax, and then convert to a native Constraint object.
+
+    This class provides all of the operators and methods needed to build
+    expressions. For example, to create the expression ``2 * x - y >= 0``, you can
+    write ``2 * Variable('x') - Variable('y') >= 0``.
+
+    Tip: you can use ``ast.dump`` to see the AST representation of an expression.
+    Or, use ``print(expr)`` to see the string representation of an expression.
+    """
+
+    def as_constraint(self) -> Constraint:
+        """Create an ilpy.Constraint object from this expression."""
+        from ._components import Constraint
+
+        l_coeffs, q_coeffs, value = _get_coeff_indices(self)
+        return Constraint.from_coefficients(
+            coefficients=l_coeffs,
+            quadratic_coefficients=q_coeffs,
+            relation=_get_relation(self) or Relation.LessEqual,
+            value=-value,  # negate value to convert to RHS form
+        )
+
+    def as_objective(self, sense: Sense = Sense.Minimize) -> Objective:
+        """Create a linear objective from this expression."""
+        if _get_relation(self) is not None:  # pragma: no cover
+            # TODO: may be supported in the future, eg. for piecewise objectives?
+            raise ValueError(f"Objective function cannot have comparisons: {self}")
+        from ._components import Objective
+
+        l_coeffs, q_coeffs, value = _get_coeff_indices(self)
+        return Objective.from_coefficients(
+            coefficients=l_coeffs,
+            quadratic_coefficients=q_coeffs,
+            constant=value,
+            sense=sense,
+        )
+
+    @staticmethod
+    def _cast(obj: Any) -> Expression:
+        """Cast object into an Expression."""
+        return obj if isinstance(obj, Expression) else Constant(obj)
+
+    def __str__(self) -> str:
+        """Serialize this expression to string form."""
+        return str(_ExprSerializer(self))
+
+    # comparisons
+
+    def __lt__(self, other: Expression | float) -> Compare:
+        return Compare(self, [ast.Lt()], [other])
+
+    def __le__(self, other: Expression | float) -> Compare:
+        return Compare(self, [ast.LtE()], [other])
+
+    def __eq__(self, other: Expression | float) -> Compare:  # type: ignore
+        return Compare(self, [ast.Eq()], [other])
+
+    def __ne__(self, other: Expression | float) -> Compare:  # type: ignore
+        return Compare(self, [ast.NotEq()], [other])
+
+    def __gt__(self, other: Expression | float) -> Compare:
+        return Compare(self, [ast.Gt()], [other])
+
+    def __ge__(self, other: Expression | float) -> Compare:
+        return Compare(self, [ast.GtE()], [other])
+
+    # binary operators
+    # (note that __and__ and __or__ are reserved for boolean operators.)
+
+    def __add__(self, other: Expression | Number) -> BinOp:
+        return BinOp(self, ast.Add(), other)
+
+    def __radd__(self, other: Expression | Number) -> BinOp:
+        return BinOp(other, ast.Add(), self)
+
+    def __sub__(self, other: Expression | Number) -> BinOp:
+        return BinOp(self, ast.Sub(), other)
+
+    def __rsub__(self, other: Expression | Number) -> BinOp:
+        return BinOp(other, ast.Sub(), self)
+
+    def __mul__(self, other: Any) -> BinOp | Constant:
+        return BinOp(self, ast.Mult(), other)
+
+    def __rmul__(self, other: Number) -> BinOp | Constant:
+        if not isinstance(other, (int, float)):  # pragma: no cover
+            raise TypeError("Right multiplication must be with a number")
+        return Constant(other) * self
+
+    def __truediv__(self, other: Number) -> BinOp:
+        return BinOp(self, ast.Div(), other)
+
+    def __rtruediv__(self, other: Number) -> BinOp:
+        return BinOp(other, ast.Div(), self)
+
+    # unary operators
+
+    def __neg__(self) -> UnaryOp:
+        return UnaryOp(ast.USub(), self)
+
+    def __pos__(self) -> UnaryOp:
+        # usually a no-op
+        return UnaryOp(ast.UAdd(), self)
+
+    # specifically not implemented on Expression for now.
+    # We don't want to reimplement a full CAS like sympy.
+    # (But we could support sympy expressions!)
+    # Implemented below only on Constant and Variable.
+
+    # def __pow__(self, other: Number) -> BinOp:
+    # return BinOp(self, ast.Pow(), other)
+
+
+class Compare(Expression, ast.Compare):
+    """A comparison of two or more values.
+
+    `left` is the first value in the comparison, `ops` the list of operators,
+    and `comparators` the list of values after the first element in the
+    comparison.
+    """
+
+    def __init__(
+        self,
+        left: Expression,
+        ops: list[ast.cmpop],
+        comparators: Sequence[Expression | Number],
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            Expression._cast(left),
+            ops,
+            [Expression._cast(c) for c in comparators],
+            **kwargs,
+        )
+
+
+class BinOp(Expression, ast.BinOp):
+    """A binary operation (like addition or division).
+
+    `op` is the operator, and `left` and `right` are any expression nodes.
+    """
+
+    def __init__(
+        self,
+        left: Expression | Number,
+        op: ast.operator,
+        right: Expression | Number,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(Expression._cast(left), op, Expression._cast(right), **kwargs)
+
+
+class UnaryOp(Expression, ast.UnaryOp):
+    """A unary operation.
+
+    `op` is the operator, and `operand` any expression node.
+    """
+
+    def __init__(self, op: ast.unaryop, operand: Expression, **kwargs: Any) -> None:
+        super().__init__(op, Expression._cast(operand), **kwargs)
+
+
+class Constant(Expression, ast.Constant):
+    """A constant value.
+
+    The `value` attribute contains the Python object it represents.
+    types supported: int, float
+    """
+
+    def __init__(self, value: Number, kind: str | None = None, **kwargs: Any) -> None:
+        if not isinstance(value, (float, int)):
+            raise TypeError("Constants must be numbers")
+        super().__init__(value, kind, **kwargs)
+
+    def __mul__(self, other: Any) -> BinOp | Constant:
+        if isinstance(other, Constant):
+            return Constant(self.value**other.value)
+        if isinstance(other, (float, int)):
+            return Constant(self.value * other)
+        return super().__mul__(other)
+
+    def __pow__(self, other: Number) -> Expression:
+        if not isinstance(other, (int, float)):  # pragma: no cover
+            raise TypeError("Exponent must be a number")
+        return Constant(self.value**other)
+
+
+class Variable(Expression, ast.Name):
+    """A variable.
+
+    `id` holds the index as a string (because ast.Name requires a string).
+
+    The special attribute `index` is added here for the purpose of storing
+    the index of a variable in a solver's variable list: ``Variable('u', index=0)``
+    """
+
+    def __init__(self, id: str, index: int | None = None) -> None:
+        self.index = index
+        super().__init__(str(id), ctx=ast.Load())
+
+    def __pow__(self, other: Number) -> Expression:
+        if not isinstance(other, (int, float)):  # pragma: no cover
+            raise TypeError("Exponent must be a number")
+        if other == 2:
+            return BinOp(self, ast.Mult(), self)
+        elif other == 1:
+            return self
+        raise ValueError("Only quadratic variables are supported")  # pragma: no cover
+
+    def __hash__(self) -> int:
+        # allow use as dict key
+        return id(self)
+
+    def __int__(self) -> int:
+        if self.index is None:  # pragma: no cover
+            raise TypeError(f"Variable {self!r} has no index")
+        return int(self.index)
+
+    __index__ = __int__
+
+    def __repr__(self) -> str:
+        return f"ilpy.Variable({self.id!r}, index={self.index!r})"
+
+
+# conversion between ast comparison operators and ilpy relations
+# TODO: support more less/greater than operators
+OPERATOR_MAP: dict[type[ast.cmpop], Relation] = {
+    ast.LtE: Relation.LessEqual,
+    ast.Eq: Relation.Equal,
+    ast.GtE: Relation.GreaterEqual,
+}
+
+
+def _get_relation(expr: Expression) -> Relation | None:
+    seen_compare = False
+    relation: Relation | None = None
+    for sub in ast.walk(expr):
+        if isinstance(sub, Compare):
+            if seen_compare:  # pragma: no cover
+                raise ValueError("Only single comparisons are supported")
+
+            op_type = type(sub.ops[0])
+            try:
+                relation = OPERATOR_MAP[op_type]
+            except KeyError as e:
+                raise ValueError(f"Unsupported comparison operator: {op_type}") from e
+            seen_compare = True
+    return relation
+
+
+def _get_coeff_indices(
+    expr: Expression,
+) -> tuple[dict[int, float], dict[tuple[int, int], float], float]:
+    l_coeffs: dict[int, float] = {}
+    q_coeffs: dict[tuple[int, int], float] = {}
+    constant = 0.0
+    for var, coefficient in _get_coefficients(expr).items():
+        if var is None:
+            constant = coefficient
+        elif isinstance(var, tuple):
+            q_coeffs[(_ensure_index(var[0]), _ensure_index(var[1]))] = coefficient
+        elif coefficient != 0:
+            l_coeffs[_ensure_index(var)] = coefficient
+    return l_coeffs, q_coeffs, constant
+
+
+def _ensure_index(var: Variable) -> int:
+    if var.index is None:
+        raise ValueError("All variables in an Expression must have an index")
+    return var.index
+
+
+def _get_coefficients(
+    expr: Expression | ast.expr,
+    coeffs: dict[Variable | None | tuple[Variable, Variable], float] | None = None,
+    scale: int = 1,
+    var_scale: Variable | None = None,
+) -> dict[Variable | None | tuple[Variable, Variable], float]:
+    """Get the coefficients of an expression.
+
+    The coefficients are returned as a dictionary mapping Variable to coefficient.
+    The key `None` is used for the constant term.  Quadratic coefficients are
+    represented with a two-tuple of variables.
+
+    Note also that expressions on the right side of a comparison are negated,
+    (so that the comparison is effectively against zero.)
+
+    Args:
+        expr: The expression to get the coefficients of.
+        coeffs: The dictionary to add the coefficients to. If not given, a new
+            dictionary is created.
+        scale: The scale to apply to the coefficients. This is used to negate
+            expressions on the right side of a comparison or scale for multiplication.
+
+    Example:
+
+        >>> u = Variable("u")
+        >>> v = Variable("v")
+        >>> _get_coefficients(2 * u - 5 * v <= 7)
+        {u: 2, v: -5, None: -7}
+
+        coefficients are simplified in the process:
+        >>> _get_coefficients(2 * u - (u + 2 * u) <= 7)
+        {u: -1, None: -7}
+    """
+    if coeffs is None:
+        coeffs = {}
+
+    # Use an explicit stack to avoid recursion
+    # Stack entries: (expr, scale, var_scale)
+    stack: list[tuple[Expression | ast.expr, float, Variable | None]] = [
+        (expr, scale, var_scale)
+    ]
+
+    while stack:
+        current_expr, current_scale, current_var_scale = stack.pop()
+
+        if isinstance(current_expr, Constant):
+            coeffs.setdefault(None, 0)
+            coeffs[None] += current_expr.value * current_scale
+
+        elif isinstance(current_expr, UnaryOp):
+            new_scale = current_scale
+            if isinstance(current_expr.op, ast.USub):
+                new_scale = -current_scale
+            stack.append((current_expr.operand, new_scale, current_var_scale))
+
+        elif isinstance(current_expr, Variable):
+            if current_var_scale is not None:
+                # multiplication or division between two variables
+                key = _sort_vars(current_expr, current_var_scale)
+                coeffs.setdefault(key, 0)
+                coeffs[key] += current_scale
+            else:
+                coeffs.setdefault(current_expr, 0)
+                coeffs[current_expr] += current_scale
+
+        elif isinstance(current_expr, Compare):
+            if len(current_expr.ops) != 1:  # pragma: no cover
+                raise ValueError("Only single comparisons are supported")
+            stack.append((current_expr.left, current_scale, current_var_scale))
+            # negate the right hand side of the comparison
+            stack.append(
+                (current_expr.comparators[0], current_scale * -1, current_var_scale)
+            )
+
+        elif isinstance(current_expr, BinOp):
+            if isinstance(current_expr.op, (ast.Mult, ast.Div)):
+                _process_mult_op_iterative(
+                    current_expr, coeffs, current_scale, current_var_scale, stack
+                )
+            elif isinstance(current_expr.op, (ast.Add, ast.UAdd, ast.USub, ast.Sub)):
+                stack.append((current_expr.left, current_scale, current_var_scale))
+                right_scale = current_scale
+                if isinstance(current_expr.op, (ast.USub, ast.Sub)):
+                    right_scale = -current_scale
+                stack.append((current_expr.right, right_scale, current_var_scale))
+            else:  # pragma: no cover
+                raise ValueError(
+                    f"Unsupported binary operator: {type(current_expr.op)}"
+                )
+
+        else:  # pragma: no cover
+            raise ValueError(f"Unsupported expression type: {type(current_expr)}")
+
+    return coeffs
+
+
+def _sort_vars(v1: Variable, v2: Variable) -> tuple[Variable, Variable]:
+    """Sort variables by index, or by id if index is None.
+
+    This is so that a pair of variables can be used as a dictionary key.
+    Without worrying about the order of the variables (and without using a set,
+    which would exclude the possibility of having the same variable twice).
+    """
+    # two lines are used to tell mypy it's a length 2 tuple
+    _v1, _v2 = sorted((v1, v2), key=lambda v: getattr(v, "index", id(v)))
+    return _v1, _v2
+
+
+def _process_mult_op_iterative(
+    expr: BinOp,
+    coeffs: dict[Variable | None | tuple[Variable, Variable], float],
+    scale: float,
+    var_scale: Variable | None,
+    stack: list[tuple[Expression | ast.expr, float, Variable | None]],
+) -> None:
+    """Helper function for _get_coefficients to process multiplication and division.
+
+    This is the iterative version that adds work to the stack instead of recursing.
+    """
+    if isinstance(expr.right, Constant):
+        v = expr.right.value
+        new_scale = scale * (1 / v if isinstance(expr.op, ast.Div) else v)
+        stack.append((expr.left, new_scale, var_scale))
+    elif isinstance(expr.left, Constant):
+        v = expr.left.value
+        new_scale = scale * (1 / v if isinstance(expr.op, ast.Div) else v)
+        stack.append((expr.right, new_scale, var_scale))
+    elif isinstance(expr.left, Variable):
+        if var_scale is not None:
+            raise TypeError("Cannot multiply by more than two variables.")
+        stack.append((expr.right, scale, expr.left))
+    elif isinstance(expr.right, Variable):
+        if var_scale is not None:  # pragma: no cover
+            raise TypeError("Cannot multiply by more than two variables.")
+        stack.append((expr.left, scale, expr.right))
+    else:  # pragma: no cover
+        raise TypeError(
+            "Unexpected multiplication or division between "
+            f"{type(expr.left)} and {type(expr.right)}"
+        )
+
+
+class _ExprSerializer(ast.NodeVisitor):
+    """Serializes an :class:`Expression` into a string.
+
+    Used above in `Expression.__str__`.
+    """
+
+    OP_MAP: ClassVar[
+        dict[type[ast.operator] | type[ast.cmpop] | type[ast.unaryop], str]
+    ] = {
+        # ast.cmpop
+        ast.Eq: "==",
+        ast.Gt: ">",
+        ast.GtE: ">=",
+        ast.NotEq: "!=",
+        ast.Lt: "<",
+        ast.LtE: "<=",
+        # ast.operator
+        ast.Add: "+",
+        ast.Sub: "-",
+        ast.Mult: "*",
+        ast.Div: "/",
+        # ast.unaryop
+        ast.UAdd: "+",
+        ast.USub: "-",
+    }
+
+    def __init__(self, node: Expression | None = None) -> None:
+        self._result: list[str] = []
+
+        def write(*params: ast.AST | str) -> None:
+            for item in params:
+                if isinstance(item, ast.AST):
+                    self.visit(item)
+                elif item:
+                    self._result.append(item)
+
+        self.write = write
+
+        if node is not None:
+            self.visit(node)
+
+    def __str__(self) -> str:
+        return "".join(self._result)
+
+    def visit_Variable(self, node: Variable) -> None:
+        self.write(node.id)
+
+    def visit_Constant(self, node: ast.Constant) -> None:
+        self.write(repr(node.value))
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        self.visit(node.left)
+        for op, right in zip(node.ops, node.comparators):
+            self.write(f" {self.OP_MAP[type(op)]} ", right)
+
+    def visit_BinOp(self, node: ast.BinOp) -> None:
+        opstring = f" {self.OP_MAP[type(node.op)]} "
+        args: list[ast.AST | str] = [node.left, opstring, node.right]
+        # wrap in parentheses if the left or right side is a binary operation
+        if isinstance(node.op, ast.Mult):
+            if isinstance(node.left, ast.BinOp):
+                args[:1] = ["(", node.left, ")"]
+            if isinstance(node.right, ast.BinOp):
+                args[2:] = ["(", node.right, ")"]
+        self.write(*args)
+
+    def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
+        sym = self.OP_MAP[type(node.op)]
+        self.write(sym, " " if sym.isalpha() else "", node.operand)

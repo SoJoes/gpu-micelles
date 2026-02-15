@@ -1,0 +1,6 @@
+#!/home/homeblue01/6/dbxl46/pytential_stokes/myenv/bin/python3
+import sys
+from pyvkfft.scripts.pyvkfft_info import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())

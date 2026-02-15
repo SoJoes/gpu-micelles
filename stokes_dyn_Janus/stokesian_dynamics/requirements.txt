@@ -1,0 +1,34 @@
+arraycontext @ git+https://github.com/inducer/arraycontext.git@1072c2ebb77977acf903f5396000aa92dfccab7e
+boxtree @ git+https://github.com/inducer/boxtree.git@0c6b8adcca5e35d4e0004c29503a5742491420cb
+cgen @ git+https://github.com/inducer/cgen.git@354930e21fc7a3af802f99a7485408a281a99c8b
+Cython==3.0.12
+debugpy==1.8.0
+ffmpy==0.6.0
+genpy @ git+https://github.com/inducer/genpy.git@ed5f6c70150ed1f26dc1d3614d1e32f404b91309
+GitPython==3.1.44
+gmsh_interop @ git+https://github.com/inducer/gmsh_interop.git@d6cdae9534312b8f949f8d758329e7f9f9849431
+groovy==0.1.2
+islpy==2026.1
+loopy @ git+https://github.com/inducer/loopy.git@9c96a1431906f717fecfb27cdaece1d154adc1a2
+matplotlib==3.8.4
+matplotlib-inline==0.1.7
+matplotlib-venn==1.1.2
+meshmode @ git+https://github.com/inducer/meshmode.git@e2d0e0c9b3da2e65c2c4f6c7a430ac8a75ea5908
+modepy @ git+https://github.com/inducer/modepy.git@93a912d315f59bb0a60022eef0161bbd73922f8b
+numba==0.59.1
+numba-cuda==0.2.0
+numpy==1.26.4
+psutil==5.9.5
+pyfmmlib==2024.1.1
+pylibcudf-cu12 @ https://pypi.nvidia.com/pylibcudf-cu12/pylibcudf_cu12-25.2.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
+pylibcugraph-cu12==25.2.0
+pylibraft-cu12==25.2.0
+pymbolic @ git+https://github.com/inducer/pymbolic.git@f9f1b27b83473c162c48f5c0ebfabbd74c0fefd5
+pyopencl==2026.1.2
+-e git+https://github.com/inducer/pytential.git@899e233a4e7146ae12a731740410bbfbd7198580#egg=pytential
+pytest==7.4.4
+python-apt==0.0.0
+pyvisfile @ git+https://github.com/inducer/pyvisfile.git@e4fe73599dba408d1b3c77604520d8a633666a1a
+scipy==1.11.4
+sumpy @ git+https://github.com/inducer/sumpy.git@b6d0310b5bcb2bff941f75d6604ac3ce3883a016
+sympy==1.13.1

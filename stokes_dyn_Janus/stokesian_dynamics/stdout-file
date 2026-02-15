@@ -1,0 +1,6 @@
+[<pyopencl.Platform 'NVIDIA CUDA' at 0x3270200>]
+numpy             1.26.4
+pyopencl          2026.1.2
+pytential         2024.0
+sumpy             2024.0
+We ran your script <3

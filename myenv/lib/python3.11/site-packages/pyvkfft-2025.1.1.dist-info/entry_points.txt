@@ -1,0 +1,5 @@
+[console_scripts]
+pyvkfft-benchmark = pyvkfft.scripts.pyvkfft_benchmark:main
+pyvkfft-info = pyvkfft.scripts.pyvkfft_info:main
+pyvkfft-test = pyvkfft.scripts.pyvkfft_test:main
+pyvkfft-test-suite = pyvkfft.scripts.pyvkfft_test_suite:main
