@@ -672,7 +672,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                 sphere_rotations=saved_sphere_rotations)
 
             if input_number >= 10:
-                np.savez(output_folder + '/' + filename + legion_random_id + '_TEMP',
+                np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
                                 Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                                 centres=saved_element_positions, deltax=saved_deltax,
                                 force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
@@ -684,6 +684,16 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                     T_xx=saved_hydro_out[:,4],
                                     T_yy=saved_hydro_out[:,5],
                                     T_xy=saved_hydro_out[:,6])
+
+                '''fplot.write_vtk_file("frame_output/frame" + str(frame) + ".vts", [
+                    ("potential", pot[frame, :]),
+                    ("indicator", indicator[frame, :]),
+                    ("nabla_pot_x", nabla_pot_x[frame, :]),
+                    ("nabla_pot_y", nabla_pot_y[frame, :]),
+                    ("T_xx_component", T_xx[frame, :]),
+                    ("T_xy_component", T_xy[frame, :]),
+                    ("T_yy_component", T_yy[frame, :]),
+                ])'''
 
 
         save_elapsed_time = time.time() - save_time_start
@@ -946,7 +956,7 @@ if error == 0:
                             sphere_rotations=saved_sphere_rotations)
 
         if input_number >= 10:
-            np.savez(output_folder + '/' + filename + legion_random_id + '_TEMP',
+            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
                             Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                             centres=saved_element_positions, deltax=saved_deltax,
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
