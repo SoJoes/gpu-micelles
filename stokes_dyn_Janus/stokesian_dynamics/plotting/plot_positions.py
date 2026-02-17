@@ -56,6 +56,8 @@ num_particles = positions_centres.shape[1]
 num_dumbbells = positions_deltax.shape[1]
 num_spheres = num_particles - num_dumbbells
 
+fplot = FieldPlotter(np.zeros(2), extent=5, npoints=500)
+
 for frame in range(frameno):
     sphere_positions = positions_centres[frame, 0:num_spheres, :]
     sphere_rotations = particle_rotations[frame, 0:num_spheres, :]
@@ -131,3 +133,14 @@ for frame in range(frameno):
                  + "/" + str(num_frames-1), loc='left', y=0.97, fontsize=11)
     ax.set_title(graph_title, loc='center', y=1.055, fontsize=11)
     plt.savefig("frame_output/frame"+str(frame)+".png")
+
+
+    fplot.write_vtk_file("frame_output/frame"+str(frame)+".vts", [
+        ("potential", pot[frame,:]),
+        ("indicator", indicator[frame,:]),
+        ("nabla_pot_x", nabla_pot_x[frame,:]),
+        ("nabla_pot_y", nabla_pot_y[frame,:]),
+        ("T_xx_component", T_xx[frame,:]),
+        ("T_xy_component", T_xy[frame,:]),
+        ("T_yy_component", T_yy[frame,:]),
+        ])

@@ -672,7 +672,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                 sphere_rotations=saved_sphere_rotations)
 
             if input_number >= 10:
-                np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+                np.savez(output_folder + '/' + filename + legion_random_id + '_TEMP',
                                 Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                                 centres=saved_element_positions, deltax=saved_deltax,
                                 force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
@@ -946,7 +946,7 @@ if error == 0:
                             sphere_rotations=saved_sphere_rotations)
 
         if input_number >= 10:
-            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+            np.savez(output_folder + '/' + filename + legion_random_id + '_TEMP',
                             Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                             centres=saved_element_positions, deltax=saved_deltax,
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
