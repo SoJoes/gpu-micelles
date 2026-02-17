@@ -14,6 +14,7 @@ import numpy as np
 import os
 import sys
 from pylab import rcParams
+from sumpy.visualization import FieldPlotter
 sys.path.append("../stokesian_dynamics")  # Allows importing from SD directory
 
 from functions.graphics import (plot_all_spheres, plot_all_dumbbells,
@@ -21,7 +22,22 @@ from functions.graphics import (plot_all_spheres, plot_all_dumbbells,
                                 plot_all_angular_velocity_lines)
 
 
-filename = 'C:\\Users\sj000\PycharmProjects\gpu-micelles\stokes_dyn_Janus\stokesian_dynamics\output\\2602161550-s11-i10-200fr-t0p1-M1-amphilic Janus particles_TEMP.npz'
+def get_latest_file(folder_path):
+    # Get all the files in the folder
+    files = os.listdir(folder_path)
+
+    # Sort the files by their last modified time
+    files.sort(key=lambda x: os.path.getmtime(os.path.join(folder_path, x)))
+
+    # Get the latest file
+    latest_file = files[-1]
+
+    return latest_file
+
+folder_path = 'output'
+latest_file = get_latest_file(folder_path)
+
+filename = latest_file
 graph_title = "testing"
 frameno = 15
 viewing_angle = (0, -90)
