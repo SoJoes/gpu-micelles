@@ -678,13 +678,14 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                 force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
                                 sphere_rotations=saved_sphere_rotations)
 
-                np.savez_compressed(output_folder + '/' + filename + legion_random_id + 'hydro_out_TEMP',pot=saved_hydro_out[:,0],
-                                indicator=saved_hydro_out[:,1],
-                                nabla_pot_x=saved_hydro_out[:,2],
-                                nabla_pot_y=saved_hydro_out[:,3],
-                                T_xx=saved_hydro_out[:,4],
-                                T_yy=saved_hydro_out[:,5],
-                                T_xy=saved_hydro_out[:,6])
+                np.savez_compressed(output_folder + '/' + filename + legion_random_id + 'hydro_out_TEMP',
+                                    pot=saved_hydro_out[:,0],
+                                    indicator=saved_hydro_out[:,1],
+                                    nabla_pot_x=saved_hydro_out[:,2],
+                                    nabla_pot_y=saved_hydro_out[:,3],
+                                    T_xx=saved_hydro_out[:,4],
+                                    T_yy=saved_hydro_out[:,5],
+                                    T_xy=saved_hydro_out[:,6])
 
                 '''fplot.write_vtk_file("frame_output/frame" + str(frame) + ".vts", [
                     ("potential", pot[frame, :]),
@@ -963,7 +964,7 @@ if error == 0:
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
                             sphere_rotations=saved_sphere_rotations)
 
-                np.savez_compressed(output_folder + '/' + filename + legion_random_id + 'hydro_out',pot=saved_hydro_out[:,0],
+            np.savez_compressed(output_folder + '/' + filename + legion_random_id + 'hydro_out',pot=saved_hydro_out[:,0],
                                 indicator=saved_hydro_out[:,1],
                                 nabla_pot_x=saved_hydro_out[:,2],
                                 nabla_pot_y=saved_hydro_out[:,3],
