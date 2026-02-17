@@ -34,20 +34,6 @@ def get_latest_file(folder_path):
 
     return latest_file
 
-import zipfile
-
-def zip_folder(folder_path, output_path):
-    # Create a zip file at the output path
-    with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        # Walk through the folder
-        for root, dirs, files in os.walk(folder_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                # Add file to the zip archive
-                # arcname ensures folder structure is preserved relative to the folder_path
-                arcname = os.path.relpath(file_path, folder_path)
-                zipf.write(file_path, arcname)
-
 folder_path = 'output'
 latest_file = get_latest_file(folder_path)
 
@@ -174,6 +160,3 @@ for frame in range(frameno):
         ("T_xy_component", T_xy[frame,:]),
         ("T_yy_component", T_yy[frame,:]),
         ])
-
-# Example usage
-zip_folder('frame_output', 'newframes.zip')
