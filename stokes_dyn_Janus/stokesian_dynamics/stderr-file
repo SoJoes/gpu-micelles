@@ -16,60 +16,15 @@ Loading oclfpga version 2022.0.2
 Loading intel-oneapi/2022.1.2/compiler
   Loading requirement: tbb/latest compiler-rt/latest oclfpga/latest
     compiler/latest
-/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pyopencl/__init__.py:570: CompilerWarning: Non-empty compiler output encountered. Set the environment variable PYOPENCL_COMPILER_OUTPUT=1 to see more.
-  lambda: self._prg.build(options_bytes, devices),
-/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/loopy/target/execution.py:309: ParameterFinderWarning: Unable to generate code to automatically find 'nunit_dofs' from 'result':
-division with remainder in linear solve for 'nunit_dofs'
-  warn("Unable to generate code to automatically "
-/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/loopy/schedule/__init__.py:2234: LoopyWarning: in kernel copy_targets: Falling back to a slow scheduler implementation due to: v2 scheduler cannot schedule loops tagged with 'ilp'/'vec' as they are not guaranteed to be single entry loops. (add 'v1_scheduler_fallback' to silenced_warnings kernel attribute to disable)
-  warn_with_kernel(
-Traceback (most recent call last):
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/run_simulation.py", line 763, in <module>
-    box_bottom_left, box_top_right, mu) = input_ftsuoe(
-                                          ^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/setups/inputs.py", line 241, in input_ftsuoe
-    hydrophobic_forces = amphilics(particle_pos = sphere_2dpos, particle_facing = facings)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py", line 167, in amphilics
-    gmres_result = gmres(
-                   ^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/linalg/gmres.py", line 333, in gmres
-    result = _gmres(op, rhs, restart=restart, tol=tol, x0=x0,
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/linalg/gmres.py", line 214, in _gmres
-    w = a_call(r)
-        ^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/symbolic/execution.py", line 583, in matvec
-    result = self.bound_expr(self.array_context, **args)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/symbolic/execution.py", line 958, in __call__
-    return self.eval(kwargs, array_context=actx)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/symbolic/execution.py", line 922, in eval
-    return execute(self.code, exec_mapper)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/symbolic/execution.py", line 709, in execute
-    _get_exec_function(stmt, exec_mapper)(
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/symbolic/execution.py", line 412, in exec_compute_potential_insn
-    source.exec_compute_potential_insn(
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/qbx/__init__.py", line 534, in exec_compute_potential_insn
-    return self._dispatch_compute_potential_insn(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/qbx/__init__.py", line 598, in _dispatch_compute_potential_insn
-    return func(actx, insn, bound_expr, evaluate, **extra_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/qbx/__init__.py", line 759, in exec_compute_potential_insn_fmm
-    fmm_driver(
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/qbx/__init__.py", line 530, in drive_fmm
-    return drive_fmm(wrangler, strengths, timing_data), timing_data
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pytential/qbx/fmm.py", line 497, in drive_fmm
-    non_qbx_potentials, timing_future = wrangler.eval_direct(
-                                        ^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/sumpy/fmm.py", line 765, in eval_direct
-    evt, pot_res = self.tree_indep.p2p()(queue,
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/sumpy/p2p.py", line 792, in __call__
-    strength_dtype = kwargs.get("strength").dtype
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'dtype'
+/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/sumpy/fmm.py:253: UserWarning: VkFFT not found. FFT runs will be slower.
+  return get_opencl_fft_app(queue, shape, dtype, inverse)
+/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/sumpy/tools.py:1045: DirectCallUncachedWarning: TranslationUnit.__call__ is uncached as of 2025, meaning it will incur possibly substantial compilation cost with every invocation. Use TranslationUnit.executor to obtain an object that holds longer-lived caches.
+  evt, (output_vec,) = app(queue, y=input_vec, wait_for=wait_for)
+/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:196: ComplexWarning: Casting complex values to real discards the imaginary part
+  actx, sigma=gmres_result.solution, k=k)).astype(np.float64)
+/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:307: ComplexWarning: Casting complex values to real discards the imaginary part
+  forces_x[igrp] = fx
+/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:308: ComplexWarning: Casting complex values to real discards the imaginary part
+  forces_y[igrp] = fy
+/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:311: ComplexWarning: Casting complex values to real discards the imaginary part
+  torques[igrp] = t - (Januses.pos_array[igrp][0] * fy - Januses.pos_array[igrp][1] * fx)
