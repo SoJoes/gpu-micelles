@@ -310,4 +310,17 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
         # torque needs to be centred around particle
         torques[igrp] = t - (Januses.pos_array[igrp][0] * fy - Januses.pos_array[igrp][1] * fx)
 
-    return(forces_x, forces_y, torques)
+    # eval hydrophobic stress
+    T_xx_eval = actx.to_numpy(
+        bind(places, T_sym_components[0])(actx, sigma=gmres_result.solution, k=k))
+
+    T_xy_eval = actx.to_numpy(
+        bind(places, T_sym_components[1])(actx, sigma=gmres_result.solution, k=k))
+
+    T_yy_eval = actx.to_numpy(
+        bind(places, T_sym_components[3])(actx, sigma=gmres_result.solution, k=k))
+
+    hydro_out = [fld_in_vol, indicator, nabla_pot_x, nabla_pot_y, T_xx_eval, T_yy_eval, T_xy_eval]
+    hydro_out = np.array([np.flatten(ary) for ary in hydro_out])
+
+    return (forces_x, forces_y, torques), hydro_out

@@ -151,6 +151,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
     global saved_Fa_out, saved_Fb_out, saved_DFb_out, saved_Ea_out
     global saved_Sa_out, saved_force_on_wall_due_to_dumbbells
     global saved_sphere_rotations
+    global saved_hydro_out
     global last_generated_Minfinity_inverse, input_description
     global extract_force_on_wall_due_to_dumbbells
     global last_velocities, last_velocity_vector, checkpoint_start_from_frame
@@ -635,6 +636,8 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 saved_DFb_out = np.array([DFb_out])
                 saved_Sa_out = np.array([Sa_out])
                 saved_force_on_wall_due_to_dumbbells = np.array([force_on_wall_due_to_dumbbells])
+                if input_number >= 10:
+                    saved_hydro_out = np.array([hydro_out])
 
             else:
                 saved_Fa_out = np.append(np.copy(saved_Fa_out),
@@ -649,6 +652,8 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                          np.array([Sa_out]), 0)
                 saved_force_on_wall_due_to_dumbbells = np.append(np.copy(saved_force_on_wall_due_to_dumbbells),
                                                                  np.array([force_on_wall_due_to_dumbbells]), 0)
+                if input_number >= 10:
+                    saved_hydro_out = np.append(np.copy(saved_hydro_out), np.array([hydro_out]), 0)
 
 
         # Backup file
@@ -657,11 +662,28 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 save_forces_every_n_timesteps > 0 and
                 save_forces_and_positions_to_temp_file_as_well and
                 frameno >= start_saving_after_first_n_timesteps):
-            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+            if input_number <10:
+                np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
                                 Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                                 centres=saved_element_positions, deltax=saved_deltax,
                                 force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
                                 sphere_rotations=saved_sphere_rotations)
+
+            if input_number >= 10:
+                np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+                                Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
+                                centres=saved_element_positions, deltax=saved_deltax,
+                                force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
+                                sphere_rotations=saved_sphere_rotations,
+                                    pot=saved_hydro_out[:,0],
+                                    indicator=saved_hydro_out[:,1],
+                                    nabla_pot_x=saved_hydro_out[:,2],
+                                    nabla_pot_y=saved_hydro_out[:,3],
+                                    T_xx=saved_hydro_out[:4],
+                                    T_yy=saved_hydro_out[:5],
+                                    T_xy=saved_hydro_out[:6])
+
+
         save_elapsed_time = time.time() - save_time_start
         print("[" + format_elapsed_time(save_elapsed_time) + "]", end=" ")
 
@@ -760,7 +782,7 @@ if num_spheres > 0 and input_form in ["fts"]:
 (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in,
  Ua_in, Oa_in, Ea_in, Ea_c_in, Ub_in, HalfDUb_in, input_description,
  U_infinity, O_infinity, centre_of_background_flow, Ot_infinity, Et_infinity,
- box_bottom_left, box_top_right, mu) = input_ftsuoe(
+ box_bottom_left, box_top_right, mu, hydro_out) = input_ftsuoe(
      input_number, posdata, 0, 0.1, [[], [], [], []],
      skip_computation=True, input_form=input_form)
 
@@ -914,13 +936,26 @@ if error == 0:
 
     # Final save
     if save_forces_every_n_timesteps > 0 or save_positions_every_n_timesteps > 0:
-
-        print("4", type(saved_Fa_out))
-        np.savez_compressed(output_folder + '/' + filename + legion_random_id + '',
+        if input_number <10:
+            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '',
                             Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                             centres=saved_element_positions, deltax=saved_deltax,
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
                             sphere_rotations=saved_sphere_rotations)
+
+        if input_number >= 10:
+            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+                            Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
+                            centres=saved_element_positions, deltax=saved_deltax,
+                            force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
+                            sphere_rotations=saved_sphere_rotations,
+                                pot=saved_hydro_out[:,0],
+                                indicator=saved_hydro_out[:,1],
+                                nabla_pot_x=saved_hydro_out[:,2],
+                                nabla_pot_y=saved_hydro_out[:,3],
+                                T_xx=saved_hydro_out[:4],
+                                T_yy=saved_hydro_out[:5],
+                                T_xy=saved_hydro_out[:6])
         # Remove backup file
         backup_file = output_folder + '/' + filename + legion_random_id + '_TEMP.npz'
         if os.path.exists(backup_file):

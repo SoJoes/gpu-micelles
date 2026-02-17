@@ -14,6 +14,7 @@ from setups.tests.inputs import input_ftsuoe_tests
 def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
                  input_form='undefined', skip_computation=False,
                  grand_resistance_matrix_fte=0):
+    global hydro_out
     """Define all input forces/velocities.
 
     Args:
@@ -238,7 +239,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         facings = np.arccos((sphere_rotations[:,0,0] - sphere_positions[:, 0])/sphere_sizes)
 
-        hydrophobic_forces = amphilics(particle_pos = sphere_2dpos, particle_facing = facings)
+        hydrophobic_forces, hydro_out = amphilics(particle_pos = sphere_2dpos, particle_facing = facings)
 
         # set forces
         Fa_in = np.zeros((num_spheres, 3))
@@ -260,7 +261,14 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         throw_error("The input setup number you have requested (" + str(n) +
                     ") is not listed in setups/inputs.py.")
 
-    return (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in, Ua_in, Oa_in, Ea_in,
+    if n < 10:
+        return (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in, Ua_in, Oa_in, Ea_in,
             Ea_c_in, Ub_in, HalfDUb_in, desc, U_infinity, O_infinity,
             centre_of_background_flow, Ot_infinity, Et_infinity,
             box_bottom_left, box_top_right, mu)
+
+    else:
+        return (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in, Ua_in, Oa_in, Ea_in,
+            Ea_c_in, Ub_in, HalfDUb_in, desc, U_infinity, O_infinity,
+            centre_of_background_flow, Ot_infinity, Et_infinity,
+            box_bottom_left, box_top_right, mu, hydro_out)
