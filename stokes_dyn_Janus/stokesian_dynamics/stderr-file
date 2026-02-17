@@ -28,3 +28,5 @@ Loading intel-oneapi/2022.1.2/compiler
   forces_y[igrp] = fy
 /home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:311: ComplexWarning: Casting complex values to real discards the imaginary part
   torques[igrp] = t - (Januses.pos_array[igrp][0] * fy - Januses.pos_array[igrp][1] * fx)
+/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:326: ComplexWarning: Casting complex values to real discards the imaginary part
+  hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
