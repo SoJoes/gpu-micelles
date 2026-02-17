@@ -323,8 +323,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
         bind(places, T_sym_components[3])(actx, sigma=gmres_result.solution, k=k))
 
     hydro_out = [fld_in_vol, indicator, nabla_pot_x, nabla_pot_y, T_xx_eval, T_yy_eval, T_xy_eval]
-    hydro_out = np.array([ary.flatten() for ary in hydro_out])
-    for array in hydro_out:
-        print(array.dtype)
+    hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
 
     return (forces_x, forces_y, torques), hydro_out
