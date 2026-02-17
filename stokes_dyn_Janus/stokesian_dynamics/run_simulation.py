@@ -244,7 +244,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
              U_infinity_k1, O_infinity_k1, centre_of_background_flow,
              Ot_infinity_k1, Et_infinity_k1,
              force_on_wall_due_to_dumbbells_k1,
-             last_velocity_vector) = generate_output_FTSUOE(
+             last_velocity_vector, hydro_out_k1) = generate_output_FTSUOE(
                 posdata, frameno, timestep, input_number,
                 last_generated_Minfinity_inverse, regenerate_Minfinity,
                 input_form, cutoff_factor, printout, use_drag_Minfinity,
@@ -340,7 +340,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
              U_infinity_k1, O_infinity_k1, centre_of_background_flow,
              Ot_infinity_k1, Et_infinity_k1,
              force_on_wall_due_to_dumbbells_k1,
-             last_velocity_vector) = generate_output_FTSUOE(
+             last_velocity_vector, hydro_out_k1) = generate_output_FTSUOE(
                 posdata, frameno, timestep, input_number,
                 last_generated_Minfinity_inverse, regenerate_Minfinity,
                 input_form, cutoff_factor, printout, use_drag_Minfinity,
@@ -392,7 +392,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
              U_infinity_k2, O_infinity_k2, centre_of_background_flow,
              Ot_infinity_k2, Et_infinity_k2,
              force_on_wall_due_to_dumbbells_k2,
-             last_velocity_vector) = generate_output_FTSUOE(
+             last_velocity_vector, hydro_out_k2) = generate_output_FTSUOE(
                 posdata_k1, frameno + 0.5, timestep, input_number,
                 last_generated_Minfinity_inverse, regenerate_Minfinity,
                 input_form, cutoff_factor, printout, use_drag_Minfinity,
@@ -441,7 +441,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
              U_infinity_k3, O_infinity_k3, centre_of_background_flow,
              Ot_infinity_k3, Et_infinity_k3,
              force_on_wall_due_to_dumbbells_k3,
-             last_velocity_vector) = generate_output_FTSUOE(
+             last_velocity_vector, hydro_out_k3) = generate_output_FTSUOE(
                 posdata_k2, frameno + 0.5, timestep, input_number,
                 last_generated_Minfinity_inverse, regenerate_Minfinity,
                 input_form, cutoff_factor, printout, use_drag_Minfinity,
@@ -490,7 +490,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
              U_infinity_k4, O_infinity_k4, centre_of_background_flow,
              Ot_infinity_k4, Et_infinity_k4,
              force_on_wall_due_to_dumbbells_k4,
-             last_velocity_vector) = generate_output_FTSUOE(
+             last_velocity_vector, hydro_out_k4) = generate_output_FTSUOE(
                 posdata_k3, frameno + 1, timestep, input_number,
                 last_generated_Minfinity_inverse, regenerate_Minfinity,
                 input_form, cutoff_factor, printout, use_drag_Minfinity,
@@ -578,6 +578,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                             + 2*np.asarray(Sa_out_k2)
                             + 2*np.asarray(Sa_out_k3)
                             + np.asarray(Sa_out_k4))
+            hydro_out = 1/6 * (hydro_out_k1 + 2* hydro_out_k2 + 2* hydro_out_k3 + hydro_out_k4)
             force_on_wall_due_to_dumbbells = 1/6 * (
                 np.asarray(force_on_wall_due_to_dumbbells_k1)
                 + 2*np.asarray(force_on_wall_due_to_dumbbells_k2)
