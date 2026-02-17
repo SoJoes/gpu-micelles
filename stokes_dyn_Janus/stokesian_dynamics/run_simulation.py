@@ -312,6 +312,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
             Fb_out = np.asarray(Fb_out_k1)
             DFb_out = np.asarray(DFb_out_k1)
             Sa_out = np.asarray(Sa_out_k1)
+            hydro_out = hydro_out_k1
             force_on_wall_due_to_dumbbells = np.asarray(force_on_wall_due_to_dumbbells_k1)
 
         elif timestepping_scheme == "rk4":

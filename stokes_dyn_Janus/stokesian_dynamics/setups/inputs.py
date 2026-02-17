@@ -265,7 +265,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         return (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in, Ua_in, Oa_in, Ea_in,
             Ea_c_in, Ub_in, HalfDUb_in, desc, U_infinity, O_infinity,
             centre_of_background_flow, Ot_infinity, Et_infinity,
-            box_bottom_left, box_top_right, mu)
+            box_bottom_left, box_top_right, mu, "")
 
     else:
         return (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in, Ua_in, Oa_in, Ea_in,
