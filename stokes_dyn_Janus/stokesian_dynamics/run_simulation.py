@@ -681,9 +681,9 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                     indicator=saved_hydro_out[:,1],
                                     nabla_pot_x=saved_hydro_out[:,2],
                                     nabla_pot_y=saved_hydro_out[:,3],
-                                    T_xx=saved_hydro_out[:4],
-                                    T_yy=saved_hydro_out[:5],
-                                    T_xy=saved_hydro_out[:6])
+                                    T_xx=saved_hydro_out[:,4],
+                                    T_yy=saved_hydro_out[:,5],
+                                    T_xy=saved_hydro_out[:,6])
 
 
         save_elapsed_time = time.time() - save_time_start
@@ -955,9 +955,9 @@ if error == 0:
                                 indicator=saved_hydro_out[:,1],
                                 nabla_pot_x=saved_hydro_out[:,2],
                                 nabla_pot_y=saved_hydro_out[:,3],
-                                T_xx=saved_hydro_out[:4],
-                                T_yy=saved_hydro_out[:5],
-                                T_xy=saved_hydro_out[:6])
+                                T_xx=saved_hydro_out[:,4],
+                                T_yy=saved_hydro_out[:,5],
+                                T_xy=saved_hydro_out[:,6])
         # Remove backup file
         backup_file = output_folder + '/' + filename + legion_random_id + '_TEMP.npz'
         if os.path.exists(backup_file):
