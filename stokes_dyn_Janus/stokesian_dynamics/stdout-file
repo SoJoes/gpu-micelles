@@ -1,4 +1,4 @@
-[<pyopencl.Platform 'NVIDIA CUDA' at 0x38ba760>]
+[<pyopencl.Platform 'NVIDIA CUDA' at 0x1992f8a0>]
 IT        0 3.06998012e+00
 IT        1 1.41851303e+00
 IT        2 1.07424877e-01
@@ -24,9 +24,9 @@ Max torque
 | Frames:   [1m3       [0m | Bead-bead: [1mON    [0m | Inv M every: [1m1       [0m | Video:    [1mOFF     [0m |
 | Timestep: [1m0.1     [0m | Timestep:  [43m[30mEuler [39m[49m | Periodic:    [1mOFF     [0m | Memory:  ~[1m90.8 KB [0m |
 +--------------------+-------------------+--------------------------------------------+
-| Save every: [1m1     [0m | Save after: [1m0    [0m | Machine: [1mgpu10                            [0m |
+| Save every: [1m1     [0m | Save after: [1m0    [0m | Machine: [1mgpu11                            [0m |
 +--------------------+-------------------+--------------------------------------------+
-[Generating 2602171216-s11-i10-3fr-t0p1-M1-amphilic Janus particles]
+[Generating 2602171408-s11-i10-3fr-t0p1-M1-amphilic Janus particles]
                         [ Minfy  ] [invMinfy] [R2Bex'd'] [ U=R\F  ] [ Saving ] [MaxMemry] [[ Total  ]] [TimeLeft] [ ETA ]
 Processing frame 1/3... (First timestep will be slower as Numba compiles functions)
                         IT        0 3.06998012e+00
@@ -65,7 +65,7 @@ Max force
 1.3039162771876767
 Max torque
 0.38563378989715114
-[    0.3s] [    0.0s] [    0.1s] [   27.4s] [    4.0s] [ 1.14 GB] [[[1m    1:02[0m]] [[92m<    2:07[0m] [<12:19]
+[    0.4s] [    0.0s] [    0.1s] [   38.7s] [    0.7s] [ 1.07 GB] [[[1m    1:08[0m]] [[92m<    2:21[0m] [<14:12]
 Processing frame 2/3... IT        0 3.06998012e+00
 IT        1 1.41839278e+00
 IT        2 1.08436521e-01
@@ -106,7 +106,7 @@ Max force
 1.357936067498325
 Max torque
 0.45687242202223555
-[    0.0s] [    0.0s] [    0.0s] [   26.8s] [    8.2s] [ 1.43 GB] [[[1m    1:07[0m]] [[92m    1:09[0m] [12:19]
+[    0.0s] [    0.0s] [    0.0s] [   29.6s] [    1.4s] [ 1.32 GB] [[[1m    1:04[0m]] [[92m    1:06[0m] [14:12]
 Processing frame 3/3... IT        0 3.06998012e+00
 IT        1 1.41856948e+00
 IT        2 1.10997437e-01
@@ -149,7 +149,7 @@ Max force
 1.4114648247005857
 Max torque
 0.5296008724274859
-[    0.0s] [    0.0s] [    0.0s] [   27.7s] [   12.3s] [ 1.45 GB] [[[1m    1:12[0m]] [[92m    0.0s[0m] [12:19]
-[Total time to run     4:19]
-[Complete: 2602171216-s11-i10-3fr-t0p1-M1-amphilic Janus particles]
+[    0.0s] [    0.0s] [    0.0s] [   27.6s] [    2.1s] [ 1.33 GB] [[[1m   59.9s[0m]] [[92m    0.0s[0m] [14:12]
+[Total time to run     4:00]
+[Complete: 2602171408-s11-i10-3fr-t0p1-M1-amphilic Janus particles]
 
