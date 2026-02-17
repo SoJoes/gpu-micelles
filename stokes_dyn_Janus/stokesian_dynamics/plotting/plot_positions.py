@@ -37,7 +37,7 @@ def get_latest_file(folder_path):
 folder_path = 'output'
 latest_file = get_latest_file(folder_path)
 
-filename = folder_path + latest_file
+filename = folder_path + '/' + latest_file
 graph_title = "testing"
 frameno = 15
 viewing_angle = (0, -90)
