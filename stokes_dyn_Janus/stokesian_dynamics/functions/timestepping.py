@@ -267,7 +267,7 @@ def generate_output_FTSUOE(
     (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in,
      Ua_in, Oa_in, Ea_in, Ea_c_in, Ub_in, HalfDUb_in, input_description,
      U_infinity, O_infinity, centre_of_background_flow, Ot_infinity,
-     Et_infinity, box_bottom_left, box_top_right, mu) = input_ftsuoe(
+     Et_infinity, box_bottom_left, box_top_right, mu, hydro_out) = input_ftsuoe(
         input_number, posdata, frameno, timestep, last_velocities,
         input_form=input_form, skip_computation=True)
 
@@ -348,7 +348,7 @@ def generate_output_FTSUOE(
              Ua_in, Oa_in, Ea_in, Ea_c_in, Ub_in, HalfDUb_in,
              input_description, U_infinity, O_infinity,
              centre_of_background_flow, Ot_infinity, Et_infinity,
-             box_bottom_left, box_top_right, mu) = input_ftsuoe(
+             box_bottom_left, box_top_right, mu, hydro_out) = input_ftsuoe(
                 input_number, posdata, frameno, timestep, last_velocities,
                 input_form=input_form,
                 grand_resistance_matrix_fte=grand_resistance_matrix)
