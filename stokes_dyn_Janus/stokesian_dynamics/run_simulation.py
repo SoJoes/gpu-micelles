@@ -958,19 +958,17 @@ if error == 0:
                             sphere_rotations=saved_sphere_rotations)
 
         if input_number >= 10:
-            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+            np.savez_compressed(output_folder + '/' + filename + legion_random_id,
                             Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                             centres=saved_element_positions, deltax=saved_deltax,
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
-                            sphere_rotations=saved_sphere_rotations)
-
-            np.savez_compressed(output_folder + '/' + filename + legion_random_id + 'hydro_out',pot=saved_hydro_out[:,0],
-                                indicator=saved_hydro_out[:,1],
-                                nabla_pot_x=saved_hydro_out[:,2],
-                                nabla_pot_y=saved_hydro_out[:,3],
-                                T_xx=saved_hydro_out[:,4],
-                                T_yy=saved_hydro_out[:,5],
-                                T_xy=saved_hydro_out[:,6])
+                            sphere_rotations=saved_sphere_rotations, pot=saved_hydro_out[:,0],
+                            indicator=saved_hydro_out[:,1],
+                            nabla_pot_x=saved_hydro_out[:,2],
+                            nabla_pot_y=saved_hydro_out[:,3],
+                            T_xx=saved_hydro_out[:,4],
+                            T_yy=saved_hydro_out[:,5],
+                            T_xy=saved_hydro_out[:,6])
         # Remove backup file
         backup_file = output_folder + '/' + filename + legion_random_id + '_TEMP.npz'
         if os.path.exists(backup_file):
