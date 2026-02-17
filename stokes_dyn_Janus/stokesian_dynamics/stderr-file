@@ -20,6 +20,8 @@ Loading intel-oneapi/2022.1.2/compiler
   return get_opencl_fft_app(queue, shape, dtype, inverse)
 /home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/sumpy/tools.py:1045: DirectCallUncachedWarning: TranslationUnit.__call__ is uncached as of 2025, meaning it will incur possibly substantial compilation cost with every invocation. Use TranslationUnit.executor to obtain an object that holds longer-lived caches.
   evt, (output_vec,) = app(queue, y=input_vec, wait_for=wait_for)
+/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pyopencl/__init__.py:570: CompilerWarning: Non-empty compiler output encountered. Set the environment variable PYOPENCL_COMPILER_OUTPUT=1 to see more.
+  lambda: self._prg.build(options_bytes, devices),
 /home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:196: ComplexWarning: Casting complex values to real discards the imaginary part
   actx, sigma=gmres_result.solution, k=k)).astype(np.float64)
 /home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:307: ComplexWarning: Casting complex values to real discards the imaginary part
@@ -30,3 +32,11 @@ Loading intel-oneapi/2022.1.2/compiler
   torques[igrp] = t - (Januses.pos_array[igrp][0] * fy - Januses.pos_array[igrp][1] * fx)
 /home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/pytential_handling/amphilic_Janus_potential.py:326: ComplexWarning: Casting complex values to real discards the imaginary part
   hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
+Traceback (most recent call last):
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/plotting/plot_positions.py", line 154, in <module>
+    fplot.write_vtk_file("frame_output/frame"+str(frame)+".vts", [
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/sumpy/visualization.py", line 181, in write_vtk_file
+    write_structured_grid(file_name, self.nd_points,
+  File "/home3/dbxl46/pytential_stokes/pytential_stokes/myenv/lib/python3.11/site-packages/pyvisfile/vtk/__init__.py", line 1008, in write_structured_grid
+    raise FileExistsError(f"Output file '{file_name}' already exists")
+FileExistsError: Output file 'frame_output/frame0.vts' already exists
