@@ -562,7 +562,7 @@ def generate_output_FTSUOE(
             last_generated_Minfinity_inverse, gen_times,
             U_infinity, O_infinity, centre_of_background_flow,
             Ot_infinity, Et_infinity,
-            force_on_wall_due_to_dumbbells, last_velocity_vector)
+            force_on_wall_due_to_dumbbells, last_velocity_vector, hydro_out)
 
 
 def calculate_time_left(times, frameno, num_frames, invert_m_every,
