@@ -53,6 +53,8 @@ class Janus_particle_array:
                     b=position) for position in positions]
 
 def amphilics(visualize=False, particle_pos=None, particle_facing=None):
+    import logging
+    logging.basicConfig(level=logging.INFO)
     base_mesh = make_curve_mesh(
                 partial(ellipse, 1),
                 np.linspace(0, 1, nelements+1),
