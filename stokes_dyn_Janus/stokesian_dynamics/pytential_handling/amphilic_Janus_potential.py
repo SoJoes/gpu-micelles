@@ -72,7 +72,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     meshes = Januses.meshes
 
     mesh = merge_disjoint_meshes(meshes, single_group=False) # so that we have separate particles
-    print(merged meshes)
+    print("merged meshes")
 
     # discretise boundary before qbx or gmres
     pre_density_discr = Discretization(
