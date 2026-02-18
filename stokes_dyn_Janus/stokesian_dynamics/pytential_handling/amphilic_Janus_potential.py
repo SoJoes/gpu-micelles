@@ -60,25 +60,21 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
                 partial(ellipse, 1),
                 np.linspace(0, 1, nelements+1),
                 mesh_order)
-    print("made base")
 
     Januses = Janus_particle_array(
         positions = particle_pos,
         facings = particle_facing,
         base_mesh = base_mesh
     )
-    print("made array")
 
     meshes = Januses.meshes
 
     mesh = merge_disjoint_meshes(meshes, single_group=False) # so that we have separate particles
-    print("merged meshes")
 
     # discretise boundary before qbx or gmres
     pre_density_discr = Discretization(
             actx, mesh,
             InterpolatoryQuadratureSimplexGroupFactory(bdry_quad_order))
-    print("discretised boundary")
 
     from pytential.qbx import QBXLayerPotentialSource, QBXTargetAssociationFailedError
     # setup for qbx
@@ -88,6 +84,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
             qbx_order=qbx_order,
             fmm_order=fmm_order
             )
+    print("qbx happened")
 
     from sumpy.visualization import FieldPlotter
     fplot = FieldPlotter(np.zeros(2), extent=16, npoints=500)
@@ -102,6 +99,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     # discretised boundary for density calculations
     density_discr = places.get_discretization("qbx")
+    print("qbx happened")
 
     # {{{ describe bvp
 
@@ -325,5 +323,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     hydro_out = [fld_in_vol, indicator, nabla_pot_x, nabla_pot_y, T_xx_eval, T_yy_eval, T_xy_eval]
     hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
+    print("calculated forces and stuff")
 
     return (forces_x, forces_y, torques), hydro_out
