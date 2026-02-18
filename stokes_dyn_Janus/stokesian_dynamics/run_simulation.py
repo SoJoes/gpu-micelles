@@ -11,6 +11,8 @@ You can override the inputs:
     setup_number, input_number, timestep, num_frames
 by passing them in as arguments from the command line."""
 
+print("We are running this btw")
+
 import sys
 import os
 import numpy as np
@@ -19,6 +21,7 @@ import socket
 import datetime
 import psutil
 import numba
+print("We are running this btw")
 from functions.email import send_email
 from functions.shared import (posdata_data, format_elapsed_time, throw_error,
                               throw_warning, feed_particles_from_bottom,
@@ -46,6 +49,7 @@ from settings import (
     timestepping_scheme, bead_bead_interactions, fully_2d_problem,
     start_saving_after_first_n_timesteps, rk4_generate_minfinity_for_each_stage)
 from resistance_scalars.data import s_dash_range, lam_range_with_reciprocals
+print("We are running this btw")
 
 # Input description of simulation
 args = sys.argv[1:]
@@ -56,6 +60,7 @@ else:
     desc = ""
 
 total_time_start = time.time()
+print("We are running this btw")
 
 
 if view_graphics:
