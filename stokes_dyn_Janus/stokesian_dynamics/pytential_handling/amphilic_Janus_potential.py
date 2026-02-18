@@ -84,11 +84,11 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
             qbx_order=qbx_order,
             fmm_order=fmm_order
             )
-    print("qbx happened")
 
     from sumpy.visualization import FieldPlotter
     fplot = FieldPlotter(np.zeros(2), extent=16, npoints=500)
     targets = actx.from_numpy(fplot.points)
+    print("fplot")
 
     from pytential import GeometryCollection
     places = GeometryCollection({
@@ -97,8 +97,11 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
         "targets": PointsTarget(targets)
         }, auto_where="qbx") # places in which to eval qbx
 
+
+    print("geom")
     # discretised boundary for density calculations
     density_discr = places.get_discretization("qbx")
+    print("qbx")
 
     # {{{ describe bvp
 
@@ -154,13 +157,11 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
       return DOFArray(actx, tuple(bc_data))
 
     bc = amphilic(nodes, Januses)
-    print("calculated bc")
 
     bvp_rhs = bind(places, sqrt_w*sym.var("bc"))(actx, bc=bc)
 
 
     bvp_rhs = DOFArray(actx, data=tuple(array for array in bvp_rhs))
-    print("Did bvp rhs")
 
     from pytential.linalg.gmres import gmres
 
