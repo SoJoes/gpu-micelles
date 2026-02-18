@@ -27,6 +27,8 @@ def pos_setup(n):
     """
     desc = ""
 
+    print("Positions called")
+
     if n < 0:
         # Tests for Pytest
         posdata, desc = pos_setup_tests(n)
@@ -209,6 +211,8 @@ def pos_setup(n):
             phi=0, current_sphere_sizes=sphere_sizes, current_sphere_positions=sphere_positions)
 
     elif n==11:
+
+        print("Positions assigned")
         # micelle forming positions
         # number janus particles in x and y axes
 
@@ -226,6 +230,7 @@ def pos_setup(n):
 
         # code modified from position 1
         num_spheres = nx*ny
+
         '''
         # only 3 spheres
         my_pos = np.zeros((3,3))
@@ -262,8 +267,6 @@ def pos_setup(n):
         dumbbell_sizes = np.array([])
         dumbbell_positions = np.empty([0, 3])
         dumbbell_deltax = np.empty([0, 3])
-
-        print("Positions assigned")
 
     elif n == 12:
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
