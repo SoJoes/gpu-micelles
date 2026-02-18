@@ -229,7 +229,7 @@ def pos_setup(n):
         '''
 
         # only 3 spheres
-        my_pos = np.array([[0,0.5], [-0.5,-0.5], [0.5,-0.5]])
+        my_pos = np.array([[0,0,0.5], [-0.5,0,-0.5], [0.5,0,-0.5]])
         my_rotations = np.array([-np.pi/2, np.pi/4, 3*np.pi/4])
         num_spheres = 3
 
