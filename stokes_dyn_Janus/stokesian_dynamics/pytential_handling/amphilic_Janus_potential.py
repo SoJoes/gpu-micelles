@@ -55,31 +55,30 @@ class Janus_particle_array:
 def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     import logging
     logging.basicConfig(level=logging.INFO)
+
     base_mesh = make_curve_mesh(
                 partial(ellipse, 1),
                 np.linspace(0, 1, nelements+1),
                 mesh_order)
+    print("made base")
 
     Januses = Janus_particle_array(
         positions = particle_pos,
         facings = particle_facing,
         base_mesh = base_mesh
     )
+    print("made array")
 
     meshes = Januses.meshes
 
     mesh = merge_disjoint_meshes(meshes, single_group=False) # so that we have separate particles
-
-    if visualize:
-        from meshmode.mesh.visualization import draw_curve
-        draw_curve(mesh)
-        import matplotlib.pyplot as plt
-        plt.show()
+    print(merged meshes)
 
     # discretise boundary before qbx or gmres
     pre_density_discr = Discretization(
             actx, mesh,
             InterpolatoryQuadratureSimplexGroupFactory(bdry_quad_order))
+    print("discretised boundary")
 
     from pytential.qbx import QBXLayerPotentialSource, QBXTargetAssociationFailedError
     # setup for qbx
