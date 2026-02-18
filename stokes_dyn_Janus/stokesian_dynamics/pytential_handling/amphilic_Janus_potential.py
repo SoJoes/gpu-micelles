@@ -224,7 +224,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
       # Scalar part of the first two terms in the definition of T_ij
       # (u^2/rho) * delta_ij + (1/2) * |grad u|^2 * delta_ij
-      scalar_diagonal_term = (u_sym**2 / rho) + rho * grad_mag_sq
+      scalar_diagonal_term = (u_sym**2 / rho) + rho * grad_mag_sq /2
 
       # Factor for the outer product term: -2 * rho * (grad_i u) * (grad_j u)
       outer_product_factor = 2 * rho
