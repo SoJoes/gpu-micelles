@@ -99,7 +99,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     # discretised boundary for density calculations
     density_discr = places.get_discretization("qbx")
-    print("qbx happened")
 
     # {{{ describe bvp
 
@@ -125,6 +124,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
 
     bound_op = bind(places, bdry_op_sym)
+    print("binding")
 
     # {{{ fix rhs and solve
 
@@ -154,11 +154,13 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
       return DOFArray(actx, tuple(bc_data))
 
     bc = amphilic(nodes, Januses)
+    print("calculated bc")
 
     bvp_rhs = bind(places, sqrt_w*sym.var("bc"))(actx, bc=bc)
 
 
     bvp_rhs = DOFArray(actx, data=tuple(array for array in bvp_rhs))
+    print("Did bvp rhs")
 
     from pytential.linalg.gmres import gmres
 
@@ -323,6 +325,5 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     hydro_out = [fld_in_vol, indicator, nabla_pot_x, nabla_pot_y, T_xx_eval, T_yy_eval, T_xy_eval]
     hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
-    print("calculated forces and stuff")
 
     return (forces_x, forces_y, torques), hydro_out
