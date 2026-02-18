@@ -263,6 +263,8 @@ def pos_setup(n):
         dumbbell_positions = np.empty([0, 3])
         dumbbell_deltax = np.empty([0, 3])
 
+        print("Positions assigned")
+
     elif n == 12:
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
             same_setup_as('2602061517-s11-i10-5fr-t1p0-M1-amphilic Janus particles', frameno=4))
