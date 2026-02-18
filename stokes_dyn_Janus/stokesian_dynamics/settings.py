@@ -176,8 +176,11 @@ if using_pytential:
     from meshmode.array_context import PyOpenCLArrayContext
     import pyopencl as cl
 
+    print("what on earth")
+
     cl_ctx = cl.create_some_context()
     queue = cl.CommandQueue(cl_ctx)
 
     allocator = cl.tools.MemoryPool(cl.tools.ImmediateAllocator(queue))
     actx = PyOpenCLArrayContext(queue, allocator=allocator)
+    print("literally did it?")
