@@ -53,8 +53,8 @@ class Janus_particle_array:
                     b=position) for position in positions]
 
 def amphilics(visualize=False, particle_pos=None, particle_facing=None):
-    import logging
-    logging.basicConfig(level=logging.INFO)
+    #import logging
+    #logging.basicConfig(level=logging.INFO)
 
     base_mesh = make_curve_mesh(
                 partial(ellipse, 1),
@@ -88,7 +88,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     from sumpy.visualization import FieldPlotter
     fplot = FieldPlotter(np.zeros(2), extent=16, npoints=500)
     targets = actx.from_numpy(fplot.points)
-    print("fplot")
 
     from pytential import GeometryCollection
     places = GeometryCollection({
@@ -98,10 +97,8 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
         }, auto_where="qbx") # places in which to eval qbx
 
 
-    print("geom")
     # discretised boundary for density calculations
     density_discr = places.get_discretization("qbx")
-    print("qbx")
 
     # {{{ describe bvp
 
@@ -127,7 +124,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
 
     bound_op = bind(places, bdry_op_sym)
-    print("binding")
 
     # {{{ fix rhs and solve
 
