@@ -48,7 +48,6 @@ from settings import (
 from resistance_scalars.data import s_dash_range, lam_range_with_reciprocals
 
 # Input description of simulation
-print("It's starting...")
 args = sys.argv[1:]
 number_of_args = len(args)
 if number_of_args == 0:
@@ -77,8 +76,6 @@ saved_element_positions = np.array([])
 times = [0 for _ in range(num_frames)]
 output_folder = "output"
 legion_random_id = ""
-
-print("Initialised...")
 
 # Pictures initialise
 if view_graphics:
