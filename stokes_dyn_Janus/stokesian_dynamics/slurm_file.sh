@@ -27,4 +27,5 @@ python -c "import pyopencl as cl; print(cl.get_platforms())"
 export PYOPENCL_CTX='0'
 
 # Run your script
-python -O run_simulation.py 11 10 0.1 50 fte
+python3.11 run_simulation.py 11 10 0.1 50 fte
+python3.11 plotting/plot_positions.py
