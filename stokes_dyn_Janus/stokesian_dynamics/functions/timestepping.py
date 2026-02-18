@@ -115,11 +115,9 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
                 perp1 = np.array([0., 0., 1.])
             else:
                 perp1 = np.array([1., 0., 0.])
-            print("first")
+            print(np.cross(Oa_omega_out[i], perp1))
             rot_matrix[:,0] = np.cross(Oa_omega_out[i], perp1) / O
-            print("second")
             rot_matrix[:,1] = np.cross(Oa_omega_out[i],np.cross(Oa_omega_out[i], perp1)) / O**2
-            print("Third")
             rot_matrix[:,2] = Oa_omega_out[i] / O
         for j in range(2):
             ''' rb0 is the position ("r") of the endpoint of the pointy
@@ -136,12 +134,10 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
             z0 = rbdashdash0_xyz[2]
 
             r0 = (x0 ** 2 + y0 ** 2 + z0 ** 2) ** 0.5
-            print("Fourth")
             t0 = np.arccos(z0 / r0)
             p0 = 0.0 if (x0 == 0 and y0 == 0) else np.arctan2(y0, x0)
             r = r0
             t = t0
-            print("Fifth")
             p = euler_timestep(p0, O, timestep)
 
             x = r * np.sin(t) * np.cos(p)
