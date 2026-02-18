@@ -211,7 +211,7 @@ def pos_setup(n):
     elif n==11:
         # micelle forming positions
         # number janus particles in x and y axes
-        '''
+
         nx = 2
         ny = 2
         dx = 6 / nx
@@ -227,7 +227,6 @@ def pos_setup(n):
         # code modified from position 1
         num_spheres = nx*ny
         '''
-
         # only 3 spheres
         my_pos = np.zeros((3,3))
         my_pos[0][2] = 0.5
@@ -237,6 +236,7 @@ def pos_setup(n):
         my_pos[2][2] = -0.5
         my_rotations = np.array([3*np.pi/2, np.pi/4, 3*np.pi/4])
         num_spheres = 3
+        '''
 
         sphere_sizes = np.array([1 for _ in range(num_spheres)])
         sphere_positions = my_pos
