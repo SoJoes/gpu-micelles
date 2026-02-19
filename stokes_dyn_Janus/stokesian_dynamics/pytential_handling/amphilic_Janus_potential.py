@@ -318,7 +318,8 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     representation_sym_grad_vol = grad(
         ambient_dim=2,
-        operand=representation_sym_vol
+        operand=sym.S(kernel, inv_sqrt_w_sigma, lam=k_sym, **repr_kwargs)
+            + sym.D(kernel, inv_sqrt_w_sigma, lam=k_sym, **repr_kwargs)
     )
 
     nabla_pot = bind(places, representation_sym_grad_vol)(
@@ -343,7 +344,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
 
     print("sizes")
-    print(nabla_pot_x.shape)
+    print(nabla_pot.shape)
     print(fld_in_vol.shape)
 
     return (forces_x, forces_y, torques), hydro_out
