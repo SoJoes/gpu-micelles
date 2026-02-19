@@ -210,11 +210,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     nabla_pot = bind(places, representation_sym_grad)(
       actx, sigma=gmres_result.solution, k=k)
 
-    import sympy.printing as sp
-    # nabla_pot is a vector field (2 components), so write components separately to VTK
-    print("Symbolic")
-    print(representation_sym_grad)
-
     # calculate hydrophobic stress
     def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
       # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
@@ -314,6 +309,9 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     nabla_pot_x = actx.to_numpy(nabla_pot[0])
     nabla_pot_y = actx.to_numpy(nabla_pot[1])
+
+    nabla_pot_x = nabla_pot_x.reshape(fplot.shape, order="F")
+    nabla_pot_y = nabla_pot_y.reshape(fplot.shape, order="F")
 
     T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=1/k)
 
