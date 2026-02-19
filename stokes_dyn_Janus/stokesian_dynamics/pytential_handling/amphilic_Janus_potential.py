@@ -106,8 +106,8 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     # {{{ describe bvp
 
-    from sumpy.kernel import HelmholtzKernel, LaplaceKernel
-    kernel = ScreenedLaplaceKernel(2)
+    from sumpy.kernel import HelmholtzKernel, LaplaceKernel, YukawaKernel
+    kernel = YukawaKernel(2)
 
     sigma_sym = sym.var("sigma")
     sqrt_w = sym.sqrt_jac_q_weight(2)
@@ -160,7 +160,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     bvp_rhs = bind(places, sqrt_w*sym.var("bc"))(actx, bc=bc)
 
-
     bvp_rhs = DOFArray(actx, data=tuple(array for array in bvp_rhs))
 
     from pytential.linalg.gmres import gmres
@@ -207,7 +206,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     # find grad of potential
     from pytential.symbolic.primitives import grad
 
-    representation_sym_grad = -grad(ambient_dim=2, operand = representation_sym)  # gives wrong result if not negative
+    representation_sym_grad = grad(ambient_dim=2, operand = representation_sym)  # gives wrong result if not negative
     nabla_pot = bind(places, representation_sym_grad)(
       actx, sigma=gmres_result.solution, k=k)
 
@@ -260,7 +259,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     representation_sym_grad_boundary = grad(ambient_dim=2, operand = representation_sym_boundary)
 
     # calculate hydrophobic stress tensor on the boundary
-    T_sym_components_boundary = hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary, rho=k)
+    T_sym_components_boundary = hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary, rho=1/k)
 
     # Define force integrands
     force_integrand_x_sym = T_sym_components_boundary[0] * nvec_sym[0] + T_sym_components_boundary[1] * nvec_sym[1]
@@ -312,7 +311,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
         # torque needs to be centred around particle
         torques[igrp] = t - (Januses.pos_array[igrp][0] * fy - Januses.pos_array[igrp][1] * fx)
 
-    T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=k)
+    T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=1/k)
 
     # eval hydrophobic stress
     T_xx_eval = actx.to_numpy(
