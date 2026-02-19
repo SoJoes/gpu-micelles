@@ -213,7 +213,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     import sympy.printing as sp
     # nabla_pot is a vector field (2 components), so write components separately to VTK
     print("Symbolic")
-    sp.pretty.pretty.pretty_print(representation_sym_grad)
+    print(representation_sym_grad)
 
     # calculate hydrophobic stress
     def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
