@@ -310,9 +310,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     nabla_pot_x = actx.to_numpy(nabla_pot[0])
     nabla_pot_y = actx.to_numpy(nabla_pot[1])
 
-    nabla_pot_x = nabla_pot_x.reshape(fplot.shape, order="F")
-    nabla_pot_y = nabla_pot_y.reshape(fplot.shape, order="F")
-
     T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=1/k)
 
     # eval hydrophobic stress
@@ -327,9 +324,5 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     hydro_out = [fld_in_vol, indicator, nabla_pot_x, nabla_pot_y, T_xx_eval, T_yy_eval, T_xy_eval]
     hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
-
-    print("sizes")
-    print(nabla_pot.shape)
-    print(fld_in_vol.shape)
 
     return (forces_x, forces_y, torques), hydro_out
