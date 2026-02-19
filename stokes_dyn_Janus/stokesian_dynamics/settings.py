@@ -72,7 +72,7 @@ cutoff_factor = 2
 
 # Timestepping scheme: Choose explicit timestep from: ['euler', 'ab2', 'rk4']
 # (ab2=Adams Bashforth)
-timestepping_scheme = 'euler'
+timestepping_scheme = 'ab2'
 
 # If using RK4, do you want to generate Minfinity for each of the 4 stages
 # (True), or just for the initial stage (False)? In the absence of R2Bexact,
@@ -111,10 +111,10 @@ explosion_protection = True
 
 # Save positions/forces every n timesteps?
 start_saving_after_first_n_timesteps = 0
-save_positions_every_n_timesteps = 1
-save_forces_every_n_timesteps = 1
+save_positions_every_n_timesteps = 8
+save_forces_every_n_timesteps = 8
 save_forces_and_positions_to_temp_file_as_well = True
-save_to_temp_file_every_n_timesteps = 1
+save_to_temp_file_every_n_timesteps = 8
 
 if start_saving_after_first_n_timesteps > num_frames:
     print("WARNING: start_saving_after_first_n_timesteps > num_frames. "
