@@ -342,4 +342,8 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     hydro_out = [fld_in_vol, indicator, nabla_pot_x, nabla_pot_y, T_xx_eval, T_yy_eval, T_xy_eval]
     hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
 
+    print("sizes")
+    print(nabla_pot_x.shape)
+    print(fld_in_vol.shape)
+
     return (forces_x, forces_y, torques), hydro_out
