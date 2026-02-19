@@ -311,6 +311,22 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
         # torque needs to be centred around particle
         torques[igrp] = t - (Januses.pos_array[igrp][0] * fy - Januses.pos_array[igrp][1] * fx)
 
+    representation_sym_vol = (
+            sym.S(kernel, inv_sqrt_w_sigma, lam=k_sym, **repr_kwargs)
+            + sym.D(kernel, inv_sqrt_w_sigma, lam=k_sym, **repr_kwargs)
+    )
+
+    representation_sym_grad_vol = grad(
+        ambient_dim=2,
+        operand=representation_sym_vol
+    )
+
+    nabla_pot = bind(places, representation_sym_grad_vol)(
+        actx, sigma=gmres_result.solution, k=k)
+
+    nabla_pot_x = actx.to_numpy(nabla_pot[0])
+    nabla_pot_y = actx.to_numpy(nabla_pot[1])
+
     T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=1/k)
 
     # eval hydrophobic stress
