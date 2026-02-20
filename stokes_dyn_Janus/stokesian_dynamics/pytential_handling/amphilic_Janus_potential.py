@@ -86,7 +86,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
             )
 
     from sumpy.visualization import FieldPlotter
-    fplot = FieldPlotter(np.zeros(2), extent=10, npoints=500)
+    fplot = FieldPlotter(np.zeros(2), extent=20, npoints=500)
     targets = actx.from_numpy(fplot.points)
 
     from pytential import GeometryCollection
