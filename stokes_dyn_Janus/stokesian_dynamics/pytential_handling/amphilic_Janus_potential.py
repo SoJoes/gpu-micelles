@@ -56,8 +56,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     #import logging
     #logging.basicConfig(level=logging.INFO)
 
-    print("Do we even get there?")
-
     base_mesh = make_curve_mesh(
                 partial(ellipse, 1),
                 np.linspace(0, 1, nelements+1),
@@ -88,7 +86,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
             )
 
     from sumpy.visualization import FieldPlotter
-    fplot = FieldPlotter(np.zeros(2), extent=5, npoints=500)
+    fplot = FieldPlotter(np.zeros(2), extent=10, npoints=500)
     targets = actx.from_numpy(fplot.points)
 
     from pytential import GeometryCollection
@@ -100,9 +98,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
 
     # discretised boundary for density calculations
-    print("QBX is silently failing")
     density_discr = places.get_discretization("qbx")
-    print("LYING")
 
     # {{{ describe bvp
 
