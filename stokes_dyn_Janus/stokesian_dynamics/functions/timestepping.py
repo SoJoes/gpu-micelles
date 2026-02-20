@@ -79,6 +79,15 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
 
     See comments inside the function for details."""
 
+    print("debugging info")
+    print(sphere_positions)
+    print(sphere_rotations)
+    print(new_sphere_positions)
+    print(new_sphere_rotations)
+    print(Oa_out)
+    print(Ta_out)
+    print(timestep)
+
     rot_matrix = np.empty((3,3))
 
     moment_of_inertia = 0.5  # 0.5*radius^2 1 * mass 1
