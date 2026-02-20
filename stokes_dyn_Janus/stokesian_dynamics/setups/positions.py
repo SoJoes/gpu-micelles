@@ -228,7 +228,7 @@ def pos_setup(n):
         my_pos = np.array([[-1,0,0],
                            [1.5,0,3.3],
                            [1.5,0,-1.5]])
-        my_rotations = np.array([0.31, 4.18, -1.04])
+        my_rotations = np.array([-0.31, -4.18, 1.04])
         num_spheres = 3
 
         sphere_sizes = np.array([1 for _ in range(num_spheres)])
