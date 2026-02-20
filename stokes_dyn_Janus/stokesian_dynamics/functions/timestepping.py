@@ -115,8 +115,9 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
         
         Modified to rotate in response to torque also
         '''
+        tol = 1e-3
 
-        if O < 1e-3: # tolerance for magnitude of O
+        if O < tol: # tolerance for magnitude of O
             rot_matrix = np.identity(3)
         else:
             Otest = (np.abs(Oa_omega_out[i] / O)).astype('float')
@@ -124,8 +125,6 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
                 perp1 = np.array([0., 0., 1.])
             else:
                 perp1 = np.array([1., 0., 0.])
-
-            print("Its here")
             rot_matrix[:,0] = np.cross(Oa_omega_out[i], perp1) / O
             rot_matrix[:,1] = np.cross(Oa_omega_out[i],np.cross(Oa_omega_out[i], perp1)) / O**2
             rot_matrix[:,2] = Oa_omega_out[i] / O
@@ -145,21 +144,23 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
             z0 = rbdashdash0_xyz[2]
 
             r0 = (x0 ** 2 + y0 ** 2 + z0 ** 2) ** 0.5
-            print("NO, here!!!")
-            t0 = np.arccos(z0 / r0)
-            print("Here actually")
-            p0 = 0.0 if (x0 == 0 and y0 == 0) else np.arctan2(y0, x0)
-            r = r0
-            t = t0
-            p = euler_timestep(p0, O, timestep)
+            if r0 <= tol:
+                new_sphere_rotations[i,j] = sphere_rotations[i,j]
+                print("Used tol <3")
+            else:
+                t0 = np.arccos(z0 / r0)
+                p0 = 0.0 if (x0 == 0 and y0 == 0) else np.arctan2(y0, x0)
+                r = r0
+                t = t0
+                p = euler_timestep(p0, O, timestep)
 
-            x = r * np.sin(t) * np.cos(p)
-            y = r * np.sin(t) * np.sin(p)
-            z = r * np.cos(t)
-            rbdashdash_xyz = np.array([x, y, z])
-            R = new_sphere_positions[i]
-            rb = R + np.dot(rot_matrix, rbdashdash_xyz)
-            new_sphere_rotations[i, j] = rb
+                x = r * np.sin(t) * np.cos(p)
+                y = r * np.sin(t) * np.sin(p)
+                z = r * np.cos(t)
+                rbdashdash_xyz = np.array([x, y, z])
+                R = new_sphere_positions[i]
+                rb = R + np.dot(rot_matrix, rbdashdash_xyz)
+                new_sphere_rotations[i, j] = rb
     return new_sphere_rotations
 
 
