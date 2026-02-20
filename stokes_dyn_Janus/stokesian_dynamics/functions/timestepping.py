@@ -116,7 +116,7 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
         Modified to rotate in response to torque also
         '''
 
-        if np.array_equal(Oa_omega_out[i], np.array([0., 0., 0.])):
+        if O < 1e-3: # tolerance for magnitude of O
             rot_matrix = np.identity(3)
         else:
             Otest = (np.abs(Oa_omega_out[i] / O)).astype('float')
@@ -124,7 +124,7 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
                 perp1 = np.array([0., 0., 1.])
             else:
                 perp1 = np.array([1., 0., 0.])
-            print(np.cross(Oa_omega_out[i], perp1))
+
             rot_matrix[:,0] = np.cross(Oa_omega_out[i], perp1) / O
             rot_matrix[:,1] = np.cross(Oa_omega_out[i],np.cross(Oa_omega_out[i], perp1)) / O**2
             rot_matrix[:,2] = Oa_omega_out[i] / O
