@@ -47,7 +47,7 @@ try:
     if number_of_args >= 6:
         #extract_force_on_wall_due_to_dumbbells = (
         #    args[5] in ["True", "true", "t", "T", "1"])
-        save_every_n = args[5]
+        save_every_n = int(args[5])
     if number_of_args >= 5:
         input_form = args[4]
     if number_of_args >= 4:
