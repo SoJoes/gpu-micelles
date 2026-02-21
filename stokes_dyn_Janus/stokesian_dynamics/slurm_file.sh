@@ -3,10 +3,10 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --gres=gpu:1g.10gb:1
-#SBATCH -t 01-12
+#SBATCH -t 01
 
 #SBATCH -p ug-gpu-small
-#SBATCH --qos=debug
+#SBATCH --qos=short
 #SBATCH --job-name=micelle_formation
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
