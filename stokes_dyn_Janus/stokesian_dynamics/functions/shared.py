@@ -308,8 +308,7 @@ def same_setup_as(filename, frameno=0, sphere_size=1, dumbbell_size=0.1,
     dumbbell_deltax = positions_deltax[frameno, :, :]
     sphere_sizes = np.array([sphere_size for _ in range(num_spheres)])
     dumbbell_sizes = np.array([dumbbell_size for _ in range(num_dumbbells)])
-    sphere_rotations = add_sphere_rotations_to_positions(
-        sphere_positions, sphere_sizes, np.array([[1, 0, 0], [0, 0, 1]]))
+    sphere_rotations = data1['sphere_rotations']
     return (sphere_sizes, sphere_positions, sphere_rotations,
             dumbbell_sizes, dumbbell_positions, dumbbell_deltax)
 
