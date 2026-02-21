@@ -34,6 +34,8 @@ num_frames = 100
 # How to solve the equation U=MF. {'fts','fte','ufte','ufteu','duf'}
 input_form = 'fte'
 
+save_every_n = 1
+
 # ----------------------------------------------------------------------------|
 # BASIC SETTINGS: OVERRIDES FROM COMMAND LINE
 
@@ -43,8 +45,9 @@ running_on_legion = 0
 
 try:
     if number_of_args >= 6:
-        extract_force_on_wall_due_to_dumbbells = (
-            args[5] in ["True", "true", "t", "T", "1"])
+        #extract_force_on_wall_due_to_dumbbells = (
+        #    args[5] in ["True", "true", "t", "T", "1"])
+        save_every_n = args[5]
     if number_of_args >= 5:
         input_form = args[4]
     if number_of_args >= 4:
@@ -111,10 +114,10 @@ explosion_protection = True
 
 # Save positions/forces every n timesteps?
 start_saving_after_first_n_timesteps = 0
-save_positions_every_n_timesteps = 4
-save_forces_every_n_timesteps = 4
+save_positions_every_n_timesteps = save_every_n
+save_forces_every_n_timesteps = save_every_n
 save_forces_and_positions_to_temp_file_as_well = True
-save_to_temp_file_every_n_timesteps = 4
+save_to_temp_file_every_n_timesteps = save_every_n
 
 if start_saving_after_first_n_timesteps > num_frames:
     print("WARNING: start_saving_after_first_n_timesteps > num_frames. "
