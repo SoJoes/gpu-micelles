@@ -85,7 +85,7 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
     alpha = Ta_out / moment_of_inertia  # angular acceleration
     omega = timestep * alpha  # angular velocity
 
-    Oa_omega_out = Oa_out - omega # rotation is opposite to amphilic
+    Oa_omega_out = Oa_out + omega
 
     for i in range(sphere_positions.shape[0]):
         R0 = sphere_positions[i]
