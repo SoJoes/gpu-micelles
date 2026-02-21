@@ -258,7 +258,7 @@ def pos_setup(n):
 
     elif n == 12:
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
-            same_setup_as('2602061517-s11-i10-5fr-t1p0-M1-amphilic Janus particles', frameno=4))
+            same_setup_as('2602211054-s11-i10-40fr-t0p1-M1-amphilic Janus particles', frameno=39))
 
     elif n == 13:
         # one sphere

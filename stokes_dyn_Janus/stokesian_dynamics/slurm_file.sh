@@ -3,6 +3,7 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --gres=gpu:1g.10gb:1
+#SBATCH -t 01-12
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=debug
@@ -30,5 +31,5 @@ export PYOPENCL_CTX='0'
 
 rm -rf frame_output
 mkdir -p frame_output
-python3.11 -u run_simulation.py 11 10 0.1 40 fte
+python3.11 -u run_simulation.py 11 10 0.1 80 fte
 python3.11 plotting/plot_positions.py
