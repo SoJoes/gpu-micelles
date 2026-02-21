@@ -3,7 +3,7 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --gres=gpu:1g.10gb:1
-#SBATCH -t 01
+#SBATCH -t 01-00
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
