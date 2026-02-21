@@ -238,6 +238,9 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         sphere_2dpos[:, 1] = sphere_positions[:, 2]
 
         facings = np.arccos((sphere_rotations[:,0,0] - sphere_positions[:, 0])/sphere_sizes)
+        print("Debug Info:")
+        print(sphere_rotations)
+        print(facings)
 
         hydrophobic_forces, hydro_out = amphilics(particle_pos = sphere_2dpos, particle_facing = facings)
 
