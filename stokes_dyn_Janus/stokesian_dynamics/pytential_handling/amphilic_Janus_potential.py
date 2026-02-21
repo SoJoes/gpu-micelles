@@ -114,9 +114,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     k_sym = sym.var("k")
     bdry_op_sym = (-loc_sign*0.5*sigma_sym
             + sqrt_w*(
-                sym.S(kernel, inv_sqrt_w_sigma, lam=k_sym,
-                    qbx_forced_limit=+1)
-                + sym.D(kernel, inv_sqrt_w_sigma, lam=k_sym,
+                sym.D(kernel, inv_sqrt_w_sigma, lam=k_sym,
                     qbx_forced_limit="avg")
                 ))
 
@@ -311,10 +309,8 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
     # eval hydrophobic stress
     T_xx_eval = actx.to_numpy(
         bind(places, T_sym_components[0])(actx, sigma=gmres_result.solution, k=k))
-
     T_xy_eval = actx.to_numpy(
         bind(places, T_sym_components[1])(actx, sigma=gmres_result.solution, k=k))
-
     T_yy_eval = actx.to_numpy(
         bind(places, T_sym_components[3])(actx, sigma=gmres_result.solution, k=k))
 
