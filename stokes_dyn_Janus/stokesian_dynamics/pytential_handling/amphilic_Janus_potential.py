@@ -113,8 +113,9 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
 
     k_sym = sym.var("k")
     bdry_op_sym = (-loc_sign*0.5*sigma_sym
-            + sqrt_w*(
-                sym.D(kernel, inv_sqrt_w_sigma, lam=k_sym,
+            + sqrt_w*(sym.S(kernel, inv_sqrt_w_sigma, lam=k_sym,
+                         qbx_forced_limit=+1)
+                   + sym.D(kernel, inv_sqrt_w_sigma, lam=k_sym,
                     qbx_forced_limit="avg")
                 ))
 
