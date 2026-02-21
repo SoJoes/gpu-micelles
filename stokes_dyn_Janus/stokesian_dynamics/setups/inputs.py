@@ -239,9 +239,9 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         rot_from_origin = sphere_rotations[:,0,:] - sphere_positions
         facings = np.arctan2(rot_from_origin[:,2], rot_from_origin[:,0])
-        print("Debug Info:")
-        print(sphere_rotations)
-        print(facings)
+        #print("Debug Info:")
+        #print(sphere_rotations)
+        #print(facings)
 
         hydrophobic_forces, hydro_out = amphilics(particle_pos = sphere_2dpos, particle_facing = facings)
 
