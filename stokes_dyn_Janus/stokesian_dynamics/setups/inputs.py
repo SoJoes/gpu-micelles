@@ -237,7 +237,8 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         sphere_2dpos[:, 0] = sphere_positions[:, 0]
         sphere_2dpos[:, 1] = sphere_positions[:, 2]
 
-        facings = np.arccos((sphere_rotations[:,0,0] - sphere_positions[:, 0])/sphere_sizes)
+        rot_from_origin = sphere_rotations[:,0,:] - sphere_positions
+        facings = np.arctan2(rot_from_origin[:,2], rot_from_origin[:,0])
         print("Debug Info:")
         print(sphere_rotations)
         print(facings)
