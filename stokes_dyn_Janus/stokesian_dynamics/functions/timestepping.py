@@ -106,7 +106,7 @@ def euler_timestep_rotation(sphere_positions, sphere_rotations,
         
         Modified to rotate in response to torque also
         '''
-        tol = 1e-5
+        tol = 1e-7
 
         if O < tol: # tolerance for magnitude of O
             rot_matrix = np.identity(3)
