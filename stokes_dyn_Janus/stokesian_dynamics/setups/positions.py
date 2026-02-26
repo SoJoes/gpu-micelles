@@ -295,8 +295,8 @@ def pos_setup(n):
         # roots of unity
         my_pos = np.zeros((3, 3))
         my_pos = np.array([[1, 0, 0],
-                           [-1, 0, np.sqrt(3)/2],
-                           [-1, 0, -np.sqrt(3)/2]])
+                           [-2, 0, np.sqrt(3)],
+                           [-2, 0, -np.sqrt(3)]])
         my_rotations = np.array([np.pi, -np.pi/3, np.pi/3])
         num_spheres = 3
 
