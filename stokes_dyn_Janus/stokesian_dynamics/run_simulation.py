@@ -642,20 +642,16 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                     saved_hydro_out = np.array([hydro_out])
 
             else:
-                saved_Fa_out = np.append(np.copy(saved_Fa_out),
-                                         np.array([Fa_out]), 0)
-
-
-                saved_Fb_out = np.append(np.copy(saved_Fb_out),
-                                         np.array([Fb_out]), 0)
-                saved_DFb_out = np.append(np.copy(saved_DFb_out),
+                np.append(saved_Fa_out,np.array([Fa_out]), 0)
+                np.append(saved_Fb_out,np.array([Fb_out]), 0)
+                np.append(saved_DFb_out,
                                           np.array([DFb_out]), 0)
-                saved_Sa_out = np.append(np.copy(saved_Sa_out),
+                np.append(saved_Sa_out,
                                          np.array([Sa_out]), 0)
-                saved_force_on_wall_due_to_dumbbells = np.append(np.copy(saved_force_on_wall_due_to_dumbbells),
+                np.append(saved_force_on_wall_due_to_dumbbells,
                                                                  np.array([force_on_wall_due_to_dumbbells]), 0)
                 if input_number >= 10:
-                    saved_hydro_out = np.append(np.copy(saved_hydro_out), np.array([hydro_out]), 0)
+                    saved_hydro_out = np.append(saved_hydro_out, np.array([hydro_out]), 0)
 
 
         # Backup file

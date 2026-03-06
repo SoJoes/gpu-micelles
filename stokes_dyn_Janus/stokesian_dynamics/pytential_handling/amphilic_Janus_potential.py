@@ -145,7 +145,7 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
           rot_y = -sin_f * xg + cos_f * yg
 
           theta = actx.np.arctan2(rot_y, rot_x)
-          bc_g = (actx.np.cos(theta) + 1) / 2
+          bc_g = (actx.np.cos(theta) + 1) / 2 + actx.np.cos(1.5*theta)
 
           bc_data.append(bc_g)
 
