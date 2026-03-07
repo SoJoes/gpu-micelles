@@ -633,11 +633,11 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
             and frameno >= start_saving_after_first_n_timesteps
         ):
             if 'saved_Fa_out' not in globals():
-                saved_Fa_out = np.array([Fa_out])
-                saved_Fb_out = np.array([Fb_out])
-                saved_DFb_out = np.array([DFb_out])
-                saved_Sa_out = np.array([Sa_out])
-                saved_force_on_wall_due_to_dumbbells = np.array([force_on_wall_due_to_dumbbells])
+                saved_Fa_out = np.array([Fa_out.copy()])
+                saved_Fb_out = np.array([Fb_out.copy()])
+                saved_DFb_out = np.array([DFb_out.copy()])
+                saved_Sa_out = np.array([Sa_out.copy()])
+                saved_force_on_wall_due_to_dumbbells = np.array([force_on_wall_due_to_dumbbells.copy()])
                 if input_number >= 10:
                     saved_hydro_out = np.array([hydro_out])
 
