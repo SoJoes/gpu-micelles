@@ -127,6 +127,7 @@ for frame in range(frameno):
 
     # Pictures
     if num_spheres > 0:
+        print(Fa_out)
         (spheres, sphere_lines, sphere_trace_lines) = plot_all_spheres(
             ax, frame, posdata, previous_step_posdata, trace_paths,
             sphere_trace_lines, Fa_out[frame])
