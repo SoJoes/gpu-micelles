@@ -25,6 +25,7 @@ export PATH="$VENV/bin:$PATH"
 
 python -c "import pyopencl as cl; print(cl.get_platforms())"
 export PYOPENCL_CTX='0'
+export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
