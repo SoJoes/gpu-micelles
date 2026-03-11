@@ -612,6 +612,28 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 saved_element_positions = np.array([element_positions])
                 saved_sphere_rotations = np.array([sphere_rotations])
                 saved_deltax = np.array([dumbbell_deltax])
+                # initial save
+                if input_number < 10:
+                    savez_zarr(output_folder + '/' + filename + legion_random_id,
+                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
+                               centres=element_positions, deltax=dumbbell_deltax,
+                               force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
+                               sphere_rotations=sphere_rotations)
+
+                if input_number >= 10:
+                    savez_zarr(output_folder + '/' + filename + legion_random_id,
+                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
+                               centres=saved_element_positions[:, -1], deltax=dumbbell_deltax,
+                               force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
+                               sphere_rotations=sphere_rotations, pot=hydro_out[:, 0],
+                               indicator=hydro_out[:, 1],
+                               nabla_pot_x=hydro_out[:, 2],
+                               nabla_pot_y=hydro_out[:, 3],
+                               T_xx=hydro_out[:, 4],
+                               T_yy=hydro_out[:, 5],
+                               T_xy=hydro_out[:, 6])
+
+
             elif frameno != checkpoint_start_from_frame:
                 saved_element_positions = np.append(np.copy(saved_element_positions),
                                                     np.array([element_positions]), 0)
@@ -661,34 +683,26 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 save_forces_every_n_timesteps > 0 and
                 save_forces_and_positions_to_temp_file_as_well and
                 frameno >= start_saving_after_first_n_timesteps):
-            if input_number <10:
-                savez_zarr(output_folder + '/' + filename + legion_random_id + '_TEMP',
-                                Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
-                                centres=saved_element_positions, deltax=saved_deltax,
-                                force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
-                                sphere_rotations=saved_sphere_rotations)
+                # initial save
+                if input_number < 10:
+                    savez_zarr(output_folder + '/' + filename + legion_random_id, append=True
+                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
+                               centres=element_positions, deltax=dumbbell_deltax,
+                               force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
+                               sphere_rotations=sphere_rotations)
 
-            if input_number >= 10:
-                savez_zarr(output_folder + '/' + filename + legion_random_id +'_TEMP',
-                                    Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
-                                    centres=saved_element_positions, deltax=saved_deltax,
-                                    force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
-                                    sphere_rotations=saved_sphere_rotations, pot=saved_hydro_out[:, 0],
-                                    indicator=saved_hydro_out[:, 1],
-                                    nabla_pot_x=saved_hydro_out[:, 2],
-                                    nabla_pot_y=saved_hydro_out[:, 3],
-                                    T_xx=saved_hydro_out[:, 4],
-                                    T_yy=saved_hydro_out[:, 5],
-                                    T_xy=saved_hydro_out[:, 6])
-                '''fplot.write_vtk_file("frame_output/frame" + str(frame) + ".vts", [
-                    ("potential", pot[frame, :]),
-                    ("indicator", indicator[frame, :]),
-                    ("nabla_pot_x", nabla_pot_x[frame, :]),
-                    ("nabla_pot_y", nabla_pot_y[frame, :]),
-                    ("T_xx_component", T_xx[frame, :]),
-                    ("T_xy_component", T_xy[frame, :]),
-                    ("T_yy_component", T_yy[frame, :]),
-                ])'''
+                if input_number >= 10:
+                    savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
+                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
+                               centres=saved_element_positions[:, -1], deltax=dumbbell_deltax,
+                               force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
+                               sphere_rotations=sphere_rotations, pot=hydro_out[:, 0],
+                               indicator=hydro_out[:, 1],
+                               nabla_pot_x=hydro_out[:, 2],
+                               nabla_pot_y=hydro_out[:, 3],
+                               T_xx=hydro_out[:, 4],
+                               T_yy=hydro_out[:, 5],
+                               T_xy=hydro_out[:, 6])
 
 
         save_elapsed_time = time.time() - save_time_start
@@ -943,25 +957,27 @@ if error == 0:
 
     # Final save
     if save_forces_every_n_timesteps > 0 or save_positions_every_n_timesteps > 0:
-        if input_number <10:
-            savez_zarr(output_folder + '/' + filename + legion_random_id + '',
-                            Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
-                            centres=saved_element_positions, deltax=saved_deltax,
-                            force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
-                            sphere_rotations=saved_sphere_rotations)
 
-        if input_number >= 10:
-            savez_zarr(output_folder + '/' + filename + legion_random_id,
-                            Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
-                            centres=saved_element_positions, deltax=saved_deltax,
-                            force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
-                            sphere_rotations=saved_sphere_rotations, pot=saved_hydro_out[:,0],
-                            indicator=saved_hydro_out[:,1],
-                            nabla_pot_x=saved_hydro_out[:,2],
-                            nabla_pot_y=saved_hydro_out[:,3],
-                            T_xx=saved_hydro_out[:,4],
-                            T_yy=saved_hydro_out[:,5],
-                            T_xy=saved_hydro_out[:,6])
+        # initial save
+        if input_number < 10:
+            savez_zarr(output_folder + '/' + filename + legion_random_id, append=True
+            Fa = Fa_out, Fb = Fb_out, DFb = DFb_out, Sa = Sa_out,
+            centres = element_positions, deltax = dumbbell_deltax,
+            force_on_wall_due_to_dumbbells = force_on_wall_due_to_dumbbells,
+            sphere_rotations = sphere_rotations)
+
+            if input_number >= 10:
+                savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
+                           Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
+                           centres=saved_element_positions[:, -1], deltax=dumbbell_deltax,
+                           force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
+                           sphere_rotations=sphere_rotations, pot=hydro_out[:, 0],
+                           indicator=hydro_out[:, 1],
+                           nabla_pot_x=hydro_out[:, 2],
+                           nabla_pot_y=hydro_out[:, 3],
+                           T_xx=hydro_out[:, 4],
+                           T_yy=hydro_out[:, 5],
+                           T_xy=hydro_out[:, 6])
         # Remove backup file
         backup_file = output_folder + '/' + filename + legion_random_id + '_TEMP.npz'
         if os.path.exists(backup_file):
