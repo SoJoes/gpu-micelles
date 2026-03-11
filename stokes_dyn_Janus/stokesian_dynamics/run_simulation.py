@@ -46,6 +46,7 @@ from settings import (
     timestepping_scheme, bead_bead_interactions, fully_2d_problem,
     start_saving_after_first_n_timesteps, rk4_generate_minfinity_for_each_stage)
 from resistance_scalars.data import s_dash_range, lam_range_with_reciprocals
+from zarr_saver import savez_zarr
 
 # Input description of simulation
 args = sys.argv[1:]
@@ -661,14 +662,14 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 save_forces_and_positions_to_temp_file_as_well and
                 frameno >= start_saving_after_first_n_timesteps):
             if input_number <10:
-                np.savez_compressed(output_folder + '/' + filename + legion_random_id + '_TEMP',
+                savez_zarr(output_folder + '/' + filename + legion_random_id + '_TEMP',
                                 Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                                 centres=saved_element_positions, deltax=saved_deltax,
                                 force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
                                 sphere_rotations=saved_sphere_rotations)
 
             if input_number >= 10:
-                np.savez_compressed(output_folder + '/' + filename + legion_random_id +'_TEMP',
+                savez_zarr(output_folder + '/' + filename + legion_random_id +'_TEMP',
                                     Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                                     centres=saved_element_positions, deltax=saved_deltax,
                                     force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
@@ -943,14 +944,14 @@ if error == 0:
     # Final save
     if save_forces_every_n_timesteps > 0 or save_positions_every_n_timesteps > 0:
         if input_number <10:
-            np.savez_compressed(output_folder + '/' + filename + legion_random_id + '',
+            savez_zarr(output_folder + '/' + filename + legion_random_id + '',
                             Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                             centres=saved_element_positions, deltax=saved_deltax,
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
                             sphere_rotations=saved_sphere_rotations)
 
         if input_number >= 10:
-            np.savez_compressed(output_folder + '/' + filename + legion_random_id,
+            savez_zarr(output_folder + '/' + filename + legion_random_id,
                             Fa=saved_Fa_out, Fb=saved_Fb_out, DFb=saved_DFb_out, Sa=saved_Sa_out,
                             centres=saved_element_positions, deltax=saved_deltax,
                             force_on_wall_due_to_dumbbells=saved_force_on_wall_due_to_dumbbells,
