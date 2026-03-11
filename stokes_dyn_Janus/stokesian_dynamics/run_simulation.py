@@ -825,7 +825,7 @@ if error == 0:
     input_descdash = ["-", ""][input_description == ""]
     descdash = ["-", ""][desc == ""]
 
-    if checkpoint_filename == "":
+    '''if checkpoint_filename == "":
         filename = (timestamp
                     + "-s" + str(setup_number)
                     + "-i" + str(input_number)
@@ -846,7 +846,7 @@ if error == 0:
             saved_sphere_rotations = saved_data['sphere_rotations']
             saved_deltax = saved_data['deltax']
             saved_force_on_wall_due_to_dumbbells = saved_data[
-                'force_on_wall_due_to_dumbbells']
+                'force_on_wall_due_to_dumbbells']'''
 
     warning_formatting_start = "\033[43m\033[30m"
     warning_formatting_end = "\033[39m\033[49m"
