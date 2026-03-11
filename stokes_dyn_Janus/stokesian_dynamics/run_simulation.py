@@ -685,7 +685,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 frameno >= start_saving_after_first_n_timesteps):
                 # initial save
                 if input_number < 10:
-                    savez_zarr(output_folder + '/' + filename + legion_random_id, append=True
+                    savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
                                Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
                                centres=element_positions, deltax=dumbbell_deltax,
                                force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
@@ -960,7 +960,7 @@ if error == 0:
 
         # initial save
         if input_number < 10:
-            savez_zarr(output_folder + '/' + filename + legion_random_id, append=True
+            savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
             Fa = Fa_out, Fb = Fb_out, DFb = DFb_out, Sa = Sa_out,
             centres = element_positions, deltax = dumbbell_deltax,
             force_on_wall_due_to_dumbbells = force_on_wall_due_to_dumbbells,
