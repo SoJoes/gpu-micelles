@@ -11,6 +11,7 @@ plot_particle_positions_video.py.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import zarr
 import os
 import sys
 from pylab import rcParams
@@ -50,21 +51,21 @@ trace_paths = 0
 #output_folder = this_folder + "/../output/"
 
 #data1 = np.load(output_folder + filename + ".npz")
-data1 = np.load(filename)
-positions_centres = data1['centres']
-positions_deltax = data1['deltax']
-Fa_out = data1['Fa']
-Fb_out = data1['Fb']
-DFb_out = data1['DFb']
-particle_rotations = data1['sphere_rotations']
+data1 = zarr.open(filename, mode="r")
+positions_centres = data1['centres'][:]
+positions_deltax = data1['deltax'][:]
+Fa_out = data1['Fa'][:]
+Fb_out = data1['Fb'][:]
+DFb_out = data1['DFb'][:]
+particle_rotations = data1['sphere_rotations'][:]
 
-pot = data1['pot']
-indicator = data1['indicator']
-nabla_pot_x = data1['nabla_pot_x']
-nabla_pot_y = data1['nabla_pot_y']
-T_xx = data1['T_xx']
-T_yy = data1['T_yy']
-T_xy = data1['T_xy']
+pot = data1['pot'][:]
+indicator = data1['indicator'][:]
+nabla_pot_x = data1['nabla_pot_x'][:]
+nabla_pot_y = data1['nabla_pot_y'][:]
+T_xx = data1['T_xx'][:]
+T_yy = data1['T_yy'][:]
+T_xy = data1['T_xy'][:]
 
 num_frames = positions_centres.shape[0]
 num_particles = positions_centres.shape[1]
