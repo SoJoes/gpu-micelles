@@ -26,7 +26,9 @@ def savez_zarr(path, append=False, chunks=None, **arrays):
     print("Save attempt")
 
     for name, arr in arrays.items():
+        arr = arr[np.newaxis, ...]
         arr = np.asarray(arr)
+
         print(arr.shape)
 
         if name in z and append:
