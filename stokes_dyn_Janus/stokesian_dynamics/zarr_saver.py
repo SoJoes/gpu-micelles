@@ -2,7 +2,7 @@ import zarr
 import numpy as np
 
 
-def savez_zarr(path, append=False, chunks="auto", **arrays):
+def savez_zarr(path, append=False, chunks=None, **arrays):
     """
     Drop-in replacement for np.savez / np.savez_compressed using Zarr.
 
