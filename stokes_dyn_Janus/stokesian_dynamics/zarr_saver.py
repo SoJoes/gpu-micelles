@@ -25,7 +25,7 @@ def savez_zarr(path, append=False, chunks=None, **arrays):
     z = zarr.open_group(path, mode=mode)
 
     for name, arr in arrays.items():
-        arr = np.asarray(arr)
+        arr = np.asarray([arr])
 
         if name in z and append:
             z[name].append(arr)
