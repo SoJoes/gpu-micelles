@@ -34,6 +34,7 @@ def savez_zarr(path, append=False, chunks="auto", **arrays):
 
             z.create_dataset(
                 name,
+                shape=arr.shape,
                 data=arr,
                 chunks=chunks,
                 maxshape=maxshape,
