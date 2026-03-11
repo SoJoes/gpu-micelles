@@ -825,7 +825,7 @@ if error == 0:
     input_descdash = ["-", ""][input_description == ""]
     descdash = ["-", ""][desc == ""]
 
-    '''if checkpoint_filename == "":
+    if checkpoint_filename == "":
         filename = (timestamp
                     + "-s" + str(setup_number)
                     + "-i" + str(input_number)
@@ -837,7 +837,7 @@ if error == 0:
                     + descdash + str(desc))
     else:
         filename = checkpoint_filename.replace("output\\", "").replace("output/", "").replace("_TEMP.npz", "")
-        with np.load(checkpoint_filename) as saved_data:
+        '''with np.load(checkpoint_filename) as saved_data:
             saved_Fa_out = saved_data['Fa']
             saved_Fb_out = saved_data['Fb']
             saved_DFb_out = saved_data['DFb']
