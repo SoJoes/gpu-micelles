@@ -73,7 +73,6 @@ grand_mobility_matrix = 0
 error = False
 previous_step_posdata = posdata
 previous_timestamp = time.time()
-saved_element_positions = np.array([])
 times = [0 for _ in range(num_frames)]
 output_folder = "output"
 legion_random_id = ""
@@ -148,11 +147,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
     global sphere_trace_lines, dumbbell_trace_lines
     global force_lines, force_text, torque_lines, velocity_lines, velocity_text
     global angular_velocity_lines, sphere_labels
-    global error, previous_timestamp, saved_element_positions, saved_deltax
-    global saved_Fa_out, saved_Fb_out, saved_DFb_out, saved_Ea_out
-    global saved_Sa_out, saved_force_on_wall_due_to_dumbbells
-    global saved_sphere_rotations
-    global saved_hydro_out
+    global error, previous_timestamp
     global last_generated_Minfinity_inverse, input_description
     global extract_force_on_wall_due_to_dumbbells
     global last_velocities, last_velocity_vector, checkpoint_start_from_frame
@@ -609,9 +604,6 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
             and frameno >= start_saving_after_first_n_timesteps
         ):
             if frameno == start_saving_after_first_n_timesteps:  # usually 0
-                saved_element_positions = np.array([element_positions])
-                saved_sphere_rotations = np.array([sphere_rotations])
-                saved_deltax = np.array([dumbbell_deltax])
                 # initial save
                 if input_number < 10:
                     savez_zarr(output_folder + '/' + filename + legion_random_id,
@@ -633,57 +625,12 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                                T_yy=hydro_out[5],
                                T_xy=hydro_out[6])
 
-
-            elif frameno != checkpoint_start_from_frame:
-                saved_element_positions = np.append(np.copy(saved_element_positions),
-                                                    np.array([element_positions]), 0)
-                saved_sphere_rotations = np.append(np.copy(saved_sphere_rotations),
-                                                   np.array([sphere_rotations]), 0)
-                saved_deltax = np.append(np.copy(saved_deltax),
-                                         np.array([dumbbell_deltax]), 0)
-            if frameno == num_frames - 1:  # if final frame, add the final position as well
-                new_element_positions = np.append(new_sphere_positions,
-                                                  new_dumbbell_positions, 0)
-                saved_element_positions = np.append(np.copy(saved_element_positions),
-                                                    np.array([new_element_positions]), 0)
-                saved_sphere_rotations = np.append(np.copy(saved_sphere_rotations),
-                                                   np.array([new_sphere_rotations]), 0)
-                saved_deltax = np.append(np.copy(saved_deltax),
-                                         np.array([new_dumbbell_deltax]), 0)
-        if (
-            save_forces_every_n_timesteps > 0
-            and frameno % save_forces_every_n_timesteps == 0
-            and frameno >= start_saving_after_first_n_timesteps
-        ):
-            if 'saved_Fa_out' not in globals():
-                saved_Fa_out = np.array([Fa_out.copy()])
-                saved_Fb_out = np.array([Fb_out.copy()])
-                saved_DFb_out = np.array([DFb_out.copy()])
-                saved_Sa_out = np.array([Sa_out.copy()])
-                saved_force_on_wall_due_to_dumbbells = np.array([force_on_wall_due_to_dumbbells.copy()])
-                if input_number >= 10:
-                    saved_hydro_out = np.array([hydro_out])
-
-            else:
-                saved_Fa_out = np.append(saved_Fa_out,np.array([Fa_out.copy()]), 0)
-                saved_Fb_out = np.append(saved_Fb_out,np.array([Fb_out.copy()]), 0)
-                saved_DFb_out = np.append(saved_DFb_out,
-                                          np.array([DFb_out.copy()]), 0)
-                saved_Sa_out = np.append(saved_Sa_out,
-                                         np.array([Sa_out.copy()]), 0)
-                saved_force_on_wall_due_to_dumbbells = np.append(saved_force_on_wall_due_to_dumbbells,
-                                                                 np.array([force_on_wall_due_to_dumbbells.copy()]), 0)
-                if input_number >= 10:
-                    saved_hydro_out = np.append(saved_hydro_out, np.array([hydro_out.copy()]), 0)
-
-
         # Backup file
         if (save_positions_every_n_timesteps > 0 and
                 frameno % save_to_temp_file_every_n_timesteps == 0 and
                 save_forces_every_n_timesteps > 0 and
                 save_forces_and_positions_to_temp_file_as_well and
                 frameno >= start_saving_after_first_n_timesteps):
-                # initial save
                 if input_number < 10:
                     savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
                                Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
@@ -837,16 +784,6 @@ if error == 0:
                     + descdash + str(desc))
     else:
         filename = checkpoint_filename.replace("output\\", "").replace("output/", "").replace("_TEMP.npz", "")
-        '''with np.load(checkpoint_filename) as saved_data:
-            saved_Fa_out = saved_data['Fa']
-            saved_Fb_out = saved_data['Fb']
-            saved_DFb_out = saved_data['DFb']
-            saved_Sa_out = saved_data['Sa']
-            saved_element_positions = saved_data['centres']
-            saved_sphere_rotations = saved_data['sphere_rotations']
-            saved_deltax = saved_data['deltax']
-            saved_force_on_wall_due_to_dumbbells = saved_data[
-                'force_on_wall_due_to_dumbbells']'''
 
     warning_formatting_start = "\033[43m\033[30m"
     warning_formatting_end = "\033[39m\033[49m"
@@ -969,7 +906,7 @@ if error == 0:
             if input_number >= 10:
                 savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
                            Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
-                           centres=saved_element_positions[:, -1], deltax=dumbbell_deltax,
+                           centres=element_positions, deltax=dumbbell_deltax,
                            force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
                            sphere_rotations=sphere_rotations, pot=hydro_out[0],
                            indicator=hydro_out[1],
