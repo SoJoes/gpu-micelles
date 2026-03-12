@@ -67,8 +67,6 @@ T_xx = data1['T_xx'][:]
 T_yy = data1['T_yy'][:]
 T_xy = data1['T_xy'][:]
 
-print(positions_centres)
-
 num_frames = positions_centres.shape[0]
 num_particles = positions_centres.shape[1]
 num_dumbbells = positions_deltax.shape[1]
