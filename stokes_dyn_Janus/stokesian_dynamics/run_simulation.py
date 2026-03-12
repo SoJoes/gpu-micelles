@@ -588,10 +588,6 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
         for i in gen_times:
             print("[" + format_elapsed_time(i) + "]", end=" ")
 
-        # debug statement
-        print("Oa:", np.linalg.norm(Oa_out_k1))
-        print("Ta:", np.linalg.norm(Ta_out_k1))
-
         posdata_final = (sphere_sizes, new_sphere_positions,
                          new_sphere_rotations, dumbbell_sizes,
                          new_dumbbell_positions, new_dumbbell_deltax)
