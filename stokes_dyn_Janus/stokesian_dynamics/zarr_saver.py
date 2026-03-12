@@ -23,13 +23,10 @@ def savez_zarr(path, append=False, chunks=None, **arrays):
 
     mode = "a" if append else "w"
     z = zarr.open_group(path, mode=mode)
-    print("Save attempt")
 
     for name, arr in arrays.items():
         arr = np.asarray(arr)
         arr = arr[np.newaxis, ...]
-
-        print(arr.shape)
 
         if name in z and append:
             z[name].append(arr)
