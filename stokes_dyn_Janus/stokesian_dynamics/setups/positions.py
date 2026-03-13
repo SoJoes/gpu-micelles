@@ -339,7 +339,7 @@ def pos_setup(n):
         sphere_positions = my_pos
 
         # individually rotated to my_rotations
-        rot1 = np.zeros((4, num_spheres))
+        rot1 = np.zeros((3, num_spheres))
         rot1[0] = np.cos(my_rotations)
         rot1[2] = -np.sin(my_rotations)
         rot2 = np.zeros_like(rot1)
@@ -347,7 +347,7 @@ def pos_setup(n):
         rot2[2] = rot1[0]
 
         # modified from shared.add_rotations_to_spheres
-        b = np.zeros([num_spheres, 4, sphere_positions.shape[1]])
+        b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
         addrot1 = (sphere_sizes * rot1).transpose()
         addrot2 = (sphere_sizes * rot2).transpose()
         b[:, 0, :] = sphere_positions + addrot1
