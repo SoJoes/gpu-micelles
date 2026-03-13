@@ -152,6 +152,7 @@ for frame in range(frameno):
                  + "/" + str(num_frames-1), loc='left', y=0.97, fontsize=11)
     ax.set_title(graph_title, loc='center', y=1.055, fontsize=11)
     plt.savefig("frame_output/frame"+str(frame)+".png")
+    plt.close()
 
 
     fplot.write_vtk_file("frame_output/frame"+str(frame)+".vts", [
