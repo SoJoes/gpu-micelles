@@ -350,6 +350,8 @@ def pos_setup(n):
         b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
         addrot1 = (sphere_sizes * rot1).transpose()
         addrot2 = (sphere_sizes * rot2).transpose()
+        print(sphere_sizes.shape, rot1.shape, addrot1.shape)
+
         b[:, 0, :] = sphere_positions + addrot1
         b[:, 1, :] = sphere_positions + addrot2
 
