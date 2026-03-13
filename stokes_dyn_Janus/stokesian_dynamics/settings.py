@@ -36,6 +36,8 @@ input_form = 'fte'
 
 save_every_n = 1
 
+cogs=False
+
 # ----------------------------------------------------------------------------|
 # BASIC SETTINGS: OVERRIDES FROM COMMAND LINE
 
@@ -44,6 +46,8 @@ number_of_args = len(args)
 running_on_legion = 0
 
 try:
+    if number_of_args >= 7:
+        cogs = bool(args[6])
     if number_of_args >= 6:
         #extract_force_on_wall_due_to_dumbbells = (
         #    args[5] in ["True", "true", "t", "T", "1"])

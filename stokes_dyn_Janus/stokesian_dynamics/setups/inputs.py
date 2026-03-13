@@ -9,6 +9,7 @@ from setups.functions_inputs import (oscillatory_shear, constant_shear,
                                      repulsion_forces, modified_repulsion_forces, attractive_forces, lennard_jones)
 from setups.functions_positions import simple_cubic_8
 from setups.tests.inputs import input_ftsuoe_tests
+from settings import cogs
 
 
 def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
@@ -243,7 +244,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         #print(sphere_rotations)
         #print(facings)
 
-        hydrophobic_forces, hydro_out = amphilics(particle_pos = sphere_2dpos, particle_facing = facings)
+        hydrophobic_forces, hydro_out = amphilics(particle_pos = sphere_2dpos, particle_facing = facings, cogs=cogs)
 
         # set forces
         Fa_in = np.zeros((num_spheres, 3))

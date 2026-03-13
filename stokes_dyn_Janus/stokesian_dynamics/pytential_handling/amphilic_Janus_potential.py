@@ -52,7 +52,7 @@ class Janus_particle_array:
                     A=np.diag([mesh_scale, mesh_scale]),
                     b=position) for position in positions]
 
-def amphilics(visualize=False, particle_pos=None, particle_facing=None):
+def amphilics(visualize=False, particle_pos=None, particle_facing=None, cogs=False):
     #import logging
     #logging.basicConfig(level=logging.INFO)
 
@@ -145,8 +145,10 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None):
           rot_y = -sin_f * xg + cos_f * yg
 
           theta = actx.np.arctan2(rot_y, rot_x)
-          # bc_g = (actx.np.cos(theta) + 1) / 2
-          bc_g = (actx.np.cos(3*theta)+1)/2 # cogs
+          if not cogs:
+              bc_g = (actx.np.cos(theta) + 1) / 2
+          else:
+              bc_g = (actx.np.cos(3*theta)+1)/2
 
           bc_data.append(bc_g)
 
