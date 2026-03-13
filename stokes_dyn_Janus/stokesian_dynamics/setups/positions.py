@@ -325,6 +325,41 @@ def pos_setup(n):
         dumbbell_positions = np.empty([0, 3])
         dumbbell_deltax = np.empty([0, 3])
 
+    elif n == 15:
+        # four spheres
+        my_pos = np.zeros((4, 3))
+        my_pos = np.array([[1, 0, 1],
+                           [-1, 0, 1],
+                           [1, 0, -1],
+                           [-1,0,-1]])
+        my_rotations = np.array([5*np.pi/4, -np.pi/4, 3*np.pi/4, np.pi/4])
+        num_spheres = 4
+
+        sphere_sizes = np.array([1 for _ in range(num_spheres)])
+        sphere_positions = my_pos
+
+        # individually rotated to my_rotations
+        rot1 = np.zeros((4, num_spheres))
+        rot1[0] = np.cos(my_rotations)
+        rot1[2] = -np.sin(my_rotations)
+        rot2 = np.zeros_like(rot1)
+        rot2[0] = -rot1[1]
+        rot2[2] = rot1[0]
+
+        # modified from shared.add_rotations_to_spheres
+        b = np.zeros([num_spheres, 4, sphere_positions.shape[1]])
+        addrot1 = (sphere_sizes * rot1).transpose()
+        addrot2 = (sphere_sizes * rot2).transpose()
+        b[:, 0, :] = sphere_positions + addrot1
+        b[:, 1, :] = sphere_positions + addrot2
+
+        sphere_rotations = b
+
+        # no dumbbells
+        dumbbell_sizes = np.array([])
+        dumbbell_positions = np.empty([0, 3])
+        dumbbell_deltax = np.empty([0, 3)
+
     else:
         throw_error("The position setup number you have requested (" + str(n) +
                     ") is not listed in setups/positions.py.")
