@@ -358,7 +358,7 @@ def pos_setup(n):
         # no dumbbells
         dumbbell_sizes = np.array([])
         dumbbell_positions = np.empty([0, 3])
-        dumbbell_deltax = np.empty([0, 3)
+        dumbbell_deltax = np.empty([0, 3])
 
     else:
         throw_error("The position setup number you have requested (" + str(n) +
