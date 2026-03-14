@@ -38,9 +38,12 @@ def get_latest_file(folder_path):
     return latest_file
 
 folder_path = 'output'
-latest_file = get_latest_file(folder_path)
+if len(sys.argv) >1:
+    filename = folder_path + '/' + sys.argv[1]
+else:
+    latest_file = get_latest_file(folder_path)
 
-filename = folder_path + '/' + latest_file
+    filename = folder_path + '/' + latest_file
 graph_title = "testing"
 viewing_angle = (0, -90)
 viewbox_bottomleft_topright = np.array([[-5, -5, -5], [5, 5, 5]])
