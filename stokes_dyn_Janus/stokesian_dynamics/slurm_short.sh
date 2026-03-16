@@ -32,4 +32,5 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 rm -rf frame_output
 mkdir -p frame_output
 python3.11 -O run_simulation.py 15 10 0.2 10 fte 2 1
+top
 python3.11 plotting/plot_positions.py
