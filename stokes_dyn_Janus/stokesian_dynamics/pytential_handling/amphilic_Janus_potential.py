@@ -330,7 +330,7 @@ class AmphilicsSolver:
             bind(self.places, self.T_sym_components[2])(actx, sigma=solution, k=self.k))
 
         hydro_out = np.array([
-            fld.flatten(),
+            self.fld.flatten(),
             indicator.flatten(),
             grad_x.flatten(),
             grad_y.flatten(),
