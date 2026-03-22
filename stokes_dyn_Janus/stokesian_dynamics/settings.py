@@ -176,15 +176,3 @@ two_d_plot = True
 using_pytential=False
 if setup_number>=11:
     using_pytential = True
-
-if using_pytential:
-    #import logging
-    #logging.basicConfig(level=logging.INFO)  # INFO for more progress info
-    from meshmode.array_context import PyOpenCLArrayContext
-    import pyopencl as cl
-
-    cl_ctx = cl.create_some_context()
-    queue = cl.CommandQueue(cl_ctx)
-
-    allocator = cl.tools.MemoryPool(cl.tools.ImmediateAllocator(queue))
-    actx = PyOpenCLArrayContext(queue, allocator=allocator)

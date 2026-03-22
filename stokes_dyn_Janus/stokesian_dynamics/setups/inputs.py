@@ -11,11 +11,13 @@ from setups.functions_positions import simple_cubic_8
 from setups.tests.inputs import input_ftsuoe_tests
 from settings import cogs
 
+amphSolver = []
 
 def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
                  input_form='undefined', skip_computation=False,
                  grand_resistance_matrix_fte=0):
     global hydro_out
+    global amphSolver
     """Define all input forces/velocities.
 
     Args:
@@ -230,7 +232,17 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
     elif n == 10:
         # amphilic potentials
 
-        from pytential_handling.amphilic_Janus_potential import amphilics
+        if frameno == 0:
+            from pytential_handling.amphilic_Janus_potential import AmphilicsSolver
+
+            sphere_2dpos = np.zeros((num_spheres, 2))
+            sphere_2dpos[:, 0] = sphere_positions[:, 0]
+            sphere_2dpos[:, 1] = sphere_positions[:, 2]
+
+            rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
+            facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
+
+            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 0.1, cogs=cogs)
 
         # prepping data for usage with function
 
@@ -240,11 +252,9 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         rot_from_origin = sphere_rotations[:,0,:] - sphere_positions
         facings = np.arctan2(rot_from_origin[:,2], rot_from_origin[:,0])
-        #print("Debug Info:")
-        #print(sphere_rotations)
-        #print(facings)
 
-        hydrophobic_forces, hydro_out = amphilics(particle_pos = sphere_2dpos, particle_facing = facings, cogs=cogs)
+        amphSolver.update_particles(sphere_2dpos, facings)
+        hydrophobic_forces, hydro_out = amphSolver.solve()
 
         # set forces
         Fa_in = np.zeros((num_spheres, 3))

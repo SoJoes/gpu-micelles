@@ -42,6 +42,7 @@ from meshmode.mesh.generation import ellipse, make_curve_mesh
 from functools import partial
 from meshmode.mesh.processing import affine_map, merge_disjoint_meshes
 
+"""
 class Janus_particle_array:
   def __init__(self, positions, facings, base_mesh, mesh_scale=1):
     self.pos_array = positions
@@ -95,7 +96,6 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None, cogs=Fal
         "qbx_high_target_assoc_tol": qbx.copy(target_association_tolerance=0.05),
         "targets": PointsTarget(targets)
         }, auto_where="qbx") # places in which to eval qbx
-
 
     # discretised boundary for density calculations
     density_discr = places.get_discretization("qbx")
@@ -322,3 +322,278 @@ def amphilics(visualize=False, particle_pos=None, particle_facing=None, cogs=Fal
     hydro_out = np.array([ary.flatten() for ary in hydro_out], dtype=np.float64)
 
     return (forces_x, forces_y, torques), hydro_out
+"""
+
+class AmphilicsSolver:
+    def __init__(self, particle_pos, particle_facing, k, cogs=False):
+        from meshmode.array_context import PyOpenCLArrayContext
+        import pyopencl as cl
+
+        cl_ctx = cl.create_some_context()
+        queue = cl.CommandQueue(cl_ctx)
+        allocator = cl.tools.MemoryPool(cl.tools.ImmediateAllocator(queue))
+
+        self.actx = PyOpenCLArrayContext(queue, allocator=allocator)
+
+        self.cogs = cogs
+        self.pos_array = particle_pos
+        self.facing_array = particle_facing
+        self.k=k
+
+        self.base_mesh = make_curve_mesh(
+            partial(ellipse, 1),
+            np.linespace(0, 1, nelements + 1),
+            mesh_order
+        )
+
+        from sumpy.visualization import FieldPlotter
+        fplot = FieldPlotter(np.zeros(2), extent=20, npoints=500)
+        self.targets = actx.from_numpy(fplot.point)
+
+        # set up symbolics
+        from sumpy.kernel import YukawaKernel
+        kernel = YukawaKernel(2)
+
+        self.sigma_sym = sym.var("sigma")
+        self.sqrt_w = sym.sqrt_jac_q_weight(2)
+        self.k_sym = sym.var("k")
+
+        inv_sqrt_w_sigma = sym.cse(self.sigma_sym / self.sqrt_w)
+
+        self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
+                       + self.sqrt_w * (sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
+                                        + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym,
+                                                qbx_forced_limit="avg")))  # }}}
+
+        repr_kwargs = {
+            "source": "qbx_high_target_assoc_tol",
+            "target": "targets",
+            "qbx_forced_limit": None
+        }
+
+        self.representation_sym = (
+                sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs)
+                + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs)
+        )
+
+        # --- gradient ---
+        from pytential.symbolic.primitives import grad
+        self.grad_sym = grad(ambient_dim=2, operand=self.representation_sym)
+
+        # --- stress tensor ---
+        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
+            grad_x_sym = grad_u_sym[0]
+            grad_y_sym = grad_u_sym[1]
+
+            grad_mag_sq = grad_x_sym ** 2 + grad_y_sym ** 2
+            scalar = (u_sym ** 2 / rho) + rho * grad_mag_sq / 2
+            factor = 2 * rho
+
+            T_xx = gamma * (scalar - factor * grad_x_sym * grad_x_sym)
+            T_xy = - gamma * (factor * grad_x_sym * grad_y_sym)
+            T_yy = gamma * (scalar - factor * grad_y_sym * grad_y_sym)
+
+            return (T_xx, T_xy, T_yy)
+
+        self.T_sym = hydrophobic_stress_T(
+            self.representation_sym,
+            self.grad_sym,
+            rho=1 / self.k
+        )
+
+    def update_particles(self, particle_pos, particle_facing):
+        self.pos_array = particle_pos
+        self.facing_array = particle_facing
+
+        meshes = [
+            affine_map(self.base_mesh, A=np.diag([1, 1]), b=pos)
+            for pos in particle_pos
+        ]
+
+        mesh = merge_disjoint_meshes(meshes, single_group=False)
+
+        pre_density_discr = Discretization(self.actx, mesh,
+                                           InterpolatoryQuadratureSimplexGroupFactory(bdry_quad_order))
+
+        from pytential.qbx import QBXLayerPotentialSource
+        self.qbx = QBXLayerPotentialSource(
+            pre_density_discr,
+            fine_order=bdry_ovsmp_quad_order,
+            qbx_order=qbx_order,
+            fmm_order=fmm_order
+        )
+
+        from pytential import GeometryCollection
+        self.places = GeometryCollection({
+            "qbx": self.qbx,
+            "qbx_high_target_assoc_tol":
+                self.qbx.copy(target_association_tolerance=0.05),
+            "targets": PointsTarget(self.targets)
+        }, auto_where="qbx")
+
+        self.density_discr = self.places.get_discretization("qbx")
+
+        from sumpy.kernel import LaplaceKernel
+
+        # --- indicator ---
+        self.indicator_op = bind(
+            self.places,
+            sym.D(LaplaceKernel(2), self.sigma_sym, **repr_kwargs)
+        )
+
+        # --- normals / weights ---
+        self.normal = bind(self.density_discr, sym.normal(2))(actx).as_vector(object)
+
+        from pytential.symbolic.primitives import area_element, QWeight
+        dS = area_element(1, 1, None) * QWeight(None)
+        self.integral_weights = bind(self.density_discr, dS)(actx)
+
+        # --- nodes cached ---
+        self.nodes = actx.thaw(self.density_discr.nodes())
+
+        # gradient
+        self.grad_op = bind(self.places, self.grad_sym)
+
+        self.T_xx_op = bind(self.places, self.T_sym[0])
+        self.T_xy_op = bind(self.places, self.T_sym[1])
+        self.T_yy_op = bind(self.places, self.T_sym[2])
+
+        nvec_sym = sym.make_sym_vector("normal", 2)
+
+        self.force_integrand_x_sym = self.T_xx_op * nvec_sym[0] + self.T_xy_op * nvec_sym[1]
+        self.force_integrand_y_sym = self.T_xy_op * nvec_sym[0] + self.T_yy_op * nvec_sym[1]
+
+        # TORQUE
+        mv_pos = bind(density_discr, sym.nodes(2))(actx)
+        self.pos = mv_pos.as_vector(object)
+
+        # Use separate symbolic variables for position components for evaluation compatibility
+        r_pos_sym = sym.make_sym_vector("r_pos", 2)
+
+        # formula derived from definitions by me <3
+        self.torque_integrand_sym = r_pos_sym[0] * self.force_integrand_y_sym - r_pos_sym[1] * self.force_integrand_x_sym
+
+    def _amphilic_bc(self):
+
+        x, y = self.nodes
+        actx = self.actx
+
+        bc_data = []
+
+        for igrp, facing in enumerate(self.facing_array):
+
+            cos_f = actx.np.cos(facing)
+            sin_f = actx.np.sin(facing)
+
+            xg = x[igrp] - self.pos_array[igrp,0]
+            yg = y[igrp] - self.pos_array[igrp,1]
+
+            rot_x = cos_f * xg + sin_f * yg
+            rot_y = -sin_f * xg + cos_f * yg
+
+            theta = actx.np.arctan2(rot_y, rot_x)
+
+            if not self.cogs:
+                bc = (actx.np.cos(theta)+1)/2
+            else:
+                bc = (actx.np.cos(3*theta)+1)/2
+
+            bc_data.append(bc)
+
+        return DOFArray(actx, tuple(bc_data))
+
+    def solve(self):
+
+        actx = self.actx
+
+        bc = self._amphilic_bc()
+
+        bvp_rhs = bind(self.places, self.sqrt_w*sym.var("bc"))(
+            actx, bc=bc)
+
+        from pytential.linalg.gmres import gmres
+
+        gmres_result = gmres(
+            self.bound_op.scipy_op(
+                actx, self.sigma_sym.name,
+                dtype=np.complex128, k=self.k),
+            bvp_rhs,
+            tol=1e-8
+        )
+
+        sol = gmres_result.solution
+
+        return self.compute_hydro_out(self, sol)
+
+    def compute_hydro_out(self, solution):
+        actx = self.actx
+
+        # --- field ---
+        fld = actx.to_numpy(
+            self.representation_sym(actx, sigma=solution, k=self.k)
+        ).astype(np.float64)
+
+        # --- indicator ---
+        ones_density = self.density_discr.zeros(actx)
+        for elem in ones_density:
+            elem.fill(1)
+
+        indicator = actx.to_numpy(
+            self.indicator_op(actx, sigma=ones_density)
+        )
+
+        force_density_x = bind(self.places, self.force_integrand_x_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
+        force_density_y = bind(self.places, self.force_integrand_y_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
+        torque_density = bind(self.places, self.torque_integrand_sym)(actx, sigma=solution, k=self.k, normal=self.normal,
+                                                            r_pos=self.pos)
+
+        dS = area_element(1, 1, None) * QWeight(None)
+
+        integral_weights = bind(self.density_discr, dS)(actx)
+
+        n_particles = len(force_density_x)
+
+        forces_x = np.ones(n_particles)
+        forces_y = np.ones(n_particles)
+        torques = np.ones(n_particles)
+
+        for igrp in range(n_particles):
+            # manual node.sum
+            fx = actx.to_numpy(
+                actx.np.sum(force_density_x[igrp] * integral_weights[igrp])
+            )
+            fy = actx.to_numpy(
+                actx.np.sum(force_density_y[igrp] * integral_weights[igrp])
+            )
+            t = actx.to_numpy(
+                actx.np.sum(torque_density[igrp] * integral_weights[igrp])
+            )
+
+            forces_x[igrp] = fx
+            forces_y[igrp] = fy
+
+            # torque needs to be centred around particle
+            torques[igrp] = t - (self.pos_array[igrp][0] * fy - self.pos_array[igrp][1] * fx)
+
+        # --- gradient ---
+        grad = self.grad_op(actx, sigma=solution, k=self.k)
+        grad_x = actx.to_numpy(grad[0])
+        grad_y = actx.to_numpy(grad[1])
+
+        # --- stress tensor ---
+        T_xx = actx.to_numpy(self.T_xx_op(actx, sigma=solution, k=self.k))
+        T_xy = actx.to_numpy(self.T_xy_op(actx, sigma=solution, k=self.k))
+        T_yy = actx.to_numpy(self.T_yy_op(actx, sigma=solution, k=self.k))
+
+        hydro_out = np.array([
+            fld.flatten(),
+            indicator.flatten(),
+            grad_x.flatten(),
+            grad_y.flatten(),
+            T_xx.flatten(),
+            T_yy.flatten(),
+            T_xy.flatten()
+        ], dtype=np.float64)
+
+        return (forces_x, forces_y, torques), hydro_out
+
