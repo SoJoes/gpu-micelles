@@ -465,7 +465,7 @@ class AmphilicsSolver:
         self.T_yy_op = bind(self.places, self.T_sym[2])
 
         # TORQUE
-        mv_pos = bind(density_discr, sym.nodes(2))(self.actx)
+        mv_pos = bind(self.density_discr, sym.nodes(2))(self.actx)
         self.pos = mv_pos.as_vector(object)
 
         # Use separate symbolic variables for position components for evaluation compatibility
