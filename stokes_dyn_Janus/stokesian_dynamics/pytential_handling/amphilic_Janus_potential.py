@@ -402,6 +402,11 @@ class AmphilicsSolver:
             rho=1 / self.k
         )
 
+        nvec_sym = sym.make_sym_vector("normal", 2)
+
+        self.force_integrand_x_sym = self.T_sym[0] * nvec_sym[0] + self.T_sym[1] * nvec_sym[1]
+        self.force_integrand_y_sym = self.T_sym[1] * nvec_sym[0] + self.T_sym[2] * nvec_sym[1]
+
     def update_particles(self, particle_pos, particle_facing):
         self.pos_array = particle_pos
         self.facing_array = particle_facing
@@ -458,11 +463,6 @@ class AmphilicsSolver:
         self.T_xx_op = bind(self.places, self.T_sym[0])
         self.T_xy_op = bind(self.places, self.T_sym[1])
         self.T_yy_op = bind(self.places, self.T_sym[2])
-
-        nvec_sym = sym.make_sym_vector("normal", 2)
-
-        self.force_integrand_x_sym = self.T_xx_op * nvec_sym[0] + self.T_xy_op * nvec_sym[1]
-        self.force_integrand_y_sym = self.T_xy_op * nvec_sym[0] + self.T_yy_op * nvec_sym[1]
 
         # TORQUE
         mv_pos = bind(density_discr, sym.nodes(2))(self.actx)
