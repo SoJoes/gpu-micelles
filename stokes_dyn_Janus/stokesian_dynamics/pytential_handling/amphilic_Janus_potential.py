@@ -545,7 +545,6 @@ class AmphilicsSolver:
         )
 
         print("debug output")
-        print(self.places.shape)
         print(self.force_integrand_x_sym.shape)
         print(solution.shape)
         print(self.normal.shape)
