@@ -473,7 +473,7 @@ class AmphilicsSolver:
         self.T_sym = hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary,
                                                          rho=1 / self.k)
 
-        self.T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=1 / k)
+        self.T_sym_components = hydrophobic_stress_T(self.representation_sym, self.representation_sym_grad, rho=1 / k)
 
         # Define force integrands
         self.force_integrand_x_sym = self.T_sym[0] * self.nvec_sym[0] + self.T_sym[1] * self.nvec_sym[1]
