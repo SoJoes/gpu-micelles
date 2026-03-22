@@ -531,7 +531,8 @@ class AmphilicsSolver:
 
         # --- field ---
         fld = actx.to_numpy(
-            self.representation_sym(actx, sigma=solution, k=self.k)
+            bind(self.places, self.representation_sym)(
+                actx, sigma=solution, k=self.k)
         ).astype(np.float64)
 
         # --- indicator ---
