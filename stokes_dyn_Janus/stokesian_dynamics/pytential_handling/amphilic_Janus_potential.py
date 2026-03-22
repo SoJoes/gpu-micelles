@@ -510,11 +510,12 @@ class AmphilicsSolver:
 
         bvp_rhs = bind(self.places, self.sqrt_w*sym.var("bc"))(
             actx, bc=bc)
+        bound_op = bind(self.places, self.bdry_op_sym)
 
         from pytential.linalg.gmres import gmres
 
         gmres_result = gmres(
-            self.bound_op.scipy_op(
+            bound_op.scipy_op(
                 actx, self.sigma_sym.name,
                 dtype=np.complex128, k=self.k),
             bvp_rhs,
