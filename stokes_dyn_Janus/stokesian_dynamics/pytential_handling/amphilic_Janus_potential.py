@@ -351,19 +351,19 @@ class AmphilicsSolver:
 
         # set up symbolics
         from sumpy.kernel import YukawaKernel
-        kernel = YukawaKernel(2)
+        self.kernel = YukawaKernel(2)
 
         self.sigma_sym = sym.var("sigma")
         self.sqrt_w = sym.sqrt_jac_q_weight(2)
         self.k_sym = sym.var("k")
 
-        inv_sqrt_w_sigma = sym.cse(self.sigma_sym / self.sqrt_w)
+        self.inv_sqrt_w_sigma = sym.cse(self.sigma_sym / self.sqrt_w)
 
         loc_sign = -1  # exterior condition DO NOT CHANGE
 
         self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
-                       + self.sqrt_w * (sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
-                                        + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym,
+                       + self.sqrt_w * (sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
+                                        + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
                                                 qbx_forced_limit="avg")))  # }}}
 
         self.repr_kwargs = {
@@ -373,39 +373,14 @@ class AmphilicsSolver:
         }
 
         self.representation_sym = (
-                sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
-                + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
         # --- gradient ---
         from pytential.symbolic.primitives import grad
         self.grad_sym = grad(ambient_dim=2, operand=self.representation_sym)
-
-        # --- stress tensor ---
-        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
-            grad_x_sym = grad_u_sym[0]
-            grad_y_sym = grad_u_sym[1]
-
-            grad_mag_sq = grad_x_sym ** 2 + grad_y_sym ** 2
-            scalar = (u_sym ** 2 / rho) + rho * grad_mag_sq / 2
-            factor = 2 * rho
-
-            T_xx = gamma * (scalar - factor * grad_x_sym * grad_x_sym)
-            T_xy = - gamma * (factor * grad_x_sym * grad_y_sym)
-            T_yy = gamma * (scalar - factor * grad_y_sym * grad_y_sym)
-
-            return (T_xx, T_xy, T_yy)
-
-        self.T_sym = hydrophobic_stress_T(
-            self.representation_sym,
-            self.grad_sym,
-            rho=1 / self.k
-        )
-
-        nvec_sym = sym.make_sym_vector("normal", 2)
-
-        self.force_integrand_x_sym = self.T_sym[0] * nvec_sym[0] + self.T_sym[1] * nvec_sym[1]
-        self.force_integrand_y_sym = self.T_sym[1] * nvec_sym[0] + self.T_sym[2] * nvec_sym[1]
+        self.nvec_sym = sym.make_sym_vector("normal", 2)
 
     def update_particles(self, particle_pos, particle_facing):
         self.pos_array = particle_pos
@@ -454,6 +429,35 @@ class AmphilicsSolver:
         dS = area_element(1, 1, None) * QWeight(None)
         self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
+
+        # Use separate symbolic variables for position components for evaluation compatibility
+        r_pos_sym = sym.make_sym_vector("r_pos", 2)
+
+        repr_kwargs_boundary = {
+            "source": "qbx",  # Source is 'qbx' (pre_density_discr)
+            "target": "qbx",  # Target is 'qbx' (the boundary itself)
+            "qbx_forced_limit": +1  # Or appropriate limit for boundary evaluation
+        }
+        representation_sym_boundary = (
+                sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
+                + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
+        )
+
+        # find grad of potential on the boundary
+        from pytential.symbolic.primitives import grad
+        representation_sym_grad_boundary = grad(ambient_dim=2, operand=representation_sym_boundary)
+
+        # calculate hydrophobic stress tensor on the boundary
+        self.T_sym = self._hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary,
+                                                         rho=1 / self.k)
+
+        # Define force integrands
+        self.force_integrand_x_sym = self.T_sym[0] * self.nvec_sym[0] + self.T_sym[1] * self.nvec_sym[1]
+        self.force_integrand_y_sym = self.T_sym[1] * self.nvec_sym[0] + self.T_sym[2] * self.nvec_sym[1]
+
+        # formula derived from definitions by me <3
+        self.torque_integrand_sym = r_pos_sym[0] * self.force_integrand_y_sym - r_pos_sym[1] * self.force_integrand_x_sym
+
         # --- nodes cached ---
         self.nodes = self.actx.thaw(self.density_discr.nodes())
 
@@ -467,12 +471,6 @@ class AmphilicsSolver:
         # TORQUE
         mv_pos = bind(self.density_discr, sym.nodes(2))(self.actx)
         self.pos = mv_pos.as_vector(object)
-
-        # Use separate symbolic variables for position components for evaluation compatibility
-        r_pos_sym = sym.make_sym_vector("r_pos", 2)
-
-        # formula derived from definitions by me <3
-        self.torque_integrand_sym = r_pos_sym[0] * self.force_integrand_y_sym - r_pos_sym[1] * self.force_integrand_x_sym
 
     def _amphilic_bc(self):
 
@@ -502,6 +500,29 @@ class AmphilicsSolver:
             bc_data.append(bc)
 
         return DOFArray(actx, tuple(bc_data))
+
+    def _hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
+        # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
+        grad_x_sym = grad_u_sym[0]
+        grad_y_sym = grad_u_sym[1]
+
+        # Magnitude squared of gradient
+        grad_mag_sq = grad_x_sym ** 2 + grad_y_sym ** 2
+
+        # Scalar part of the first two terms in the definition of T_ij
+        # (u^2/rho) * delta_ij + (1/2) * |grad u|^2 * delta_ij
+        scalar_diagonal_term = (u_sym ** 2 / rho) + rho * grad_mag_sq / 2
+
+        # Factor for the outer product term: -2 * rho * (grad_i u) * (grad_j u)
+        outer_product_factor = 2 * rho
+
+        T_xx_sym = gamma * (scalar_diagonal_term - outer_product_factor * grad_x_sym * grad_x_sym)
+        T_xy_sym = - gamma * (outer_product_factor * grad_x_sym * grad_y_sym)
+        T_yx_sym = T_xy_sym
+        T_yy_sym = gamma * (scalar_diagonal_term - outer_product_factor * grad_y_sym * grad_y_sym)
+
+        # Return components of the stress tensor as a tuple
+        return (T_xx_sym, T_xy_sym, T_yx_sym, T_yy_sym)
 
     def solve(self):
         actx = self.actx
@@ -544,9 +565,6 @@ class AmphilicsSolver:
             self.indicator_op(actx, sigma=ones_density)
         )
 
-        print("debug output")
-        print(solution.shape)
-        print(self.normal.shape)
         force_density_x = bind(self.places, self.force_integrand_x_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
         force_density_y = bind(self.places, self.force_integrand_y_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
         torque_density = bind(self.places, self.torque_integrand_sym)(actx, sigma=solution, k=self.k, normal=self.normal,
