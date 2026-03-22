@@ -429,6 +429,28 @@ class AmphilicsSolver:
         dS = area_element(1, 1, None) * QWeight(None)
         self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
+        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
+            # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
+            grad_x_sym = grad_u_sym[0]
+            grad_y_sym = grad_u_sym[1]
+
+            # Magnitude squared of gradient
+            grad_mag_sq = grad_x_sym ** 2 + grad_y_sym ** 2
+
+            # Scalar part of the first two terms in the definition of T_ij
+            # (u^2/rho) * delta_ij + (1/2) * |grad u|^2 * delta_ij
+            scalar_diagonal_term = (u_sym ** 2 / rho) + rho * grad_mag_sq / 2
+
+            # Factor for the outer product term: -2 * rho * (grad_i u) * (grad_j u)
+            outer_product_factor = 2 * rho
+
+            T_xx_sym = gamma * (scalar_diagonal_term - outer_product_factor * grad_x_sym * grad_x_sym)
+            T_xy_sym = - gamma * (outer_product_factor * grad_x_sym * grad_y_sym)
+            T_yx_sym = T_xy_sym
+            T_yy_sym = gamma * (scalar_diagonal_term - outer_product_factor * grad_y_sym * grad_y_sym)
+
+            # Return components of the stress tensor as a tuple
+            return (T_xx_sym, T_xy_sym, T_yx_sym, T_yy_sym)
 
         # Use separate symbolic variables for position components for evaluation compatibility
         r_pos_sym = sym.make_sym_vector("r_pos", 2)
@@ -448,7 +470,7 @@ class AmphilicsSolver:
         representation_sym_grad_boundary = grad(ambient_dim=2, operand=representation_sym_boundary)
 
         # calculate hydrophobic stress tensor on the boundary
-        self.T_sym = self._hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary,
+        self.T_sym = hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary,
                                                          rho=1 / self.k)
 
         # Define force integrands
@@ -500,29 +522,6 @@ class AmphilicsSolver:
             bc_data.append(bc)
 
         return DOFArray(actx, tuple(bc_data))
-
-    def _hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
-        # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
-        grad_x_sym = grad_u_sym[0]
-        grad_y_sym = grad_u_sym[1]
-
-        # Magnitude squared of gradient
-        grad_mag_sq = grad_x_sym ** 2 + grad_y_sym ** 2
-
-        # Scalar part of the first two terms in the definition of T_ij
-        # (u^2/rho) * delta_ij + (1/2) * |grad u|^2 * delta_ij
-        scalar_diagonal_term = (u_sym ** 2 / rho) + rho * grad_mag_sq / 2
-
-        # Factor for the outer product term: -2 * rho * (grad_i u) * (grad_j u)
-        outer_product_factor = 2 * rho
-
-        T_xx_sym = gamma * (scalar_diagonal_term - outer_product_factor * grad_x_sym * grad_x_sym)
-        T_xy_sym = - gamma * (outer_product_factor * grad_x_sym * grad_y_sym)
-        T_yx_sym = T_xy_sym
-        T_yy_sym = gamma * (scalar_diagonal_term - outer_product_factor * grad_y_sym * grad_y_sym)
-
-        # Return components of the stress tensor as a tuple
-        return (T_xx_sym, T_xy_sym, T_yx_sym, T_yy_sym)
 
     def solve(self):
         actx = self.actx
