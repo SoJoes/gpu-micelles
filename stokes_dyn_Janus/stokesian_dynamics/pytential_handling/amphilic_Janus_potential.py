@@ -382,6 +382,8 @@ class AmphilicsSolver:
         self.grad_sym = grad(ambient_dim=2, operand=self.representation_sym)
         self.nvec_sym = sym.make_sym_vector("normal", 2)
 
+        self.representation_sym_grad = grad(ambient_dim=2, operand=self.representation_sym)
+
     def update_particles(self, particle_pos, particle_facing):
         self.pos_array = particle_pos
         self.facing_array = particle_facing
