@@ -12,7 +12,6 @@ from pytential.target import PointsTarget
 
 # my file
 from pytential_handling.my_laplace_kernel import ScreenedLaplaceKernel
-from settings import actx
 import sys
 from os import devnull
 
