@@ -366,15 +366,15 @@ class AmphilicsSolver:
                                         + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym,
                                                 qbx_forced_limit="avg")))  # }}}
 
-        repr_kwargs = {
+        self.repr_kwargs = {
             "source": "qbx_high_target_assoc_tol",
             "target": "targets",
             "qbx_forced_limit": None
         }
 
         self.representation_sym = (
-                sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs)
-                + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs)
+                sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
         # --- gradient ---
@@ -439,7 +439,7 @@ class AmphilicsSolver:
         # --- indicator ---
         self.indicator_op = bind(
             self.places,
-            sym.D(LaplaceKernel(2), self.sigma_sym, **repr_kwargs)
+            sym.D(LaplaceKernel(2), self.sigma_sym, **self.repr_kwargs)
         )
 
         # --- normals / weights ---
