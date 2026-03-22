@@ -544,6 +544,11 @@ class AmphilicsSolver:
             self.indicator_op(actx, sigma=ones_density)
         )
 
+        print("debug output")
+        print(self.places.shape)
+        print(self.force_integrand_x_sym.shape)
+        print(solution.shape)
+        print(self.normal.shape)
         force_density_x = bind(self.places, self.force_integrand_x_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
         force_density_y = bind(self.places, self.force_integrand_y_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
         torque_density = bind(self.places, self.torque_integrand_sym)(actx, sigma=solution, k=self.k, normal=self.normal,
