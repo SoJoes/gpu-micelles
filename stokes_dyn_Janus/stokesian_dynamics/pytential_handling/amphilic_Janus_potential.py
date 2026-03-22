@@ -104,6 +104,9 @@ class AmphilicsSolver:
         self.representation_sym_grad = grad(ambient_dim=2, operand=self.representation_sym)
 
     def update_particles(self, particle_pos, particle_facing):
+        from pytools.persistent_dict import clear_in_mem_caches
+        clear_in_mem_caches()
+
         self.pos_array = particle_pos
         self.facing_array = particle_facing
 
