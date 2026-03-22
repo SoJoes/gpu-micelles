@@ -347,7 +347,7 @@ class AmphilicsSolver:
 
         from sumpy.visualization import FieldPlotter
         fplot = FieldPlotter(np.zeros(2), extent=20, npoints=500)
-        self.targets = self.actx.from_numpy(fplot.point)
+        self.targets = self.actx.from_numpy(fplot.points)
 
         # set up symbolics
         from sumpy.kernel import YukawaKernel
