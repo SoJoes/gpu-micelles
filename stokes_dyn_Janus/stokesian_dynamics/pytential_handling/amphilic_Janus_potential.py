@@ -473,6 +473,8 @@ class AmphilicsSolver:
         self.T_sym = hydrophobic_stress_T(representation_sym_boundary, representation_sym_grad_boundary,
                                                          rho=1 / self.k)
 
+        self.T_sym_components = hydrophobic_stress_T(representation_sym, representation_sym_grad, rho=1 / k)
+
         # Define force integrands
         self.force_integrand_x_sym = self.T_sym[0] * self.nvec_sym[0] + self.T_sym[1] * self.nvec_sym[1]
         self.force_integrand_y_sym = self.T_sym[1] * self.nvec_sym[0] + self.T_sym[2] * self.nvec_sym[1]
@@ -604,9 +606,12 @@ class AmphilicsSolver:
         grad_y = actx.to_numpy(grad[1])
 
         # --- stress tensor ---
-        T_xx = actx.to_numpy(self.T_xx_op(actx, sigma=solution, k=self.k))
-        T_xy = actx.to_numpy(self.T_xy_op(actx, sigma=solution, k=self.k))
-        T_yy = actx.to_numpy(self.T_yy_op(actx, sigma=solution, k=self.k))
+        T_xx = actx.to_numpy(
+            bind(self.places, self.T_sym_components[0])(actx, sigma=solution, k=self.k))
+        T_xy = actx.to_numpy(
+            bind(self.places, self.T_sym_components[1])(actx, sigma=solution, k=self.k))
+        T_yy = actx.to_numpy(
+            bind(self.places, self.T_sym_components[2])(actx, sigma=solution, k=self.k))
 
         hydro_out = np.array([
             fld.flatten(),
