@@ -524,7 +524,7 @@ class AmphilicsSolver:
 
         sol = gmres_result.solution
 
-        return self.compute_hydro_out(self, sol)
+        return self.compute_hydro_out(sol)
 
     def compute_hydro_out(self, solution):
         actx = self.actx
