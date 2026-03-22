@@ -545,7 +545,6 @@ class AmphilicsSolver:
         )
 
         print("debug output")
-        print(self.force_integrand_x_sym.shape)
         print(solution.shape)
         print(self.normal.shape)
         force_density_x = bind(self.places, self.force_integrand_x_sym)(actx, sigma=solution, k=self.k, normal=self.normal)
