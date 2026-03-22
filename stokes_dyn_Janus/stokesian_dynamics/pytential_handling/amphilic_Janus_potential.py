@@ -608,21 +608,14 @@ class AmphilicsSolver:
         T_xy = actx.to_numpy(self.T_xy_op(actx, sigma=solution, k=self.k))
         T_yy = actx.to_numpy(self.T_yy_op(actx, sigma=solution, k=self.k))
 
-        T_xx_eval = actx.to_numpy(
-            bind(self.places, self.T_sym[0])(actx, sigma=solution, k=self.k))
-        T_xy_eval = actx.to_numpy(
-            bind(self.places, self.T_sym[1])(actx, sigma=solution, k=self.k))
-        T_yy_eval = actx.to_numpy(
-            bind(self.places, self.T_sym[2])(actx, sigma=solution, k=self.k))
-
         hydro_out = np.array([
             fld.flatten(),
             indicator.flatten(),
             grad_x.flatten(),
             grad_y.flatten(),
-            T_xx_eval.flatten(),
-            T_yy_eval.flatten(),
-            T_xy_eval.flatten()
+            T_xx.flatten(),
+            T_yy.flatten(),
+            T_xy.flatten()
         ], dtype=np.float64)
 
         return (forces_x, forces_y, torques), hydro_out
