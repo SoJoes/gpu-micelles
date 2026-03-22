@@ -341,7 +341,7 @@ class AmphilicsSolver:
 
         self.base_mesh = make_curve_mesh(
             partial(ellipse, 1),
-            np.linespace(0, 1, nelements + 1),
+            np.linspace(0, 1, nelements + 1),
             mesh_order
         )
 
