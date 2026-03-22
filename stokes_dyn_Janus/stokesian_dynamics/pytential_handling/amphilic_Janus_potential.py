@@ -347,7 +347,7 @@ class AmphilicsSolver:
 
         from sumpy.visualization import FieldPlotter
         fplot = FieldPlotter(np.zeros(2), extent=20, npoints=500)
-        self.targets = actx.from_numpy(fplot.point)
+        self.targets = self.actx.from_numpy(fplot.point)
 
         # set up symbolics
         from sumpy.kernel import YukawaKernel
@@ -441,14 +441,14 @@ class AmphilicsSolver:
         )
 
         # --- normals / weights ---
-        self.normal = bind(self.density_discr, sym.normal(2))(actx).as_vector(object)
+        self.normal = bind(self.density_discr, sym.normal(2))(self.actx).as_vector(object)
 
         from pytential.symbolic.primitives import area_element, QWeight
         dS = area_element(1, 1, None) * QWeight(None)
-        self.integral_weights = bind(self.density_discr, dS)(actx)
+        self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
         # --- nodes cached ---
-        self.nodes = actx.thaw(self.density_discr.nodes())
+        self.nodes = self.actx.thaw(self.density_discr.nodes())
 
         # gradient
         self.grad_op = bind(self.places, self.grad_sym)
@@ -463,7 +463,7 @@ class AmphilicsSolver:
         self.force_integrand_y_sym = self.T_xy_op * nvec_sym[0] + self.T_yy_op * nvec_sym[1]
 
         # TORQUE
-        mv_pos = bind(density_discr, sym.nodes(2))(actx)
+        mv_pos = bind(density_discr, sym.nodes(2))(self.actx)
         self.pos = mv_pos.as_vector(object)
 
         # Use separate symbolic variables for position components for evaluation compatibility
@@ -502,7 +502,6 @@ class AmphilicsSolver:
         return DOFArray(actx, tuple(bc_data))
 
     def solve(self):
-
         actx = self.actx
 
         bc = self._amphilic_bc()
