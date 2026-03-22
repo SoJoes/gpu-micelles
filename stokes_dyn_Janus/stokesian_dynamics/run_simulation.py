@@ -11,6 +11,10 @@ You can override the inputs:
     setup_number, input_number, timestep, num_frames
 by passing them in as arguments from the command line."""
 
+import pytools.persistent_dict as p
+
+p._ENABLE_PERSISTENT_DICT = False
+
 import sys
 import os
 import numpy as np
