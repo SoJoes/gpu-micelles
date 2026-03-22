@@ -569,6 +569,7 @@ class AmphilicsSolver:
         torque_density = bind(self.places, self.torque_integrand_sym)(actx, sigma=solution, k=self.k, normal=self.normal,
                                                             r_pos=self.pos)
 
+        from pytential.symbolic.primitives import area_element, QWeight
         dS = area_element(1, 1, None) * QWeight(None)
 
         integral_weights = bind(self.density_discr, dS)(actx)
