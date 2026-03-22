@@ -359,6 +359,8 @@ class AmphilicsSolver:
 
         inv_sqrt_w_sigma = sym.cse(self.sigma_sym / self.sqrt_w)
 
+        loc_sign = -1  # exterior condition DO NOT CHANGE
+
         self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
                        + self.sqrt_w * (sym.S(kernel, inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
                                         + sym.D(kernel, inv_sqrt_w_sigma, lam=self.k_sym,
