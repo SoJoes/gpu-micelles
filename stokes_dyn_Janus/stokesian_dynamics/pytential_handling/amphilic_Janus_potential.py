@@ -339,10 +339,8 @@ class AmphilicsSolver:
             self.T_yy.flatten(),
             self.T_xy.flatten()
         ], dtype=np.float64)
-
-        geo_data = self.qbx.geometry
-        geo_data.tree.clear_cache(geo_data)
-        geo_data.traversal.clear_cache(geo_data)
+        self.qbx.tree.clear_cache(geo_data)
+        self.qbx.traversal.clear_cache(geo_data)
         # more of these to do
 
         return (forces_x, forces_y, torques), hydro_out
