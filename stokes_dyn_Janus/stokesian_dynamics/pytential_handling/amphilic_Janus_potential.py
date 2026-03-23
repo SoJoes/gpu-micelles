@@ -340,5 +340,7 @@ class AmphilicsSolver:
             self.T_xy.flatten()
         ], dtype=np.float64)
 
+        self.qbx.clear_cache(self.qbx)
+
         return (forces_x, forces_y, torques), hydro_out
 
