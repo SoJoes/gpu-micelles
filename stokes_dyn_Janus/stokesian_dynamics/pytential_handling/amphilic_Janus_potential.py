@@ -340,7 +340,7 @@ class AmphilicsSolver:
             self.T_xy.flatten()
         ], dtype=np.float64)
 
-        geo_data = self.places.get_geometry_data(...)
+        geo_data = self.places.get_geometry(...)
 
         geo_data.tree.clear_cache(geo_data)
         geo_data.traversal.clear_cache(geo_data)
