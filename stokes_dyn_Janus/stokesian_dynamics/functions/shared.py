@@ -295,7 +295,6 @@ def same_setup_as(filename, frameno=0, sphere_size=1, dumbbell_size=0.1,
 
     # Allows you to choose between different locations for your storage file.
     from zarr import open as zopen
-    print("FILENAME" + filename)
     if local:
         data1 = zopen(filename, mode="r")
     else:

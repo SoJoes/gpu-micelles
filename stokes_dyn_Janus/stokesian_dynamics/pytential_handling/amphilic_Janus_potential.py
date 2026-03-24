@@ -43,7 +43,7 @@ from meshmode.mesh.processing import affine_map, merge_disjoint_meshes
 
 
 class AmphilicsSolver:
-    def __init__(self, particle_pos, particle_facing, k, cogs=False):
+    def __init__(self, particle_pos, particle_facing, k, cogs=1):
         from meshmode.array_context import PyOpenCLArrayContext
         import pyopencl as cl
 
@@ -237,11 +237,7 @@ class AmphilicsSolver:
             rot_y = -sin_f * xg + cos_f * yg
 
             theta = actx.np.arctan2(rot_y, rot_x)
-
-            if not self.cogs:
-                bc = (actx.np.cos(theta)+1)/2
-            else:
-                bc = (actx.np.cos(3*theta)+1)/2
+            bc = (actx.np.cos(self.cogs*theta)+1)/2
 
             bc_data.append(bc)
 
