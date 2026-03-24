@@ -268,7 +268,7 @@ def pos_setup(n):
         files.sort(key=lambda x: path.getmtime(path.join(folder_path, x)))
 
         # Get the latest file
-        latest_file = files[0]
+        latest_file = files[-1]
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
             same_setup_as(latest_file, frameno=-1))
 
