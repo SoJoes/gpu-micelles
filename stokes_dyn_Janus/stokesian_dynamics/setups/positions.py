@@ -262,6 +262,7 @@ def pos_setup(n):
 
         # Get all the files in the folder
         files = listdir(folder_path)
+        print(files)
 
         # Sort the files by their last modified time
         files.sort(key=lambda x: path.getmtime(path.join(folder_path, x)))
