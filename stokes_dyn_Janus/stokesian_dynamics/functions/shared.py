@@ -294,21 +294,28 @@ def same_setup_as(filename, frameno=0, sphere_size=1, dumbbell_size=0.1,
     """Load posdata list from a saved file at a given frame number."""
 
     # Allows you to choose between different locations for your storage file.
+    from zarr import open as zopen
     if local:
-        data1 = np.load("output/" + filename + ".npz")
+        data1 = zopen(filename, mode="r")
     else:
-        data1 = np.load("your_external_location/output/" + filename + ".npz")
-    positions_centres = data1['centres']
-    positions_deltax = data1['deltax']
+        data1 = zopen(filename, mode="r")
+
+    positions_centres = data1['centres'][:]
+    positions_deltax = data1['deltax'][:]
+    particle_rotations = data1['sphere_rotations'][:]
+
+    sphere_rotations = particle_rotations[frameno, 0:num_spheres, :]
+    dumbbell_positions = positions_centres[frameno, num_spheres:num_particles, :]
+    dumbbell_deltax = positions_deltax[frameno, :, :]
+
+    sphere_sizes = np.array([1 for _ in range(num_spheres)])
+    dumbbell_sizes = np.array([0.1 for _ in range(num_dumbbells)])
+
     num_particles = positions_centres.shape[1]
     num_dumbbells = positions_deltax.shape[1]
     num_spheres = num_particles - num_dumbbells
     sphere_positions = positions_centres[frameno, 0:num_spheres, :]
-    dumbbell_positions = positions_centres[frameno, num_spheres:num_particles, :]
-    dumbbell_deltax = positions_deltax[frameno, :, :]
-    sphere_sizes = np.array([sphere_size for _ in range(num_spheres)])
-    dumbbell_sizes = np.array([dumbbell_size for _ in range(num_dumbbells)])
-    sphere_rotations = data1['sphere_rotations'][frameno, 0:num_spheres, :]
+
     return (sphere_sizes, sphere_positions, sphere_rotations,
             dumbbell_sizes, dumbbell_positions, dumbbell_deltax)
 
