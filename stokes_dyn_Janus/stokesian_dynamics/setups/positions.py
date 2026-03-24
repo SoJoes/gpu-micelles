@@ -262,15 +262,16 @@ def pos_setup(n):
 
         # Get all the files in the folder
         files = listdir(folder_path)
-        print(files)
 
         # Sort the files by their last modified time
         files.sort(key=lambda x: path.getmtime(path.join(folder_path, x)))
 
         # Get the latest file
         latest_file = files[-1]
+        filename = folder_path + '/' + latest_file
+
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
-            same_setup_as(latest_file, frameno=-1))
+            same_setup_as(filename, frameno=-1))
 
     elif n == 13:
         # one sphere
