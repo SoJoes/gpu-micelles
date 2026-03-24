@@ -305,6 +305,10 @@ def same_setup_as(filename, frameno=0, sphere_size=1, dumbbell_size=0.1,
     positions_deltax = data1['deltax'][:]
     particle_rotations = data1['sphere_rotations'][:]
 
+    num_particles = positions_centres.shape[1]
+    num_dumbbells = positions_deltax.shape[1]
+    num_spheres = num_particles - num_dumbbells
+
     sphere_rotations = particle_rotations[frameno, 0:num_spheres, :]
     dumbbell_positions = positions_centres[frameno, num_spheres:num_particles, :]
     dumbbell_deltax = positions_deltax[frameno, :, :]
