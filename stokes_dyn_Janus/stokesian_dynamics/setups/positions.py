@@ -257,8 +257,19 @@ def pos_setup(n):
         dumbbell_deltax = np.empty([0, 3])
 
     elif n == 12:
+        from os import listdir, path
+        folder_path = 'output'
+
+        # Get all the files in the folder
+        files = listdir(folder_path)
+
+        # Sort the files by their last modified time
+        files.sort(key=lambda x: path.getmtime(path.join(folder_path, x)))
+
+        # Get the latest file
+        latest_file = files[-1]
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
-            same_setup_as('2602261330-s12-i10-30fr-t0p1-M1-amphilic Janus particles', frameno=-1))
+            same_setup_as(latest_file, frameno=-1))
 
     elif n == 13:
         # one sphere
