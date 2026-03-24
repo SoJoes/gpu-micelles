@@ -31,7 +31,7 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output
 mkdir -p frame_output
-python3.11 -O run_simulation.py 15 10 0.2 5 fte 2 1
+python3.11 -O run_simulation.py 15 10 0.2 2 fte 2 1
 for i in {0..5}; do
     echo "Iteration $i"
     python3.11 -O run_simulation.py 12 10 0.2 2 fte 2 1
