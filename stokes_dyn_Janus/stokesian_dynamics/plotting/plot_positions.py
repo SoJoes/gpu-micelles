@@ -76,6 +76,8 @@ T_xx_list = []
 T_yy_list = []
 T_xy_list = []
 
+print(latest_file)
+
 for file in latest_file[1:len(latest_file)]:
     filename = folder_path + '/' + file
     this_data = zarr.open(filename, mode="r")
@@ -94,8 +96,6 @@ for file in latest_file[1:len(latest_file)]:
     T_xx_list.append(data1['T_xx'][:])
     T_yy_list.append(data1['T_yy'][:])
     T_xy_list.append(data1['T_xy'][:])
-
-    print(pos_centres_list)
 
 positions_centres = np.concatenate(pos_centres_list, axis=0)
 positions_deltax = np.concatenate(pos_deltax_list, axis=0)
