@@ -59,9 +59,6 @@ trace_paths = 0
 #output_folder = this_folder + "/../output/"
 
 #data1 = np.load(output_folder + filename + ".npz")
-first_file = latest_file[0]
-filename = folder_path + '/' + first_file
-data1 = zarr.open(filename, mode="r")
 
 pos_centres_list = []
 pos_deltax_list = []
@@ -80,7 +77,7 @@ T_xy_list = []
 
 print(latest_file)
 
-for file in latest_file[1:len(latest_file)]:
+for file in latest_file:
     filename = folder_path + '/' + file
     data1 = zarr.open(filename, mode="r")
 
