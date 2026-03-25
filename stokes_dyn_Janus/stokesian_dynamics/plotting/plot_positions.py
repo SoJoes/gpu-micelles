@@ -25,7 +25,7 @@ from functions.graphics import (plot_all_spheres, plot_all_dumbbells,
                                 plot_all_angular_velocity_lines)
 
 
-def get_latest_file(folder_path):
+def get_latest_file(folder_path, n=1):
     # Get all the files in the folder
     files = os.listdir(folder_path)
 
@@ -33,17 +33,18 @@ def get_latest_file(folder_path):
     files.sort(key=lambda x: os.path.getmtime(os.path.join(folder_path, x)))
 
     # Get the latest file
-    latest_file = files[-1]
+    latest_file = files[-num_files:-1]
 
     return latest_file
 
-folder_path = 'output'
-if len(sys.argv) >1:
-    filename = folder_path + '/' + sys.argv[1]
-else:
-    latest_file = get_latest_file(folder_path)
+args = sys.argv[1:]
+num_files = 1
+if len(args) > 0:
+    num_files = args[0]
 
-    filename = folder_path + '/' + latest_file
+folder_path = 'output'
+latest_file = get_latest_file(folder_path, n=num_files)
+
 graph_title = "testing"
 viewing_angle = (0, -90)
 viewbox_bottomleft_topright = np.array([[-5, -5, -5], [5, 5, 5]])
@@ -56,21 +57,58 @@ trace_paths = 0
 #output_folder = this_folder + "/../output/"
 
 #data1 = np.load(output_folder + filename + ".npz")
+first_file = latest_file[0]
+filename = folder_path + '/' + first_file
 data1 = zarr.open(filename, mode="r")
-positions_centres = data1['centres'][:]
-positions_deltax = data1['deltax'][:]
-Fa_out = data1['Fa'][:]
-Fb_out = data1['Fb'][:]
-DFb_out = data1['DFb'][:]
-particle_rotations = data1['sphere_rotations'][:]
 
-pot = data1['pot'][:]
-indicator = data1['indicator'][:]
-nabla_pot_x = data1['nabla_pot_x'][:]
-nabla_pot_y = data1['nabla_pot_y'][:]
-T_xx = data1['T_xx'][:]
-T_yy = data1['T_yy'][:]
-T_xy = data1['T_xy'][:]
+pos_centres_list = []
+pos_deltax_list = []
+Fa_out_list = []
+Fb_out_list = []
+DFb_out_list = []
+particle_rotations_list = []
+
+pot_list = []
+indicator_list = []
+nabla_pot_x_list = []
+nabla_pot_y_list = []
+T_xx_list = []
+T_yy_list = []
+T_xy_list = []
+
+for file in latest_file[1:len(latest_file)]:
+    filename = folder_path + '/' + file
+    this_data = zarr.open(filename, mode="r")
+
+    pos_centres_list.append(data1['centres'][:])
+    pos_deltax_list.append(data1['deltax'][:])
+    Fa_out_list.append(data1['Fa'][:])
+    Fb_out_list.append(data1['Fb'][:])
+    DFb_out_list.append(data1['DFb'][:])
+    particle_rotations_list.append(data1['sphere_rotations'][:])
+
+    pot_list.append(data1['pot'][:])
+    indicator_list.append(data1['indicator'][:])
+    nabla_pot_x_list.append(data1['nabla_pot_x'][:])
+    nabla_pot_y_list.append(data1['nabla_pot_y'][:])
+    T_xx_list.append(data1['T_xx'][:])
+    T_yy_list.append(data1['T_yy'][:])
+    T_xy_list.append(data1['T_xy'][:])
+
+positions_centres = np.concatenate(pos_centres_list, axis=0)
+positions_deltax = np.concatenate(pos_deltax_list, axis=0)
+Fa_out = np.concatenate(Fa_out_list, axis=0)
+Fb_out = np.concatenate(Fb_out_list, axis=0)
+DFb_out = np.concatenate(DFb_out_list, axis=0)
+particle_rotations = np.concatenate(particle_rotations_list, axis=0)
+
+pot = np.concatenate(pot_list, axis=0)
+indicator = np.concatenate(indicator_list, axis=0)
+nabla_pot_x = np.concatenate(nabla_pot_x_list, axis=0)
+nabla_pot_y = np.concatenate(nabla_pot_y_list, axis=0)
+T_xx = np.concatenate(T_xx_list, axis=0)
+T_xy = np.concatenate(T_xy_list, axis=0)
+T_yy = np.concatenate(T_yy_list, axis=0)
 
 num_frames = positions_centres.shape[0]
 num_particles = positions_centres.shape[1]
