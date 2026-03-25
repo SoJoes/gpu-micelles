@@ -635,11 +635,13 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 save_forces_and_positions_to_temp_file_as_well and
                 frameno >= start_saving_after_first_n_timesteps):
                 #snapshot = tracemalloc.take_snapshot()
-                top_stats = snapshot.statistics('lineno')
+                #top_stats = snapshot.statistics('lineno')
 
+                '''
                 print("[ Top 10 memory allocations ]")
                 for stat in top_stats[:10]:
                     print(stat)
+                '''
                 if input_number < 10:
                     savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
                                Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Sa=Sa_out,
