@@ -48,8 +48,8 @@ from settings import (
 from resistance_scalars.data import s_dash_range, lam_range_with_reciprocals
 from zarr_saver import savez_zarr
 
-import tracemalloc
-tracemalloc.start()
+#import tracemalloc
+#tracemalloc.start()
 
 # Input description of simulation
 args = sys.argv[1:]
@@ -634,7 +634,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 save_forces_every_n_timesteps > 0 and
                 save_forces_and_positions_to_temp_file_as_well and
                 frameno >= start_saving_after_first_n_timesteps):
-                snapshot = tracemalloc.take_snapshot()
+                #snapshot = tracemalloc.take_snapshot()
                 top_stats = snapshot.statistics('lineno')
 
                 print("[ Top 10 memory allocations ]")
