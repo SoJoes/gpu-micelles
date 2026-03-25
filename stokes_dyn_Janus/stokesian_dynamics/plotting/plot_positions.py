@@ -75,8 +75,6 @@ T_xx_list = []
 T_yy_list = []
 T_xy_list = []
 
-print(latest_file)
-
 for file in latest_file:
     filename = folder_path + '/' + file
     data1 = zarr.open(filename, mode="r")
