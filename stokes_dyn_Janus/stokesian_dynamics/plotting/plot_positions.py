@@ -33,7 +33,7 @@ def get_latest_file(folder_path, n=1):
     files.sort(key=lambda x: os.path.getmtime(os.path.join(folder_path, x)))
 
     # Get the latest file
-    latest_file = files[-num_files:-1]
+    latest_file = files[-num_files:]
 
     return latest_file
 
