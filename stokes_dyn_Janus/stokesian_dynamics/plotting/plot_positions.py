@@ -82,7 +82,7 @@ print(latest_file)
 
 for file in latest_file[1:len(latest_file)]:
     filename = folder_path + '/' + file
-    this_data = zarr.open(filename, mode="r")
+    data1 = zarr.open(filename, mode="r")
 
     pos_centres_list.append(data1['centres'][:])
     pos_deltax_list.append(data1['deltax'][:])
