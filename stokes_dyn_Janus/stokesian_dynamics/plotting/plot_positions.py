@@ -44,6 +44,8 @@ if len(args) > 0:
 
 folder_path = 'output'
 latest_file = get_latest_file(folder_path, n=num_files)
+print("LATEST:" + str(num_files))
+print(latest_file)
 
 graph_title = "testing"
 viewing_angle = (0, -90)
