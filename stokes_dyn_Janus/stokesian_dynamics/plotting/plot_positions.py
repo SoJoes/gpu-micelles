@@ -40,7 +40,7 @@ def get_latest_file(folder_path, n=1):
 args = sys.argv[1:]
 num_files = 1
 if len(args) > 0:
-    num_files = args[0]
+    num_files = int(args[0])
 
 folder_path = 'output'
 latest_file = get_latest_file(folder_path, n=num_files)
