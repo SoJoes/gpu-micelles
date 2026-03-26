@@ -12,7 +12,7 @@ import numpy as np
 from functions.shared import (add_sphere_rotations_to_positions, same_setup_as,
                               throw_error)
 import glob
-from settings import setup_number, input_number, num_frames, timestep
+from settings import setup_number, input_number, num_frames, timestep, folder_path
 from setups.tests.positions import pos_setup_tests
 from setups.functions_positions import (simple_cubic_8, randomise_spheres,
                                         randomise_dumbbells)
@@ -258,7 +258,6 @@ def pos_setup(n):
 
     elif n == 12:
         from os import listdir, path
-        folder_path = 'output'
 
         # Get all the files in the folder
         files = listdir(folder_path)
