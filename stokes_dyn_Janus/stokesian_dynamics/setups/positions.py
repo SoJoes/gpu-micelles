@@ -12,7 +12,7 @@ import numpy as np
 from functions.shared import (add_sphere_rotations_to_positions, same_setup_as,
                               throw_error)
 import glob
-from settings import setup_number, input_number, num_frames, timestep, folder_path
+from settings import setup_number, input_number, num_frames, timestep, output_folder
 from setups.tests.positions import pos_setup_tests
 from setups.functions_positions import (simple_cubic_8, randomise_spheres,
                                         randomise_dumbbells)
@@ -260,14 +260,14 @@ def pos_setup(n):
         from os import listdir, path
 
         # Get all the files in the folder
-        files = listdir(folder_path)
+        files = listdir(output_folder)
 
         # Sort the files by their last modified time
-        files.sort(key=lambda x: path.getmtime(path.join(folder_path, x)))
+        files.sort(key=lambda x: path.getmtime(path.join(output_folder, x)))
 
         # Get the latest file
         latest_file = files[-1]
-        filename = folder_path + '/' + latest_file
+        filename = output_folder + '/' + latest_file
 
         (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
             same_setup_as(filename, frameno=-1))
