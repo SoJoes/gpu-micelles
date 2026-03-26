@@ -39,8 +39,11 @@ def get_latest_file(folder_path, n=1):
 
 args = sys.argv[1:]
 num_files = 1
+start_frame = 0
 if len(args) > 0:
     num_files = int(args[0])
+if len(args) > 1:
+    start_frame = int(args[1])
 
 folder_path = 'output'
 latest_file = get_latest_file(folder_path, n=num_files)
@@ -188,14 +191,14 @@ for frame in range(frameno):
         q.remove()
 
     ax.set_title("  frame "
-                 + ("{:" + str(len(str(num_frames))) + ".0f}").format(frame)
+                 + ("{:" + str(len(str(num_frames))) + ".0f}").format(start_frame + frame)
                  + "/" + str(num_frames-1), loc='left', y=0.97, fontsize=11)
     ax.set_title(graph_title, loc='center', y=1.055, fontsize=11)
-    plt.savefig("frame_output/frame"+str(frame)+".png")
+    plt.savefig("frame_output/frame"+str(start_frame + frame)+".png")
     plt.close()
 
 
-    fplot.write_vtk_file("frame_output/frame"+str(frame)+".vts", [
+    fplot.write_vtk_file("frame_output/frame"+str(start_frame + frame)+".vts", [
         ("potential", pot[frame,:]),
         ("indicator", indicator[frame,:]),
         ("nabla_pot_x", nabla_pot_x[frame,:]),
