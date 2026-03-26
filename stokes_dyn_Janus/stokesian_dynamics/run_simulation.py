@@ -44,7 +44,7 @@ from settings import (
     input_number, extract_force_on_wall_due_to_dumbbells,
     feed_every_n_timesteps, feed_from_file,
     timestepping_scheme, bead_bead_interactions, fully_2d_problem,
-    start_saving_after_first_n_timesteps, rk4_generate_minfinity_for_each_stage, cogs, using_pytential)
+    start_saving_after_first_n_timesteps, rk4_generate_minfinity_for_each_stage, cogs, using_pytential, output_folder)
 from resistance_scalars.data import s_dash_range, lam_range_with_reciprocals
 from zarr_saver import savez_zarr
 
@@ -77,7 +77,6 @@ error = False
 previous_step_posdata = posdata
 previous_timestamp = time.time()
 times = [0 for _ in range(num_frames)]
-output_folder = "output"
 legion_random_id = ""
 
 # Pictures initialise

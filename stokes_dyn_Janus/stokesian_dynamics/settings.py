@@ -37,6 +37,7 @@ input_form = 'fte'
 save_every_n = 1
 
 cogs=1
+output_folder = 'output'
 
 # ----------------------------------------------------------------------------|
 # BASIC SETTINGS: OVERRIDES FROM COMMAND LINE
@@ -46,6 +47,8 @@ number_of_args = len(args)
 running_on_legion = 0
 
 try:
+    if number_of_args >= 8:
+        output_folder = str(args[7])
     if number_of_args >= 7:
         cogs = int(args[6])
     if number_of_args >= 6:
