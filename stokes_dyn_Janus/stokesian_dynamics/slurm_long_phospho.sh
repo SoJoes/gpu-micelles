@@ -32,9 +32,9 @@ export PYOPENCL_CTX='0'
 # rm -rf frame_output
 mkdir -p frame_output2
 mkdir -p output2
-# python3.11 -O run_simulation.py 15 10 0.05 50 fte 10 1 output2
+# python3.11 -O run_simulation.py 15 10 0.05 80 fte 10 1 output2
 for i in {0..5}; do
     echo "Started simulation run $i"
-    python3.11 -O run_simulation.py 12 10 0.05 50 fte 10 1 output2
+    python3.11 -O run_simulation.py 12 10 0.05 80 fte 10 1 output2
 done
 python3.11 plotting/plot_positions.py 8 0 frame_output2

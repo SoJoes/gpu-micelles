@@ -41,6 +41,7 @@ args = sys.argv[1:]
 num_files = 1
 start_frame = 0
 frame_folder = "frame_output"
+folder_path = 'output'
 
 if len(args) > 0:
     num_files = int(args[0])
@@ -48,8 +49,9 @@ if len(args) > 1:
     start_frame = int(args[1])
 if len(args) > 2:
     frame_folder = str(args[2])
+if len(args) > 3:
+    folder_path = str(args[3])
 
-folder_path = 'output'
 latest_file = get_latest_file(folder_path, n=num_files)
 print("LATEST:" + str(num_files))
 print(latest_file)
