@@ -384,7 +384,7 @@ def pos_setup(n):
         outer_pos = radius * outer_pos
 
         my_pos = np.concatenate((inner_pos, outer_pos))
-        my_rotations = np.concatenate((2*np.pi - outer_rotations, outer_rotations))
+        my_rotations = np.concatenate((np.pi + outer_rotations, outer_rotations))
 
         sphere_sizes = np.ones(num_spheres)
         sphere_positions = my_pos
