@@ -378,7 +378,7 @@ def pos_setup(n):
         num_spheres = 8
         radius = 4
         outer_rotations = 2 * np.pi * np.array(range(num_spheres//2)) / (num_spheres//2)
-        outer_pos = np.hstack((np.cos(outer_rotations), 0, np.sin(outer_rotations)))
+        outer_pos = np.vstack((np.cos(outer_rotations), 0, np.sin(outer_rotations)))
         inner_pos = (radius - 1.5) * outer_pos.copy()
         outer_pos = radius * outer_pos
 
