@@ -375,27 +375,19 @@ def pos_setup(n):
 
     elif n == 16:
         # four spheres
-        num_spheres = 8
-        radius = 4
+        num_spheres = 16
+        radius = 7
         outer_rotations = 2 * np.pi * np.array(range(num_spheres//2)) / (num_spheres//2)
         outer_pos = np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
-        print("SHAPES")
-        print(np.shape(outer_pos))
 
-        inner_pos = (radius - 1.5) * outer_pos.copy()
+        inner_pos = (radius - 2) * outer_pos.copy()
         outer_pos = radius * outer_pos
 
         my_pos = np.concatenate((inner_pos, outer_pos))
-        print(np.shape(my_pos))
         my_rotations = np.concatenate((outer_rotations, -outer_rotations))
-        print(np.shape(my_rotations))
 
         sphere_sizes = np.ones(num_spheres)
         sphere_positions = my_pos
-
-        print("SHAPES")
-        print(np.shape(sphere_positions))
-        print(np.shape(my_rotations))
 
         # individually rotated to my_rotations
         rot1 = np.zeros((3, num_spheres))
