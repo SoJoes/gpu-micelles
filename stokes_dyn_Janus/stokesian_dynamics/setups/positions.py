@@ -384,7 +384,7 @@ def pos_setup(n):
         outer_pos = radius * outer_pos
 
         my_pos = np.concatenate((inner_pos, outer_pos))
-        angles = np.arctan2(my_pos[:, 2], my_pos[:, 0])
+        angles = np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi / 2
 
         half = num_spheres // 2
         angles[half:] += np.pi  # outer ring faces inward
