@@ -388,6 +388,10 @@ def pos_setup(n):
         sphere_sizes = np.ones(num_spheres)
         sphere_positions = my_pos
 
+        print("SHAPES")
+        print(np.shape(sphere_positions))
+        print(np.shape(my_rotations))
+
         # individually rotated to my_rotations
         rot1 = np.zeros((3, num_spheres))
         rot1[0] = np.cos(my_rotations)
