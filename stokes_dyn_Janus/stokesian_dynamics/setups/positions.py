@@ -390,7 +390,7 @@ def pos_setup(n):
         my_pos = np.concatenate((inner_pos, outer_pos))
         angles = np.pi - (np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi/2)
 
-        angles[num_outer - 1:] += np.pi  # outer ring faces inward
+        angles[num_inner:] += np.pi  # outer ring faces inward
         angles += np.pi / 2  # fix offset
 
         angles = (angles + np.pi) % (2 * np.pi) - np.pi
