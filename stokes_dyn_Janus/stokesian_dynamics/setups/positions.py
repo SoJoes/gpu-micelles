@@ -385,7 +385,7 @@ def pos_setup(n):
         inner_pos = (radius - 1.5) * outer_pos.copy()
         outer_pos = radius * outer_pos
 
-        my_pos = np.concatenate((inner_pos, outer_pos), axis=1)
+        my_pos = np.concatenate((inner_pos, outer_pos))
         print(np.shape(my_pos))
         my_rotations = np.concatenate((outer_rotations, -outer_rotations))
         print(np.shape(my_rotations))
