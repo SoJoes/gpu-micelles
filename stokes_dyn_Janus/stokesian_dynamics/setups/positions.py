@@ -373,6 +373,44 @@ def pos_setup(n):
         dumbbell_positions = np.empty([0, 3])
         dumbbell_deltax = np.empty([0, 3])
 
+    elif n == 16:
+        # four spheres
+        num_spheres = 8
+        radius = 4
+        outer_rotations = 2 * np.pi * np.array(range(num_spheres//2)) / (num_spheres//2)
+        outer_pos = np.hstack((np.cos(outer_rotations), 0, np.sin(outer_rotations))
+        inner_pos = (radius - 1.5) * outer_pos.copy()
+        outer_pos = radius * outer_pos
+
+        my_pos = np.hstack((inner_pos, outer_pos))
+        my_rotations = np.concatenate((outer_rotations, -outer_rotations))
+
+        sphere_sizes = np.ones(num_spheres)
+        sphere_positions = my_pos
+
+        # individually rotated to my_rotations
+        rot1 = np.zeros((3, num_spheres))
+        rot1[0] = np.cos(my_rotations)
+        rot1[2] = -np.sin(my_rotations)
+        rot2 = np.zeros_like(rot1)
+        rot2[0] = -rot1[1]
+        rot2[2] = rot1[0]
+
+        # modified from shared.add_rotations_to_spheres
+        b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
+        addrot1 = (sphere_sizes * rot1).transpose()
+        addrot2 = (sphere_sizes * rot2).transpose()
+
+        b[:, 0, :] = sphere_positions + addrot1
+        b[:, 1, :] = sphere_positions + addrot2
+
+        sphere_rotations = b
+
+        # no dumbbells
+        dumbbell_sizes = np.array([])
+        dumbbell_positions = np.empty([0, 3])
+        dumbbell_deltax = np.empty([0, 3])
+
     else:
         throw_error("The position setup number you have requested (" + str(n) +
                     ") is not listed in setups/positions.py.")
