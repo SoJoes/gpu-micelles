@@ -380,7 +380,7 @@ def pos_setup(n):
         outer_rotations = 2 * np.pi * np.array(range(num_spheres//2)) / (num_spheres//2)
         outer_pos = np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
 
-        inner_pos = (radius - 2) * outer_pos.copy()
+        inner_pos = (radius - 3) * outer_pos.copy()
         outer_pos = radius * outer_pos
 
         my_pos = np.concatenate((inner_pos, outer_pos))
