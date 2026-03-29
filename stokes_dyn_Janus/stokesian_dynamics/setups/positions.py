@@ -384,7 +384,15 @@ def pos_setup(n):
         outer_pos = radius * outer_pos
 
         my_pos = np.concatenate((inner_pos, outer_pos))
-        my_rotations = np.concatenate((np.pi + outer_rotations, np.pi - outer_rotations))
+        angles = np.arctan2(my_pos[:, 2], my_pos[:, 0])
+
+        half = num_spheres // 2
+        angles[half:] += np.pi  # outer ring faces inward
+        angles += np.pi / 2  # fix renderer offset
+
+        angles = (angles + np.pi) % (2 * np.pi) - np.pi
+
+        my_rotations = angles
         print(my_rotations)
 
         sphere_sizes = np.ones(num_spheres)
