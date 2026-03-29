@@ -375,10 +375,11 @@ def pos_setup(n):
 
     elif n == 16:
         # four spheres
-        num_spheres = 18
         radius = 7
         num_outer = int(np.floor(np.pi/(np.arcsin(1/radius))))
         num_inner = int(np.floor(np.pi/(np.arcsin(1/(radius-3)))))
+
+        num_spheres = num_outer + num_inner
 
         outer_rotations = 2 * np.pi * np.array(range(num_outer)) / num_outer
         outer_pos = radius * np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
@@ -389,9 +390,8 @@ def pos_setup(n):
         my_pos = np.concatenate((inner_pos, outer_pos))
         angles = np.pi - (np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi/2)
 
-        half = num_spheres // 2
-        angles[half:] += np.pi  # outer ring faces inward
-        angles += np.pi / 2  # fix renderer offset
+        angles[num_outer - 1:] += np.pi  # outer ring faces inward
+        angles += np.pi / 2  # fix offset
 
         angles = (angles + np.pi) % (2 * np.pi) - np.pi
 
