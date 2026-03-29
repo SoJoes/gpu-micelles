@@ -377,8 +377,8 @@ def pos_setup(n):
         # four spheres
         num_spheres = 18
         radius = 7
-        num_outer = np.floor(np.pi/(np.arcsin(1/radius)), type=np.int64)
-        num_inner = np.floor(np.pi/(np.arcsin(1/(radius-3))), type=np.int64)
+        num_outer = np.floor(np.pi/(np.arcsin(1/radius)), dtype=np.int64)
+        num_inner = np.floor(np.pi/(np.arcsin(1/(radius-3))), dtype=np.int64)
 
         outer_rotations = 2 * np.pi * np.array(range(num_outer)) / num_outer
         outer_pos = radius * np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
