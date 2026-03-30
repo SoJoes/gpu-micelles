@@ -34,13 +34,13 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
     distance_matrix = np.linalg.norm(bead_positions-bead_positions[:, None],
                                      axis=2)  # distance from each bead to each other bead
     average_size_matrix = 0.5*(bead_sizes+bead_sizes[:, None])  
-    scaled_distance_matrix = distance_matrix/average_size_matrix  # scaled to [0,1] presumably
+    scaled_distance_matrix = distance_matrix # /average_size_matrix  # scaled to [0,1] presumably
 
     index_matrix = (range(num_spheres+2*num_dumbbells)
                     - np.array(range(num_spheres+2*num_dumbbells))[:, None])  # indexes of each bead
 
     print(scaled_distance_matrix)
-    cutoff = 4
+    cutoff = 1
     overlapping_or_close = np.where(
         np.logical_and(scaled_distance_matrix > 0,
                        np.logical_and(scaled_distance_matrix < cutoff,
