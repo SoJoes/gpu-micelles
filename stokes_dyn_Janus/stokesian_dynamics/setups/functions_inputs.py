@@ -39,7 +39,8 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
     index_matrix = (range(num_spheres+2*num_dumbbells)
                     - np.array(range(num_spheres+2*num_dumbbells))[:, None])  # indexes of each bead
 
-    cutoff = 3  # r_c
+    print(scaled_distance_matrix)
+    cutoff = 4
     overlapping_or_close = np.where(
         np.logical_and(scaled_distance_matrix > 0,
                        np.logical_and(scaled_distance_matrix < cutoff,
@@ -57,7 +58,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
         a2 = bead_sizes[pair[1]]
         repulsion_force_length = 0  # initialise
 
-        h_cutoff = -0.5
+        h_cutoff = -1
 
         # # Dratler et al. repulsion potential
         # constant = 0.008
