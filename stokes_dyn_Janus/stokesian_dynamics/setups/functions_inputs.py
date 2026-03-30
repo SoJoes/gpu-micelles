@@ -57,7 +57,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
         a2 = bead_sizes[pair[1]]
         repulsion_force_length = 0  # initialise
 
-        h_cutoff = 0.06
+        h_cutoff = 1
 
         # # Dratler et al. repulsion potential
         # constant = 0.008
