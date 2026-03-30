@@ -39,7 +39,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
     index_matrix = (range(num_spheres+2*num_dumbbells)
                     - np.array(range(num_spheres+2*num_dumbbells))[:, None])  # indexes of each bead
 
-    cutoff = 3
+    cutoff = 4
     overlapping_or_close = np.where(
         np.logical_and(scaled_distance_matrix > 0,
                        np.logical_and(scaled_distance_matrix < cutoff,
@@ -50,7 +50,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
     for pair in overlapping_or_close_pairs:
         # for each pair
         scaled_overlap = scaled_distance_matrix[pair]  # record overlap of pair
-        h = scaled_overlap - 2.06
+        h = scaled_overlap - 2.1
         r = bead_positions[pair[1]] - bead_positions[pair[0]]  # distance between pair
         unit_vector = r/np.linalg.norm(r)  # unit vector between pair
         a1 = bead_sizes[pair[0]]
