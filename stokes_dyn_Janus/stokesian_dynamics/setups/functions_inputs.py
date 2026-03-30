@@ -66,11 +66,18 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
 
         # Mari et al. electrostatic repulsion
         # force from pair
-        if h >= h_cutoff:
+        '''if h >= h_cutoff:
             repulsion_force_length += strength*(2.*a1*a2/(a1+a2))*np.exp(-tau*h)
             print("REPULSING", h)
         else:
-            repulsion_force_length += strength*(2.*a1*a2/(a1+a2))*np.exp(-tau*h_cutoff)
+            repulsion_force_length += strength*(2.*a1*a2/(a1+a2))*np.exp(-tau*h_cutoff)'''
+
+        rho1 = 2.5
+        norm_r = np.linalg.norm(r)
+
+        if norm_r < rho1:
+            repulsion_force_length += np.pi * strength * (np.cos(np.pi * norm_r / (2*rho1))) / (2*rho1)
+            print("repulsed it away !")
 
         bead_force[pair[0]] = (np.array(bead_force[pair[0]])
                                + repulsion_force_length*unit_vector)

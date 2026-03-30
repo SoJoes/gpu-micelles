@@ -266,10 +266,10 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         Ta_in[:, 1] = -hydrophobic_forces[2] # need to rotate opposite direction from output
 
         # Constant shear
-        '''(Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
          Ot_infinity, Et_infinity) = constant_shear(
             gammadot=1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)'''
+            num_spheres=num_spheres)
 
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
