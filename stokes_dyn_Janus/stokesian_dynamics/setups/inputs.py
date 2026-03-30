@@ -151,7 +151,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
     elif n == 4:
         # Repulsive force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            50, 100, num_spheres, num_dumbbells, sphere_positions,
+            50, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
@@ -273,7 +273,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            200, 50, num_spheres, num_dumbbells, sphere_positions,
+            50, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 

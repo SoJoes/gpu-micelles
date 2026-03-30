@@ -757,6 +757,9 @@ if num_spheres > 0 and input_form in ["fts"]:
     throw_warning("If you have spheres, it is more likely that you want to "
                   + "use FTE, UFTE or UFTEU form, rather than FTS.")
 
+# repulsion
+
+# actual forces
 (Fa_in, Ta_in, Sa_in, Sa_c_in, Fb_in, DFb_in,
  Ua_in, Oa_in, Ea_in, Ea_c_in, Ub_in, HalfDUb_in, input_description,
  U_infinity, O_infinity, centre_of_background_flow, Ot_infinity, Et_infinity,
