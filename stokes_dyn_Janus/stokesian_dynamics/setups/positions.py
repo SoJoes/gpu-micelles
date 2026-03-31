@@ -305,14 +305,21 @@ def pos_setup(n):
 
     elif n==14:
         # roots of unity
-        my_pos = np.zeros((3, 3))
-        my_pos = np.array([[1, 0, 0],
-                           [-2, 0, np.sqrt(3)],
-                           [-2, 0, -np.sqrt(3)]])
-        my_rotations = np.array([np.pi, -np.pi/3, np.pi/3])
-        num_spheres = 3
+        radius = 4
+        num_spheres = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 3
+        num_spheres = 2
 
-        sphere_sizes = np.array([1 for _ in range(num_spheres)])
+        outer_rotations = 2 * np.pi * np.array(range(num_spheres)) / num_spheres
+        my_pos = radius * np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
+        angles = np.pi - (np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi/2)
+
+        angles[:] += 3* np.pi /2  # outer ring faces inward and fix offset
+
+        angles = (angles + np.pi) % (2 * np.pi) - np.pi
+
+        my_rotations = angles
+
+        sphere_sizes = np.ones(num_spheres)
         sphere_positions = my_pos
 
         # individually rotated to my_rotations
@@ -324,9 +331,10 @@ def pos_setup(n):
         rot2[2] = rot1[0]
 
         # modified from shared.add_rotations_to_spheres
-        b = np.zeros([num_spheres, 2, sphere_positions.shape[1]])
+        b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
         addrot1 = (sphere_sizes * rot1).transpose()
         addrot2 = (sphere_sizes * rot2).transpose()
+
         b[:, 0, :] = sphere_positions + addrot1
         b[:, 1, :] = sphere_positions + addrot2
 
@@ -374,7 +382,7 @@ def pos_setup(n):
         dumbbell_deltax = np.empty([0, 3])
 
     elif n == 16:
-        # four spheres
+        # vesicle
         radius = 7
         num_outer = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 3
         num_inner = int(np.floor(np.pi/(np.arcsin(1/(radius-3))))) - 3
