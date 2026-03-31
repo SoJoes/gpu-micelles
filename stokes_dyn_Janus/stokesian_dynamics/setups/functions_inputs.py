@@ -77,7 +77,6 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
 
         if norm_r < rho1:
             repulsion_force_length += np.pi * strength * (np.cos(np.pi * norm_r / (2*rho1))) / (2*rho1)
-            print("repulsed it away !")
 
         bead_force[pair[0]] = (np.array(bead_force[pair[0]])
                                + repulsion_force_length*unit_vector)
