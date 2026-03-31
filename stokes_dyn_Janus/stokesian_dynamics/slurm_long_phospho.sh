@@ -11,8 +11,8 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
-#SBATCH -e stderr-file
-#SBATCH -o stdout-file
+#SBATCH -e stderr-file1
+#SBATCH -o stdout-file1
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
