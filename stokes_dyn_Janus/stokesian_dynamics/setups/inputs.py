@@ -266,10 +266,10 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         Ta_in[:, 1] = -hydrophobic_forces[2] # need to rotate opposite direction from output
 
         # added repulsion force
-        (Fa_in, Fb_in, DFb_in) = repulsion_forces(
+        '''(Fa_in, Fb_in, DFb_in) = repulsion_forces(
             80, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
-            dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
+            dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)'''
 
         desc = "amphilic Janus particles"
 
