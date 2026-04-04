@@ -65,7 +65,7 @@ class AmphilicsSolver:
         )
 
         from sumpy.visualization import FieldPlotter
-        fplot = FieldPlotter(np.zeros(2), extent=20, npoints=500)
+        fplot = FieldPlotter(np.zeros(2), extent=40, npoints=500)
         self.targets = self.actx.from_numpy(fplot.points)
 
         # set up symbolics
@@ -151,7 +151,7 @@ class AmphilicsSolver:
         dS = area_element(1, 1, None) * QWeight(None)
         self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
-        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=1, rho=1):
+        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=4.1, rho=1):
             # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
             grad_x_sym = grad_u_sym[0]
             grad_y_sym = grad_u_sym[1]

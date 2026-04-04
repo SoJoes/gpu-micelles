@@ -7,12 +7,12 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=phospho
+#SBATCH --job-name=angel
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
-#SBATCH -e stderr-file1
-#SBATCH -o stdout-file1
+#SBATCH -e stderr-file2
+#SBATCH -o stdout-file2
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
@@ -29,11 +29,12 @@ export PYOPENCL_CTX='0'
 
 # Run your script
 
-rm -rf frame_output1
-mkdir -p frame_output1
-python3.11 -O run_simulation.py 16 11 0.2 80 fte 10 1 output1
+rm -rf frame_output2
+mkdir -p frame_output2
+mkdir output2
+python3.11 -O run_simulation.py 16 11 0.2 80 fte 5 2 output2
 for i in {0..5}; do
     echo "Started simulation run $i"
-    python3.11 -O run_simulation.py 12 11 0.2 80 fte 10 1 output1
+    python3.11 -O run_simulation.py 12 11 0.2 80 fte 5 2 output2
 done
-python3.11 plotting/plot_positions.py 6 0 frame_output1 output1
+python3.11 plotting/plot_positions.py 6 0 frame_output2 output2
