@@ -313,6 +313,8 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
             hydro_out = hydro_out_k1
             force_on_wall_due_to_dumbbells = np.asarray(force_on_wall_due_to_dumbbells_k1)
 
+            print("Max Fa_out is", np.max(Fa_out))
+
         elif timestepping_scheme == "rk4":
             # RK4
             new_sphere_rotations = np.copy(sphere_rotations).astype('float')
