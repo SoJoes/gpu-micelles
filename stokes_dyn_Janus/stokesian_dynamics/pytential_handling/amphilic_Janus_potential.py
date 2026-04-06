@@ -81,7 +81,8 @@ class AmphilicsSolver:
         loc_sign = -1  # exterior condition DO NOT CHANGE
 
         self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
-                       + self.sqrt_w * (sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
+                       + self.sqrt_w * (sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
+                                        + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
                                                 qbx_forced_limit="avg")))  # }}}
 
         self.repr_kwargs = {
@@ -91,7 +92,8 @@ class AmphilicsSolver:
         }
 
         self.representation_sym = (
-                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs, qbx_forced_limit="avg")
+                sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
 
@@ -140,7 +142,7 @@ class AmphilicsSolver:
         # --- indicator ---
         self.indicator_op = bind(
             self.places,
-            sym.D(LaplaceKernel(2), self.sigma_sym, **self.repr_kwargs, qbx_forced_limit="avg")
+            sym.D(LaplaceKernel(2), self.sigma_sym, **self.repr_kwargs)
         )
 
         # --- normals / weights ---
@@ -182,7 +184,8 @@ class AmphilicsSolver:
             "qbx_forced_limit": +1  # Or appropriate limit for boundary evaluation
         }
         representation_sym_boundary = (
-                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
+                sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
+                + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
         )
 
         # find grad of potential on the boundary
