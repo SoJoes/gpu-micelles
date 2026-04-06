@@ -29,7 +29,7 @@ def enablePrint():
 
 nelements = 20
 bdry_quad_order = 5 # order of quadrature on the boundary
-mesh_order = bdry_quad_order + 2
+mesh_order = bdry_quad_order
 qbx_order = bdry_quad_order
 bdry_ovsmp_quad_order = 4*bdry_quad_order # boundary ? quadrature order
 fmm_order = 10
@@ -65,7 +65,7 @@ class AmphilicsSolver:
         )
 
         from sumpy.visualization import FieldPlotter
-        fplot = FieldPlotter(np.zeros(2), extent=40, npoints=500)
+        fplot = FieldPlotter(np.zeros(2), extent=40, npoints=700)
         self.targets = self.actx.from_numpy(fplot.points)
 
         # set up symbolics
