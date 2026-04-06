@@ -91,10 +91,13 @@ class AmphilicsSolver:
             "qbx_forced_limit": None
         }
 
-        self.representation_sym = sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs) '''(
+        self.representation_sym = sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+        '''
+        (
                 sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
                 + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
-        )'''
+        )
+        '''
 
         # --- gradient ---
         from pytential.symbolic.primitives import grad
