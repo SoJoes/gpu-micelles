@@ -28,7 +28,7 @@ def enablePrint():
 # {{{ set some constants for use below
 
 nelements = 20
-bdry_quad_order = 4 # order of quadrature on the boundary
+bdry_quad_order = 5 # order of quadrature on the boundary
 mesh_order = bdry_quad_order
 qbx_order = bdry_quad_order
 bdry_ovsmp_quad_order = 4*bdry_quad_order # boundary ? quadrature order
@@ -325,7 +325,7 @@ class AmphilicsSolver:
         self.T_xy = actx.to_numpy(
             bind(self.places, self.T_sym_components[1])(actx, sigma=solution, k=self.k))
         self.T_yy = actx.to_numpy(
-            bind(self.places, self.T_sym_components[2])(actx, sigma=solution, k=self.k))
+            bind(self.places, self.T_sym_components[3])(actx, sigma=solution, k=self.k))
 
         hydro_out = np.array([
             self.fld.flatten(),
