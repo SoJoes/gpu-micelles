@@ -91,7 +91,7 @@ class AmphilicsSolver:
         }
 
         self.representation_sym = (
-                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs, qbx_forced_limit="avg")
         )
 
 
@@ -140,7 +140,7 @@ class AmphilicsSolver:
         # --- indicator ---
         self.indicator_op = bind(
             self.places,
-            sym.D(LaplaceKernel(2), self.sigma_sym, **self.repr_kwargs)
+            sym.D(LaplaceKernel(2), self.sigma_sym, **self.repr_kwargs, qbx_forced_limit="avg")
         )
 
         # --- normals / weights ---
