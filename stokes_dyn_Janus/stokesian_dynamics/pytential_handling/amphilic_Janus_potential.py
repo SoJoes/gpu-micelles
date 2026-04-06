@@ -29,7 +29,7 @@ def enablePrint():
 
 nelements = 20
 bdry_quad_order = 5 # order of quadrature on the boundary
-mesh_order = bdry_quad_order
+mesh_order = bdry_quad_order + 2
 qbx_order = bdry_quad_order
 bdry_ovsmp_quad_order = 4*bdry_quad_order # boundary ? quadrature order
 fmm_order = 10
