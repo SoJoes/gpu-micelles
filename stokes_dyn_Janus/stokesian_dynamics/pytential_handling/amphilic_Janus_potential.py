@@ -29,7 +29,7 @@ def enablePrint():
 
 nelements = 20
 bdry_quad_order = 5 # order of quadrature on the boundary
-mesh_order = bdry_quad_order
+mesh_order = bdry_quad_order + 2
 qbx_order = bdry_quad_order
 bdry_ovsmp_quad_order = 4*bdry_quad_order # boundary ? quadrature order
 fmm_order = 10
@@ -152,7 +152,7 @@ class AmphilicsSolver:
         dS = area_element(1, 1, None) * QWeight(None)
         self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
-        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=4.1, rho=1):
+        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=4.1*4/5, rho=1/self.k):
             # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
             grad_x_sym = grad_u_sym[0]
             grad_y_sym = grad_u_sym[1]
