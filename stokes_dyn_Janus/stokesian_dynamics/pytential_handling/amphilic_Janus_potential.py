@@ -81,7 +81,8 @@ class AmphilicsSolver:
         loc_sign = -1  # exterior condition DO NOT CHANGE
 
         self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
-                       + self.sqrt_w * (sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
+                       + self.sqrt_w * (sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
+                                        + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
                                                 qbx_forced_limit="avg")))  # }}}
 
         self.repr_kwargs = {
@@ -91,7 +92,8 @@ class AmphilicsSolver:
         }
 
         self.representation_sym = (
-                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
 
