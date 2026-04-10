@@ -65,7 +65,7 @@ class AmphilicsSolver:
         )
 
         from sumpy.visualization import FieldPlotter
-        fplot = FieldPlotter(np.zeros(2), extent=40, npoints=500)
+        fplot = FieldPlotter(np.zeros(2), extent=10, npoints=500) # REMEMBER TO CHANGE BACK LATER
         self.targets = self.actx.from_numpy(fplot.points)
 
         # set up symbolics
