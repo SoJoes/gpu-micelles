@@ -79,15 +79,9 @@ class AmphilicsSolver:
         self.inv_sqrt_w_sigma = sym.cse(self.sigma_sym / self.sqrt_w)
 
         loc_sign = -1  # exterior condition DO NOT CHANGE
-
-        '''
         self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
                        + self.sqrt_w * (sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1)
                                         + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
-                                                qbx_forced_limit="avg")))  # }}}
-        '''
-        self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
-                       + self.sqrt_w * (sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym,
                                                 qbx_forced_limit="avg")))  # }}}
 
         self.repr_kwargs = {
@@ -95,16 +89,9 @@ class AmphilicsSolver:
             "target": "targets",
             "qbx_forced_limit": None
         }
-
-        '''
         self.representation_sym = (
                 sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
                 + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
-        )
-        '''
-
-        self.representation_sym = (
-                self.sqrt_w*sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
 
@@ -194,14 +181,9 @@ class AmphilicsSolver:
             "target": "qbx",  # Target is 'qbx' (the boundary itself)
             "qbx_forced_limit": +1  # Or appropriate limit for boundary evaluation
         }
-        '''
         representation_sym_boundary = (
                 sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
                 + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
-        )
-        '''
-        representation_sym_boundary = (
-                self.sqrt_w*sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
         )
 
         # find grad of potential on the boundary
