@@ -8,8 +8,6 @@
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
 #SBATCH --job-name=micelle_formation
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user dbxl46@durham.ac.uk
 
 #SBATCH -e stderr-file
 #SBATCH -o stdout-file
@@ -32,5 +30,5 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output
 mkdir -p frame_output
-python3.11 -O run_simulation.py 14 10 0.1 50 fte 3 1
+python3.11 -O run_simulation.py 14 10 0.1 40 fte 3 1
 python3.11 plotting/plot_positions.py
