@@ -78,7 +78,7 @@ class AmphilicsSolver:
 
         self.inv_sqrt_w_sigma = sym.cse(self.sigma_sym / self.sqrt_w)
 
-        loc_sign = 1  # exterior condition DO NOT CHANGE
+        loc_sign = -1  # exterior condition DO NOT CHANGE
 
         '''
         self.bdry_op_sym = (-loc_sign * 0.5 * self.sigma_sym
@@ -104,7 +104,7 @@ class AmphilicsSolver:
         '''
 
         self.representation_sym = (
-                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+                self.sqrt_w*sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
 
@@ -201,7 +201,7 @@ class AmphilicsSolver:
         )
         '''
         representation_sym_boundary = (
-                sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
+                self.sqrt_w*sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **repr_kwargs_boundary)
         )
 
         # find grad of potential on the boundary
