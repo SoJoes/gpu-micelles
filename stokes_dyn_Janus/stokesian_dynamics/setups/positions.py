@@ -209,22 +209,7 @@ def pos_setup(n):
             phi=0, current_sphere_sizes=sphere_sizes, current_sphere_positions=sphere_positions)
 
     elif n==11:
-        # micelle forming positions
-        # number janus particles in x and y axes
-        # nx = 2
-        # ny = 1
-        # dx = 6 / nx
-        # dy = 6 / ny
-        # my_pos = np.array([[dx * (i_x - nx / 2), 0, dy * (j_y - ny / 2)]
-        #                    for i_x in range(nx)
-        #                    for j_y in range(ny)]) + np.array([dx * nx/4, 0, dy * ny/4])
-        # my_rotations = np.zeros(nx*ny) * np.pi
-        # my_rotations[1] = np.pi
-        # # code modified from position 1
-        # num_spheres = nx*ny
-
-        # only 3 spheres
-        my_pos = np.zeros((3,3))
+        # spin around example
         my_pos = np.array([[-1,0,0],
                            [1.5,0,3.3],
                            [1.5,0,-1.5]])
@@ -417,6 +402,61 @@ def pos_setup(n):
         rot2[2] = rot1[0]
 
         # modified from shared.add_rotations_to_spheres
+        b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
+        addrot1 = (sphere_sizes * rot1).transpose()
+        addrot2 = (sphere_sizes * rot2).transpose()
+
+        b[:, 0, :] = sphere_positions + addrot1
+        b[:, 1, :] = sphere_positions + addrot2
+
+        sphere_rotations = b
+
+        # no dumbbells
+        dumbbell_sizes = np.array([])
+        dumbbell_positions = np.empty([0, 3])
+        dumbbell_deltax = np.empty([0, 3])
+
+    elif n == 17:
+        # grid of particles (nxn)
+        n = 5  # grid size (n x n)
+        spacing = 1.5  # distance between particles
+
+        # create grid coordinates
+        x = np.linspace(-(n - 1) / 2, (n - 1) / 2, n) * spacing
+        z = np.linspace(-(n - 1) / 2, (n - 1) / 2, n) * spacing
+        xx, zz = np.meshgrid(x, z)
+
+        num_spheres = n * n
+
+        # positions in x-z plane (y = 0)
+        my_pos = np.column_stack((
+            xx.flatten(),
+            np.zeros(num_spheres),
+            zz.flatten()
+        ))
+
+        mean_angle = 0.0
+        angle_std = 0.2
+
+        angles = np.random.normal(loc=mean_angle, scale=angle_std, size=num_spheres)
+        angles = (angles + np.pi) % (2 * np.pi) - np.pi
+
+        my_rotations = angles
+
+        # sizes
+        sphere_sizes = np.ones(num_spheres)
+        sphere_positions = my_pos
+
+        # rotation vectors (same structure as your code)
+        rot1 = np.zeros((3, num_spheres))
+        rot1[0] = np.cos(my_rotations)
+        rot1[2] = -np.sin(my_rotations)
+
+        rot2 = np.zeros_like(rot1)
+        rot2[0] = -rot1[1]
+        rot2[2] = rot1[0]
+
+        # build rotation-applied positions
         b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
         addrot1 = (sphere_sizes * rot1).transpose()
         addrot2 = (sphere_sizes * rot2).transpose()

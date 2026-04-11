@@ -9,7 +9,7 @@ from setups.functions_inputs import (oscillatory_shear, constant_shear,
                                      repulsion_forces, modified_repulsion_forces, attractive_forces, lennard_jones)
 from setups.functions_positions import simple_cubic_8
 from setups.tests.inputs import input_ftsuoe_tests
-from settings import cogs
+from settings import cogs, field_extent
 
 amphSolver = []
 
@@ -242,7 +242,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
             facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
 
-            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1/4, cogs=cogs)
+            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1/4, field_extent=field_extent, cogs=cogs)
 
         # prepping data for usage with function
 

@@ -39,6 +39,8 @@ save_every_n = 1
 cogs=1
 output_folder = 'output'
 
+field_extent = 40
+
 # ----------------------------------------------------------------------------|
 # BASIC SETTINGS: OVERRIDES FROM COMMAND LINE
 
@@ -47,6 +49,8 @@ number_of_args = len(args)
 running_on_legion = 0
 
 try:
+    if number_of_args >= 9:
+        field_extent = int(args[8])
     if number_of_args >= 8:
         output_folder = str(args[7])
     if number_of_args >= 7:

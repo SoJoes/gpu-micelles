@@ -43,7 +43,7 @@ from meshmode.mesh.processing import affine_map, merge_disjoint_meshes
 
 
 class AmphilicsSolver:
-    def __init__(self, particle_pos, particle_facing, k, cogs=1):
+    def __init__(self, particle_pos, particle_facing, k, field_extent = 30, cogs=1):
         from meshmode.array_context import PyOpenCLArrayContext
         import pyopencl as cl
 
@@ -65,7 +65,7 @@ class AmphilicsSolver:
         )
 
         from sumpy.visualization import FieldPlotter
-        fplot = FieldPlotter(np.zeros(2), extent=10, npoints=500) # REMEMBER TO CHANGE BACK LATER
+        fplot = FieldPlotter(np.zeros(2), extent=field_extent, npoints=500)
         self.targets = self.actx.from_numpy(fplot.points)
 
         # set up symbolics
