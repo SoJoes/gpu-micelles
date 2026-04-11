@@ -9,8 +9,8 @@
 #SBATCH --qos=short
 #SBATCH --job-name=turning
 
-#SBATCH -e stderr-file
-#SBATCH -o stdout-file
+#SBATCH -e stderr-file2
+#SBATCH -o stdout-file2
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
