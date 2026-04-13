@@ -214,7 +214,7 @@ def pos_setup(n):
                            [1.5,0,3.3],
                            [1.5,0,-1.5]])
 
-        my_rotations = np.array([-0.31, -4.18, 1.04])
+        my_rotations = np.array([-0.31, -4.18, 1.04 + np.pi/2])
         num_spheres = 3
 
         sphere_sizes = np.array([1 for _ in range(num_spheres)])
@@ -437,7 +437,7 @@ def pos_setup(n):
         ))
 
         mean_angle = 0.0
-        angle_std = np.sqrt(np.pi)/2
+        angle_std = np.sqrt(np.pi)/4
 
         angles = np.random.normal(loc=mean_angle, scale=angle_std, size=num_spheres)
         angles = (angles + np.pi) % (2 * np.pi) - np.pi
