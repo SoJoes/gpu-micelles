@@ -214,7 +214,7 @@ def pos_setup(n):
                            [1.5,0,3.3],
                            [1.5,0,-1.5]])
 
-        my_rotations = np.array([-0.31, -4.18, np.pi+1.04])
+        my_rotations = np.array([-0.31, -4.18, 1.04])
         num_spheres = 3
 
         sphere_sizes = np.array([1 for _ in range(num_spheres)])
@@ -420,7 +420,7 @@ def pos_setup(n):
     elif n == 17:
         # grid of particles (nxn)
         n = 5  # grid size (n x n)
-        spacing = 3.5  # distance between particles
+        spacing = 2.5  # distance between particles
 
         # create grid coordinates
         x = np.linspace(-(n - 1) / 2, (n - 1) / 2, n) * spacing
