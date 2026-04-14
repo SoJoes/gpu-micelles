@@ -30,4 +30,9 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output2
 mkdir -p frame_output2
-python3.11 -u -O run_simulation.py 16 10 0.1 1 fte 1 1 output2 10
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 1 1 output2 10
+for i in {0..3}; do
+    echo "Started simulation run $i"
+    python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 1 output2 10
+done
+python3.11 plotting/plot_positions.py 5 0 frame_output2 output2
