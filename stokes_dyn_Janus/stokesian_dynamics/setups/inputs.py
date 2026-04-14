@@ -313,7 +313,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         # Constant shear
         (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
          Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.5, frameno=frameno, timestep=timestep,
+            gammadot=2, frameno=frameno, timestep=timestep,
             num_spheres=num_spheres)
 
         # added repulsion force
