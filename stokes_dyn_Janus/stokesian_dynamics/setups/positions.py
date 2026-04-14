@@ -210,11 +210,11 @@ def pos_setup(n):
 
     elif n==11:
         # spin around example
-        my_pos = np.array([[-1,0,0],
-                           [1.5,0,3.3],
-                           [1.5,0,-1.5]])
+        my_pos = np.array([[0,0,0],
+                           [2.5,0,3.3],
+                           [2.5,0,-1.5]])
 
-        my_rotations = np.array([-0.31, -4.18, 1.04])
+        my_rotations = np.array([0.1, 4/3, -1/3]) * np.pi
         num_spheres = 3
 
         sphere_sizes = np.array([1 for _ in range(num_spheres)])
