@@ -138,18 +138,6 @@ class AmphilicsSolver:
 
         self.density_discr = self.places.get_discretization("qbx")
 
-        # FOR CFL CONDI TION
-        nodes = self.density_discr.nodes()
-
-        # compute pairwise neighbor distances along curve
-        x = self.actx.to_numpy(nodes[0])
-        y = self.actx.to_numpy(nodes[1])
-
-        dx = np.sqrt(np.diff(x) ** 2 + np.diff(y) ** 2)
-
-        print("CFL HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE")
-        print("Min dx:", dx.min())
-
         from sumpy.kernel import LaplaceKernel
 
         # --- indicator ---
