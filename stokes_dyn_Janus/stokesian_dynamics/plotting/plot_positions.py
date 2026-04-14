@@ -103,6 +103,9 @@ for file in latest_file:
     T_yy_list.append(data1['T_yy'][:])
     T_xy_list.append(data1['T_xy'][:])
 
+    print(file)
+    print("has number of frames:", data1['centes'][:].shape)
+
 positions_centres = np.concatenate(pos_centres_list, axis=0)
 positions_deltax = np.concatenate(pos_deltax_list, axis=0)
 Fa_out = np.concatenate(Fa_out_list, axis=0)
