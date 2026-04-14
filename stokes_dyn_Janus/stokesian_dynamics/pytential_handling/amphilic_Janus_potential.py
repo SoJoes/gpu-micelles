@@ -139,7 +139,7 @@ class AmphilicsSolver:
         self.density_discr = self.places.get_discretization("qbx")
 
         # FOR CFL CONDI TION
-        nodes = density_discr.nodes()
+        nodes = self.density_discr.nodes()
 
         # compute pairwise neighbor distances along curve
         x = self.actx.to_numpy(nodes[0])
