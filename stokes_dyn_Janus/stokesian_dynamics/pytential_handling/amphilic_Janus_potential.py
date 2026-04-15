@@ -102,6 +102,8 @@ class AmphilicsSolver:
 
         self.representation_sym_grad = grad(ambient_dim=2, operand=self.representation_sym)
 
+        self.last_gmres = None
+
         # FOR COMPUTATION OF CFL CONDITION
 
     def update_particles(self, particle_pos, particle_facing):
@@ -153,7 +155,7 @@ class AmphilicsSolver:
         dS = area_element(1, 1, None) * QWeight(None)
         self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
-        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=4.1*4/5, rho=1/self.k):
+        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=4.1, rho=1/self.k):
             # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
             grad_x_sym = grad_u_sym[0]
             grad_y_sym = grad_u_sym[1]
@@ -256,17 +258,27 @@ class AmphilicsSolver:
 
         from pytential.linalg.gmres import gmres
 
-        gmres_result = gmres(
-            self.bound_op.scipy_op(
-                actx, self.sigma_sym.name,
-                dtype=np.complex128, k=self.k),
-            self.bvp_rhs,
-            tol=1e-8
-        )
+        if self.last_gmres != None:
+            gmres_result = gmres(
+                self.bound_op.scipy_op(
+                    actx, self.sigma_sym.name,
+                    dtype=np.complex128, k=self.k),
+                self.bvp_rhs,
+                tol=1e-8,
+                x0 = self.last_gmres
+            )
+        else:
+            gmres_result = gmres(
+                self.bound_op.scipy_op(
+                    actx, self.sigma_sym.name,
+                    dtype=np.complex128, k=self.k),
+                self.bvp_rhs,
+                tol=1e-8
+            )
 
-        sol = gmres_result.solution
+        self.last_gmres = gmres_result.solution
 
-        return self.compute_hydro_out(sol)
+        return self.compute_hydro_out(self.last_gmres)
 
     def compute_hydro_out(self, solution):
         actx = self.actx
