@@ -75,7 +75,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
         rho1 = 4/5
         norm_r = np.linalg.norm(r)
 
-        if norm_r -2< rho1:
+        if norm_r - 2 < rho1:
             repulsion_force_length += np.pi * strength * (np.cos(np.pi * norm_r / (2*rho1))) / (2*rho1)
 
         bead_force[pair[0]] = (np.array(bead_force[pair[0]])
