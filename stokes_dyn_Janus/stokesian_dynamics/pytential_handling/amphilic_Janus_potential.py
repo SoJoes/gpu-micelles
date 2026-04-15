@@ -33,7 +33,7 @@ mesh_order = 5
 qbx_order = 5
 bdry_ovsmp_quad_order = 4*bdry_quad_order # boundary ? quadrature order
 fmm_order = 10
-k = 0.1
+k = 0.25
 
 # }}}
 

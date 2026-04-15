@@ -242,7 +242,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
             facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
 
-            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1/4, field_extent=field_extent, cogs=cogs)
+            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1/3, field_extent=field_extent, cogs=cogs)
 
         # prepping data for usage with function
 
