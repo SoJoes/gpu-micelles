@@ -258,7 +258,7 @@ class AmphilicsSolver:
 
         from pytential.linalg.gmres import gmres
 
-        if self.last_gmres != None:
+        try:
             gmres_result = gmres(
                 self.bound_op.scipy_op(
                     actx, self.sigma_sym.name,
@@ -267,7 +267,7 @@ class AmphilicsSolver:
                 tol=1e-8,
                 x0 = self.last_gmres
             )
-        else:
+        except:
             gmres_result = gmres(
                 self.bound_op.scipy_op(
                     actx, self.sigma_sym.name,
