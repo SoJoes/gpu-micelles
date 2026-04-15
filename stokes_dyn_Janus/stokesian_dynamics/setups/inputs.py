@@ -265,6 +265,9 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         Ta_in = np.zeros((num_spheres, 3))
         Ta_in[:, 1] = -hydrophobic_forces[2] # need to rotate opposite direction from output
 
+        print(Fa_in)
+        print(Ta_in)
+
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
             2, 200, num_spheres, num_dumbbells, sphere_positions,
