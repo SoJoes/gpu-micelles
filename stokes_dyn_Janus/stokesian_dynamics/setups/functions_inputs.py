@@ -74,7 +74,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
         else:
             repulsion_force_length += strength*(2.*a1*a2/(a1+a2))*np.exp(-tau*h_cutoff)'''
 
-        rho1 = 2 + 4/5
+        rho1 = 3
         norm_r = np.linalg.norm(r)
 
         print("No repulsion??", norm_r)
