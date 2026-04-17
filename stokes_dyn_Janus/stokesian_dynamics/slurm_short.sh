@@ -6,8 +6,8 @@
 #SBATCH -t 01-00
 
 #SBATCH -p ug-gpu-small
-#SBATCH --qos=strong
-#SBATCH --job-name=grid
+#SBATCH --qos=short
+#SBATCH --job-name=strong
 
 #SBATCH -e stderr-file
 #SBATCH -o stdout-file
