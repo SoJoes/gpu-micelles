@@ -6,7 +6,7 @@
 #SBATCH -t 01-00
 
 #SBATCH -p ug-gpu-small
-#SBATCH --qos=short
+#SBATCH --qos=strong
 #SBATCH --job-name=grid
 
 #SBATCH -e stderr-file
@@ -30,5 +30,5 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output
 mkdir -p frame_output
-python3.11 -u -O run_simulation.py 12 10 0.1 15 fte 1 1 output 10
+python3.11 -u -O run_simulation.py 16 13 0.1 20 fte 5 1 output
 python3.11 plotting/plot_positions.py 1 15 frame_output output
