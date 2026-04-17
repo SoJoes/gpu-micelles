@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=strong
+#SBATCH --job-name=grid
 
 #SBATCH -e stderr-file
 #SBATCH -o stdout-file
@@ -30,5 +30,9 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output
 mkdir -p frame_output
-python3.11 -u -O run_simulation.py 16 13 0.1 20 fte 5 1 output
-python3.11 plotting/plot_positions.py 1 15 frame_output output
+python3.11 -u -O run_simulation.py 17 10 0.1 40 fte 5 1 output
+for i in {0..1}; do
+    echo "Started simulation run $i"
+    python3.11 -u -O run_simulation.py 12 10 0.1 40 fte 5 1 output
+done
+python3.11 plotting/plot_positions.py 3 0 frame_output output
