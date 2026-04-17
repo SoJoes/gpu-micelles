@@ -370,8 +370,8 @@ def pos_setup(n):
     elif n == 16:
         # vesicle
         radius = 7
-        num_outer = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 3
-        num_inner = int(np.floor(np.pi/(np.arcsin(1/(radius-3))))) - 3
+        num_outer = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 1
+        num_inner = int(np.floor(np.pi/(np.arcsin(1/(radius-3))))) - 1
 
         num_spheres = num_outer + num_inner
 
