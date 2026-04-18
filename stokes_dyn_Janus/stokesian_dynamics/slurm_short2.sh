@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=slow
+#SBATCH --job-name=weak
 
 #SBATCH -e stderr-file2
 #SBATCH -o stdout-file2
@@ -30,5 +30,9 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output2
 mkdir -p frame_output2
-python3.11 -u -O run_simulation.py 16 12 0.1 20 fte 5 1 output2
-python3.11 plotting/plot_positions.py 1 0 frame_output2 output2
+python3.11 -u -O run_simulation.py 16 11 0.1 40 fte 5 1 output2
+for i in {0..1}; do
+    echo "Started simulation run $i"
+    python3.11 -u -O run_simulation.py 12 11 0.1 40 fte 5 1 output2
+done
+python3.11 plotting/plot_positions.py 3 0 frame_output2 output2

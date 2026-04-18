@@ -267,7 +267,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            200, 200, num_spheres, num_dumbbells, sphere_positions,
+            100, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
@@ -310,19 +310,13 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         Ta_in = np.zeros((num_spheres, 3))
         Ta_in[:, 1] = -hydrophobic_forces[2] # need to rotate opposite direction from output
 
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.0001, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
-
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            200, 200, num_spheres, num_dumbbells, sphere_positions,
+            20, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
-        desc = "amphilic Janus particles with shear"
+        desc = "amphilic Janus particles weak repulsion"
 
     elif n == 12:
         # amphilic potentials WITH FLOW
@@ -360,19 +354,13 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
         Ta_in = np.zeros((num_spheres, 3))
         Ta_in[:, 1] = -hydrophobic_forces[2] # need to rotate opposite direction from output
 
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.00005, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
-
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            200, 200, num_spheres, num_dumbbells, sphere_positions,
+            50, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
-        desc = "amphilic Janus particles with slow shear"
+        desc = "amphilic Janus particles mid repulsion"
 
     elif n == 13:
         # amphilic potentials WITH FLOW
