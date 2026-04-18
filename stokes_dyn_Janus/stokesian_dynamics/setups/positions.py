@@ -373,8 +373,11 @@ def pos_setup(n):
         gap = 1.0
 
         # number of particles based on arc length spacing
-        num_outer = int(np.floor(2 * np.pi * radius / gap)) - 1
-        num_inner = int(np.floor(2 * np.pi * (radius - 3) / gap)) - 1
+        angle_step = 2 * np.arcsin(gap / (2 * radius))
+        angle_step2 = 2 * np.arcsin(gap / (2 * radius - 3))
+
+        num_outer = int(np.floor(2 * np.pi * radius / angle_step)) - 1
+        num_inner = int(np.floor(2 * np.pi * (radius - 3) / angle_step2)) - 1
 
         print("outer", num_outer)
         print("inner", num_inner)
