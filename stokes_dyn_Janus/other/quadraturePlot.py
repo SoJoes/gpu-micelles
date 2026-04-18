@@ -162,6 +162,6 @@ def plot_quadrature_rule_nodes(
 
 if __name__ == "__main__":
 
-    plot_quadrature_rule_nodes("vr", 6, 2,
+    plot_quadrature_rule_nodes("vr", 5, 2,
                                hide_axis=True,
                                show=False)
