@@ -394,7 +394,7 @@ def pos_setup(n):
 
         my_rotations = angles
 
-        sphere_sizes = np.ones(num_spheres)
+        sphere_sizes = np.ones(num_spheres) * 1.25
         sphere_positions = my_pos
 
         # individually rotated to my_rotations
