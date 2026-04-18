@@ -373,8 +373,11 @@ def pos_setup(n):
         gap = 1.0
 
         # number of particles based on arc length spacing
-        num_outer = int(np.floor(2 * np.pi * radius / gap))
-        num_inner = int(np.floor(2 * np.pi * (radius - 3) / gap))
+        num_outer = int(np.floor(2 * np.pi * radius / gap)) - 1
+        num_inner = int(np.floor(2 * np.pi * (radius - 3) / gap)) - 1
+
+        print("outer", num_outer)
+        print("inner", num_inner)
 
         num_spheres = num_outer + num_inner
 
