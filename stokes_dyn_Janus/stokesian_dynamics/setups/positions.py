@@ -370,7 +370,7 @@ def pos_setup(n):
     elif n == 16:
         # vesicle
         radius = 8
-        gap = 1.0
+        gap = 1.25
 
         # number of particles based on arc length spacing
         angle_step = 2 * np.arcsin(gap / (2 * radius))
