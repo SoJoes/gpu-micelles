@@ -370,8 +370,11 @@ def pos_setup(n):
     elif n == 16:
         # vesicle
         radius = 7
-        num_outer = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 1
-        num_inner = int(np.floor(np.pi/(np.arcsin(1/(radius-3))))) - 1
+        gap = 1.0
+
+        # number of particles based on arc length spacing
+        num_outer = int(np.floor(2 * np.pi * radius / gap))
+        num_inner = int(np.floor(2 * np.pi * (radius - 3) / gap))
 
         num_spheres = num_outer + num_inner
 
