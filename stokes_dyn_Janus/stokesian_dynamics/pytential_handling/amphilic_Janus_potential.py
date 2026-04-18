@@ -111,8 +111,10 @@ class AmphilicsSolver:
         self.pos_array = particle_pos
         self.facing_array = particle_facing
 
+        particle_size = 1
+
         meshes = [
-            affine_map(self.base_mesh, A=np.diag([1, 1]), b=pos)
+            affine_map(self.base_mesh, A=particle_size*np.diag([1, 1]), b=pos)
             for pos in particle_pos
         ]
 

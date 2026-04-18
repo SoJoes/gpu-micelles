@@ -369,7 +369,7 @@ def pos_setup(n):
 
     elif n == 16:
         # vesicle
-        radius = 7
+        radius = 8
         gap = 1.0
 
         # number of particles based on arc length spacing

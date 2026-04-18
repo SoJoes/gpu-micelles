@@ -47,8 +47,6 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
     overlapping_or_close_pairs = zip(overlapping_or_close[0],
                                      overlapping_or_close[1])  # which pairs are close/overlapping
 
-    print("NO paris??", overlapping_or_close_pairs)
-
     for pair in overlapping_or_close_pairs:
         # for each pair
         scaled_overlap = scaled_distance_matrix[pair]  # record overlap of pair
