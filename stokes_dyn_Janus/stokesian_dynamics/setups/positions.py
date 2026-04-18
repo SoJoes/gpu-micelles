@@ -372,8 +372,8 @@ def pos_setup(n):
         radius = 8
         gap = 1.25
 
-        num_outer = int(np.floor(2*radius / 3.75))
-        num_inner = int(np.floor(2*(radius-3) / 3.75))
+        num_outer = int(np.floor(2*np.pi*radius / 3.75))
+        num_inner = int(np.floor(2*np.pi*(radius-3) / 3.75))
 
         print("outer", num_outer)
         print("inner", num_inner)
