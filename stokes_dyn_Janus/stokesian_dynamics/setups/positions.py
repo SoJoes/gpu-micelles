@@ -530,6 +530,59 @@ def pos_setup(n):
         dumbbell_positions = np.empty([0, 3])
         dumbbell_deltax = np.empty([0, 3])
 
+    elif n == 19:
+        # vesicle
+        radius = 15
+
+        num_outer = int(np.floor(2*np.pi*radius / 3))
+        num_inner = int(np.floor(2*np.pi*(radius-3) / 3))
+
+        print("outer", num_outer)
+        print("inner", num_inner)
+
+        num_spheres = num_outer + num_inner
+
+        outer_rotations = 2 * np.pi * np.array(range(num_outer)) / num_outer
+        outer_pos = radius * np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
+
+        inner_rotations = 2 * np.pi * np.array(range(num_inner)) / num_inner
+        inner_pos = (radius - 3) * np.column_stack((np.cos(inner_rotations), np.zeros_like(inner_rotations), np.sin(inner_rotations)))
+
+        my_pos = np.concatenate((inner_pos, outer_pos))
+        angles = np.pi - (np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi/2)
+
+        angles[num_inner:] += np.pi  # outer ring faces inward
+        angles += np.pi / 2  # fix offset
+
+        angles = (angles + np.pi) % (2 * np.pi) - np.pi
+
+        my_rotations = angles
+
+        sphere_sizes = np.ones(num_spheres) * 1.25
+        sphere_positions = my_pos
+
+        # individually rotated to my_rotations
+        rot1 = np.zeros((3, num_spheres))
+        rot1[0] = np.cos(my_rotations)
+        rot1[2] = -np.sin(my_rotations)
+        rot2 = np.zeros_like(rot1)
+        rot2[0] = -rot1[1]
+        rot2[2] = rot1[0]
+
+        # modified from shared.add_rotations_to_spheres
+        b = np.zeros([num_spheres, 3, sphere_positions.shape[1]])
+        addrot1 = (sphere_sizes * rot1).transpose()
+        addrot2 = (sphere_sizes * rot2).transpose()
+
+        b[:, 0, :] = sphere_positions + addrot1
+        b[:, 1, :] = sphere_positions + addrot2
+
+        sphere_rotations = b
+
+        # no dumbbells
+        dumbbell_sizes = np.array([])
+        dumbbell_positions = np.empty([0, 3])
+        dumbbell_deltax = np.empty([0, 3])
 
     else:
         throw_error("The position setup number you have requested (" + str(n) +
