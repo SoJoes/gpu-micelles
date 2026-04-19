@@ -441,7 +441,7 @@ def pos_setup(n):
         ))
 
         mean_angle = 0.0
-        angle_std = np.sqrt(np.pi)/4
+        angle_std = np.sqrt(np.pi)
 
         angles = np.random.normal(loc=mean_angle, scale=angle_std, size=num_spheres)
         angles = (angles + np.pi) % (2 * np.pi) - np.pi
