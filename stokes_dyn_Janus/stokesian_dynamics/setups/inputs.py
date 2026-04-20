@@ -365,13 +365,6 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
-
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.05, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
-
         desc="repulsion 5"
 
     elif n == 13:
@@ -414,13 +407,6 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             10, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
-
-
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
 
         desc = "repulsion 10"
 
@@ -465,13 +451,6 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
-
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
-
         desc = "repulsion 50"
 
     elif n == 15:
@@ -514,12 +493,6 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             100, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
-
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
 
         desc = "repulsion 100"
 
