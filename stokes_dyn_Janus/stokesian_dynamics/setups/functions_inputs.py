@@ -73,7 +73,7 @@ def repulsion_forces(strength, tau, num_spheres, num_dumbbells,
             repulsion_force_length += strength*(2.*a1*a2/(a1+a2))*np.exp(-tau*h_cutoff)'''
 
         rho1 = 0.5
-        norm_r = np.linalg.norm(r) - 2
+        norm_r = np.linalg.norm(r) - 2.5
 
         if norm_r < rho1:
             repulsion_force_length += np.pi * strength * (np.cos(np.pi * norm_r / (2*rho1))) / (2*rho1)
