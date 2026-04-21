@@ -532,7 +532,7 @@ def pos_setup(n):
 
     elif n == 19:
         # vesicle
-        radius = 19
+        radius = 18
 
         num_outer = 32 #int(np.floor(2*np.pi*radius / 3))
         num_inner = 26 #int(np.floor(2*np.pi*(radius-3.75) / 3))
@@ -546,7 +546,7 @@ def pos_setup(n):
         outer_pos = radius * np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
 
         inner_rotations = 2 * np.pi * np.array(range(num_inner)) / num_inner
-        inner_pos = (radius - 3.5) * np.column_stack((np.cos(inner_rotations), np.zeros_like(inner_rotations), np.sin(inner_rotations)))
+        inner_pos = (radius - 3) * np.column_stack((np.cos(inner_rotations), np.zeros_like(inner_rotations), np.sin(inner_rotations)))
 
         my_pos = np.concatenate((inner_pos, outer_pos))
         angles = np.pi - (np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi/2)
