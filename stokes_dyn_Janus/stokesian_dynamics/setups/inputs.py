@@ -273,7 +273,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         desc = "amphilic Janus particles"
 
-    elif n == 11:
+    elif 14 > n and n >= 11:
         # amphilic potentials
 
         if frameno == 0:
@@ -311,19 +311,28 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            2, 200, num_spheres, num_dumbbells, sphere_positions,
+            7, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
+        if n == 11:
+            desc="amphiphilic"
+        if n == 12:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.005, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.005"
+        elif n == 13:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.1, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.1"
 
-        desc = "amphilic Janus particles shear flow"
-
-    elif n == 12:
+    elif n >= 14 and n < 17:
         # amphilic potentials
 
         if frameno == 0:
@@ -336,7 +345,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
             facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
 
-            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1/5, field_extent=field_extent, cogs=cogs)
+            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1/5, field_extent=field_extent, cogs=cogs, gamma=5)
 
         # prepping data for usage with function
 
@@ -361,66 +370,27 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
 
         # added repulsion force
         (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            5, 200, num_spheres, num_dumbbells, sphere_positions,
+            7, 200, num_spheres, num_dumbbells, sphere_positions,
             dumbbell_positions, dumbbell_deltax, sphere_sizes,
             dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
 
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
+        if n == 14:
+            desc="highGamma"
+        if n == 15:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.005, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="highGammaShear0.005"
+        elif n == 16:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.1, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="highGammaShear0.1"
 
-        desc="repulsion 5"
-
-    elif n == 13:
-
-        if frameno == 0:
-            from pytential_handling.amphilic_Janus_potential import AmphilicsSolver
-
-            sphere_2dpos = np.zeros((num_spheres, 2))
-            sphere_2dpos[:, 0] = sphere_positions[:, 0]
-            sphere_2dpos[:, 1] = sphere_positions[:, 2]
-
-            rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
-            facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
-
-            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 1 / 5, field_extent=field_extent, cogs=cogs)
-
-        # prepping data for usage with function
-
-        sphere_2dpos = np.zeros((num_spheres, 2))
-        sphere_2dpos[:, 0] = sphere_positions[:, 0]
-        sphere_2dpos[:, 1] = sphere_positions[:, 2]
-
-        rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
-        facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
-
-        amphSolver.update_particles(sphere_2dpos, facings)
-        hydrophobic_forces, hydro_out = amphSolver.solve()
-
-        # set forces
-        Fa_in = np.zeros((num_spheres, 3))
-        Fa_in[:, 0] = hydrophobic_forces[0]
-        Fa_in[:, 2] = hydrophobic_forces[1]
-
-        # set torque
-        Ta_in = np.zeros((num_spheres, 3))
-        Ta_in[:, 1] = -hydrophobic_forces[2]  # need to rotate opposite direction from output
-
-        # added repulsion force
-        (Fa_in, Fb_in, DFb_in) = repulsion_forces(
-            10, 200, num_spheres, num_dumbbells, sphere_positions,
-            dumbbell_positions, dumbbell_deltax, sphere_sizes,
-            dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
-
-        # Constant shear
-        (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
-         Ot_infinity, Et_infinity) = constant_shear(
-            gammadot=0.1, frameno=frameno, timestep=timestep,
-            num_spheres=num_spheres)
-
-        desc = "repulsion 10"
 
     else:
         throw_error("The input setup number you have requested (" + str(n) +

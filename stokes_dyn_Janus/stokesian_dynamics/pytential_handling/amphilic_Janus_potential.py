@@ -43,7 +43,7 @@ from meshmode.mesh.processing import affine_map, merge_disjoint_meshes
 
 
 class AmphilicsSolver:
-    def __init__(self, particle_pos, particle_facing, k, field_extent = 30, cogs=1):
+    def __init__(self, particle_pos, particle_facing, k, field_extent = 30, cogs=1, gamma=4.3):
         from meshmode.array_context import PyOpenCLArrayContext
         import pyopencl as cl
 
@@ -57,6 +57,7 @@ class AmphilicsSolver:
         self.pos_array = particle_pos
         self.facing_array = particle_facing
         self.k=k
+        self.gamma = gamma
 
         self.base_mesh = make_curve_mesh(
             partial(ellipse, 1),
@@ -157,7 +158,7 @@ class AmphilicsSolver:
         dS = area_element(1, 1, None) * QWeight(None)
         self.integral_weights = bind(self.density_discr, dS)(self.actx)
 
-        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=4.3, rho=1/self.k):
+        def hydrophobic_stress_T(u_sym, grad_u_sym, gamma=self.gamma, rho=1/self.k):
             # grad_u_sym is expected to be a symbolic vector (e.g., a tuple of expressions)
             grad_x_sym = grad_u_sym[0]
             grad_y_sym = grad_u_sym[1]
