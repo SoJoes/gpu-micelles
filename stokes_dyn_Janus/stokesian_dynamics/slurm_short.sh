@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=highShear
+#SBATCH --job-name=relaxation
 
 #SBATCH -e stderr-file
 #SBATCH -o stdout-file
@@ -30,5 +30,14 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output
 mkdir -p frame_output
-python3.11 -u -O run_simulation.py 12 13 0.1 100 fte 2 1 output 10
-python3.11 plotting/plot_positions.py 1 0 frame_output output
+python3.11 -u -O run_simulation.py 19 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.2 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 13 0.2 50 fte 2 1 output
+
+python3.11 plotting/plot_positions.py 9 0 frame_output output
