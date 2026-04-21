@@ -391,6 +391,50 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
                 num_spheres=num_spheres)
             desc="highGammaShear0.1"
 
+    elif n == 17:
+
+        # amphilic potentials
+
+        if frameno == 0:
+            from pytential_handling.amphilic_Janus_potential import AmphilicsSolver
+
+            sphere_2dpos = np.zeros((num_spheres, 2))
+            sphere_2dpos[:, 0] = sphere_positions[:, 0]
+            sphere_2dpos[:, 1] = sphere_positions[:, 2]
+
+            rot_from_origin = sphere_rotations[:, 0, :] - sphere_positions
+            facings = np.arctan2(rot_from_origin[:, 2], rot_from_origin[:, 0])
+
+            amphSolver = AmphilicsSolver(sphere_2dpos, facings, 2/5, field_extent=field_extent, cogs=cogs, gamma=5)
+
+        # prepping data for usage with function
+
+        sphere_2dpos = np.zeros((num_spheres, 2))
+        sphere_2dpos[:, 0] = sphere_positions[:, 0]
+        sphere_2dpos[:, 1] = sphere_positions[:, 2]
+
+        rot_from_origin = sphere_rotations[:,0,:] - sphere_positions
+        facings = np.arctan2(rot_from_origin[:,2], rot_from_origin[:,0])
+
+        amphSolver.update_particles(sphere_2dpos, facings)
+        hydrophobic_forces, hydro_out = amphSolver.solve()
+
+        # set forces
+        Fa_in = np.zeros((num_spheres, 3))
+        Fa_in[:, 0] = hydrophobic_forces[0]
+        Fa_in[:, 2] = hydrophobic_forces[1]
+
+        # set torque
+        Ta_in = np.zeros((num_spheres, 3))
+        Ta_in[:, 1] = -hydrophobic_forces[2] # need to rotate opposite direction from output
+
+        # added repulsion force
+        (Fa_in, Fb_in, DFb_in) = repulsion_forces(
+            7, 200, num_spheres, num_dumbbells, sphere_positions,
+            dumbbell_positions, dumbbell_deltax, sphere_sizes,
+            dumbbell_sizes, num_sphere_in_each_lid, Fa_in, Fb_in, DFb_in)
+
+        name="highGammaShorterRho"
 
     else:
         throw_error("The input setup number you have requested (" + str(n) +
