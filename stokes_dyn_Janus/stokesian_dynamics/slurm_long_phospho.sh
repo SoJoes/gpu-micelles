@@ -31,5 +31,7 @@ export PYOPENCL_CTX='0'
 
 rm -rf frame_output1
 mkdir -p frame_output1
-python3.11 -u -O run_simulation.py 14 14 0.1 100 fte 2 1 output1 10
-python3.11 plotting/plot_positions.py 1 0 frame_output1 output1
+python3.11 -u -O run_simulation.py 12 14 0.1 100 fte 2 1 output1 10
+python3.11 -u -O run_simulation.py 12 14 0.1 100 fte 2 1 output1 10
+python3.11 -u -O run_simulation.py 12 14 0.1 100 fte 2 1 output1 10
+python3.11 plotting/plot_positions.py 3 38 frame_output1 output1
