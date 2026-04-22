@@ -624,7 +624,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
 
                 if input_number >= 10:
                     savez_zarr(output_folder + '/' + filename + legion_random_id,
-                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Ea=Ea_in,
+                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Ea=Ea_in, Sa=Sa_out,
                                centres=element_positions, deltax=dumbbell_deltax,
                                force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
                                sphere_rotations=sphere_rotations, pot=hydro_out[0],
@@ -658,7 +658,7 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
 
                 if input_number >= 10:
                     savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
-                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Ea=Ea_in,
+                               Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Ea=Ea_in, Sa=Sa_out,
                                centres=element_positions, deltax=dumbbell_deltax,
                                force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
                                sphere_rotations=sphere_rotations, pot=hydro_out[0],
@@ -926,7 +926,7 @@ if error == 0:
 
             if input_number >= 10:
                 savez_zarr(output_folder + '/' + filename + legion_random_id, append=True,
-                           Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Ea=Ea_in,
+                           Fa=Fa_out, Fb=Fb_out, DFb=DFb_out, Ea=Ea_in, Sa=Sa_out,
                            centres=element_positions, deltax=dumbbell_deltax,
                            force_on_wall_due_to_dumbbells=force_on_wall_due_to_dumbbells,
                            sphere_rotations=sphere_rotations, pot=hydro_out[0],
