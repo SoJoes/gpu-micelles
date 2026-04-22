@@ -39,5 +39,6 @@ python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
 python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
 python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
 python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
 
-python3.11 plotting/plot_positions.py 9 0 frame_output output
+python3.11 plotting/plot_positions.py 10 0 frame_output output
