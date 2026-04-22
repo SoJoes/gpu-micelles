@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=turning
+#SBATCH --job-name=angelGrid
 
 #SBATCH -e stderr-file2
 #SBATCH -o stdout-file2
@@ -30,6 +30,9 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output2
 mkdir -p frame_output2
-python3.11 -u -O run_simulation.py 12 17 0.2 100 fte 2 1 output2 10
-python3.11 -u -O run_simulation.py 12 17 0.2 100 fte 2 1 output2 10
-python3.11 plotting/plot_positions.py 1 50 frame_output2 output2
+python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 2 2 output2 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
+python3.11 plotting/plot_positions.py 5 0 frame_output2 output2
