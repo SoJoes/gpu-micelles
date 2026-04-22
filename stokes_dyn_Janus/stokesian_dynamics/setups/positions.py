@@ -535,9 +535,9 @@ def pos_setup(n):
 
     elif n == 19:
         # vesicle
-        radius = 17.5
+        radius = 17
 
-        num_outer = 32 #int(np.floor(2*np.pi*radius / 3))
+        num_outer = 30 #int(np.floor(2*np.pi*radius / 3))
         num_inner = 26 #int(np.floor(2*np.pi*(radius-3.75) / 3))
 
         print("outer", num_outer)
