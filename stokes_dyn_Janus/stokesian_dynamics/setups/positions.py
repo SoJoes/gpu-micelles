@@ -291,13 +291,16 @@ def pos_setup(n):
 
     elif n==14:
         # roots of unity
-        radius = 3
+        radius = 2.5
         num_spheres = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 3
-        num_spheres = 2
+        num_spheres = 3
 
         outer_rotations = 2 * np.pi * np.array(range(num_spheres)) / num_spheres
         my_pos = radius * np.column_stack((np.cos(outer_rotations), np.zeros_like(outer_rotations), np.sin(outer_rotations)))
         angles = np.pi - (np.arctan2(my_pos[:, 2], my_pos[:, 0]) - np.pi/2)
+
+        # ADD PI TO ONE OF THE ROTATIONS
+        angles[2] += np.pi
 
         angles[:] += 3* np.pi /2  # outer ring faces inward and fix offset
 
