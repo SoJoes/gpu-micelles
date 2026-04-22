@@ -32,4 +32,8 @@ rm -rf frame_output3
 mkdir -p frame_output3
 python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
 python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
-python3.11 plotting/plot_positions.py 2 25 frame_output3 output3
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
+python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
+python3.11 plotting/plot_positions.py 6 75 frame_output3 output3
