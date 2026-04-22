@@ -33,5 +33,5 @@ mkdir -p frame_output3
 for i in {0..20}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
-  done
+done
 python3.11 plotting/plot_positions.py 6 75 frame_output3 output3

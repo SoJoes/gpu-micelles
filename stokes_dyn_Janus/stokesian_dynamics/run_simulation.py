@@ -265,6 +265,14 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
                 else:
                     new_sphere_positions = ab2_timestep(
                         sphere_positions, Ua_out_plus_infinities_k1, last_velocities[0], timestep)
+                    #
+                    # print("Max dx is", np.max(ab2_timestep(
+                    #     np.zeros_like(sphere_positions),Ua_out_plus_infinities_k1,
+                    # last_velocities[0], timestep)
+                    # ))
+                    # print("Max u is", np.max((1.5 * Ua_out_plus_infinities_k1 - 0.5 * last_velocities[0])
+                    # ))
+
                     new_sphere_rotations = ab2_timestep_rotation(
                         sphere_positions, sphere_rotations,
                         new_sphere_positions, new_sphere_rotations,
@@ -312,8 +320,6 @@ def generate_frame(frameno, grand_mobility_matrix, view_graphics=True,
             Sa_out = np.asarray(Sa_out_k1)
             hydro_out = hydro_out_k1
             force_on_wall_due_to_dumbbells = np.asarray(force_on_wall_due_to_dumbbells_k1)
-
-            print("Max Fa_out is", np.max(Fa_out))
 
         elif timestepping_scheme == "rk4":
             # RK4

@@ -3,7 +3,7 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --gres=gpu:1g.10gb:1
-#SBATCH -t 01-00
+#SBATCH -t 02-00
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
@@ -30,9 +30,12 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 rm -rf frame_output2
 mkdir -p frame_output2
-python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 2 2 output2 25
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 2 output2 25
-python3.11 plotting/plot_positions.py 5 0 frame_output2 output2
+for i in {0..14}; do
+  echo "Started simulation run $i"
+  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 2 output2 25
+done
+for i in {0...19}; do
+  echo "Started simulation run $i"
+  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 2 output2 25
+done
+python3.11 plotting/plot_positions.py 35 129 frame_output2 output2
