@@ -3,16 +3,14 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --gres=gpu:1g.10gb:1
-#SBATCH -t 01-00
+#SBATCH -t 02-00
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=cogs
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user dbxl46@durham.ac.uk
+#SBATCH --job-name=cogGrid
 
-#SBATCH -e stderr-file
-#SBATCH -o stdout-file
+#SBATCH -e stderr-file4
+#SBATCH -o stdout-file4
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
@@ -26,14 +24,20 @@ export PATH="$VENV/bin:$PATH"
 
 python -c "import pyopencl as cl; print(cl.get_platforms())"
 export PYOPENCL_CTX='0'
+export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
-rm -rf frame_output
-mkdir -p frame_output
-python3.11 -O run_simulation.py 16 10 0.2 80 fte 10 3
-for i in {0..3}; do
-    echo "Started simulation run $i"
-    python3.11 -O run_simulation.py 12 10 0.2 80 fte 10 3
+rm -rf frame_output4
+mkdir -p frame_output4
+mkdir -p output4
+python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 3 output4 25
+for i in {0..18}; do
+  echo "Started simulation run $i"
+  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 3 output4 25
 done
-python3.11 plotting/plot_positions.py 5
+for i in {0...19}; do
+  echo "Started simulation run $i"
+  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 3 output4 25
+done
+python3.11 plotting/plot_positions.py 40 0 frame_output4 output4
