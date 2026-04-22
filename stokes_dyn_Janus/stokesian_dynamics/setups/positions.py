@@ -291,7 +291,7 @@ def pos_setup(n):
 
     elif n==14:
         # roots of unity
-        radius = 2.5
+        radius = 2
         num_spheres = int(np.floor(np.pi/(np.arcsin(1/radius)))) - 3
         num_spheres = 3
 
