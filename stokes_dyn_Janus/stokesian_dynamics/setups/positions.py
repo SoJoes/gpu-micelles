@@ -426,7 +426,7 @@ def pos_setup(n):
 
     elif n == 17:
         # grid of particles (nxn)
-        n = 7  # grid size (n x n)
+        n = 6  # grid size (n x n)
         spacing = 3.5  # distance between particles
 
         # create grid coordinates
