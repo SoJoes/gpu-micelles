@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1
-#SBATCH -c 1
+#SBATCH -c 2
 #SBATCH --gres=gpu:1g.10gb:1
 #SBATCH -t 02-00
 
@@ -28,6 +28,7 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
+python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 1 janusRelax 30
 for i in {0..18}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 1 janusRelax 30
