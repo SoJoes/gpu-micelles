@@ -114,7 +114,6 @@ T_yy = np.concatenate(T_yy_list, axis=0)
 
 num_frames = positions_centres.shape[0]
 num_particles = positions_centres.shape[1]
-num_dumbbells = positions_deltax.shape[1]
 num_spheres = num_particles - num_dumbbells
 
 fplot = FieldPlotter(np.zeros(2), extent=5, npoints=500)
@@ -124,7 +123,6 @@ for frame in range(frameno):
     sphere_positions = positions_centres[frame, 0:num_spheres, :]
     sphere_rotations = particle_rotations[frame, 0:num_spheres, :]
     dumbbell_positions = positions_centres[frame, num_spheres:num_particles, :]
-    dumbbell_deltax = positions_deltax[frame, :, :]
 
     sphere_sizes = np.array([1 for _ in range(num_spheres)])
     dumbbell_sizes = np.array([0.1 for _ in range(num_dumbbells)])
@@ -133,7 +131,7 @@ for frame in range(frameno):
     Ua_out = [[0, 0, 0] for _ in range(num_spheres)]
 
     posdata = [sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes,
-               dumbbell_positions, dumbbell_deltax]
+               dumbbell_positions]
     previous_step_posdata = posdata
 
     # Pictures initialise

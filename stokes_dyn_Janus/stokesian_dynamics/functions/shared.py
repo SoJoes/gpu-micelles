@@ -289,7 +289,7 @@ def format_elapsed_time(elapsed_time):
         return '{:7.1f}'.format(elapsed_time) + "s"
 
 
-def same_setup_as(filename, frameno=0, sphere_size=1, dumbbell_size=0.1,
+def same_setup_as(filename, frameno=0, sphere_size=1.25, dumbbell_size=0.1,
                   local=True):
     """Load posdata list from a saved file at a given frame number."""
 
@@ -301,22 +301,20 @@ def same_setup_as(filename, frameno=0, sphere_size=1, dumbbell_size=0.1,
         data1 = zopen(filename, mode="r")
 
     positions_centres = data1['centres'][:]
-    positions_deltax = data1['deltax'][:]
     particle_rotations = data1['sphere_rotations'][:]
+    dumbbell_sizes = np.array([])
+    dumbbell_positions = np.empty([0, 3])
+    dumbbell_deltax = np.empty([0, 3])
 
     num_particles = positions_centres.shape[1]
-    num_dumbbells = positions_deltax.shape[1]
     num_spheres = num_particles - num_dumbbells
 
     sphere_rotations = particle_rotations[frameno, 0:num_spheres, :]
-    dumbbell_positions = positions_centres[frameno, num_spheres:num_particles, :]
-    dumbbell_deltax = positions_deltax[frameno, :, :]
 
-    sphere_sizes = np.array([1 for _ in range(num_spheres)])
-    dumbbell_sizes = np.array([0.1 for _ in range(num_dumbbells)])
+    sphere_sizes = np.array([sphere_size for _ in range(num_spheres)])
 
     num_particles = positions_centres.shape[1]
-    num_dumbbells = positions_deltax.shape[1]
+    num_dumbbells = 0
     num_spheres = num_particles - num_dumbbells
     sphere_positions = positions_centres[frameno, 0:num_spheres, :]
 
