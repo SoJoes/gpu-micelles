@@ -28,8 +28,9 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
+rm -r angelRelax
 mkdir -p angelRelax
-  python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 2 angelRelax 30
+python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 3 cogRelax 30
 for i in {0..18}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 2 angelRelax 30
