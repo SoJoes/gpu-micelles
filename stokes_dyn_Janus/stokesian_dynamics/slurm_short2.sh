@@ -28,7 +28,6 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
-rm -r angelRelax
 mkdir -p angelRelax
 python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 3 cogRelax 30
 for i in {0..18}; do
