@@ -125,12 +125,11 @@ for frame in range(frameno):
     dumbbell_positions = positions_centres[frame, num_spheres:num_particles, :]
 
     sphere_sizes = np.array([1 for _ in range(num_spheres)])
-    dumbbell_sizes = np.array([0.1 for _ in range(num_dumbbells)])
     Ta_out = [[0, 0, 0] for _ in range(num_spheres)]
     Oa_out = [[0, 0, 0] for _ in range(num_spheres)]
     Ua_out = [[0, 0, 0] for _ in range(num_spheres)]
 
-    posdata = [sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes,
+    posdata = [sphere_sizes, sphere_positions, sphere_rotations,
                dumbbell_positions]
     previous_step_posdata = posdata
 
@@ -142,8 +141,6 @@ for frame in range(frameno):
     ax = fig.add_subplot(111, projection='3d')
     ax.view_init(viewing_angle[0], viewing_angle[1])
     spheres = list()
-    dumbbell_lines = list()
-    dumbbell_spheres = list()
     force_lines = list()
     force_text = list()
     torque_lines = list()
@@ -153,7 +150,6 @@ for frame in range(frameno):
     angular_velocity_lines = list()
     sphere_lines = list()
     sphere_trace_lines = list()
-    dumbbell_trace_lines = list()
     v = viewbox_bottomleft_topright.transpose()
     ax.auto_scale_xyz(v[0], v[1], v[2])
     ax.set_xlim3d(v[0, 0], v[0, 1])
@@ -174,19 +170,12 @@ for frame in range(frameno):
         (spheres, sphere_lines, sphere_trace_lines) = plot_all_spheres(
             ax, frame, posdata, previous_step_posdata, trace_paths,
             sphere_trace_lines, Fa_out[frame])
-    if num_dumbbells > 0:
-        (dumbbell_spheres, dumbbell_lines, dumbbell_trace_lines) = plot_all_dumbbells(
-            ax, frame, posdata, trace_paths, dumbbell_trace_lines,
-            Fb_out[frame], DFb_out[frame])
     if view_labels:
         torque_lines = plot_all_torque_lines(ax, posdata, Ta_out)
         (velocity_lines, velocity_text, sphere_labels) = plot_all_velocity_lines(
             ax, posdata, Ua_out)  # Velocity in green
         angular_velocity_lines = plot_all_angular_velocity_lines(
             ax, posdata, Oa_out)  # Angular velocity in white with green edging
-
-    for q in (dumbbell_lines):
-        q.remove()
 
     ax.set_title("  frame "
                  + ("{:" + str(len(str(num_frames))) + ".0f}").format(start_frame + frame)
