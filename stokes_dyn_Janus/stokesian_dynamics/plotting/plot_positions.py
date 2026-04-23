@@ -70,10 +70,7 @@ trace_paths = 0
 #data1 = np.load(output_folder + filename + ".npz")
 
 pos_centres_list = []
-pos_deltax_list = []
 Fa_out_list = []
-Fb_out_list = []
-DFb_out_list = []
 particle_rotations_list = []
 
 pot_list = []
@@ -89,10 +86,7 @@ for file in latest_file:
     data1 = zarr.open(filename, mode="r")
 
     pos_centres_list.append(data1['centres'][:])
-    pos_deltax_list.append(data1['deltax'][:])
     Fa_out_list.append(data1['Fa'][:])
-    Fb_out_list.append(data1['Fb'][:])
-    DFb_out_list.append(data1['DFb'][:])
     particle_rotations_list.append(data1['sphere_rotations'][:])
 
     pot_list.append(data1['pot'][:])
@@ -107,10 +101,7 @@ for file in latest_file:
     print("has number of frames:", data1['centres'][:].shape)
 
 positions_centres = np.concatenate(pos_centres_list, axis=0)
-positions_deltax = np.concatenate(pos_deltax_list, axis=0)
 Fa_out = np.concatenate(Fa_out_list, axis=0)
-Fb_out = np.concatenate(Fb_out_list, axis=0)
-DFb_out = np.concatenate(DFb_out_list, axis=0)
 particle_rotations = np.concatenate(particle_rotations_list, axis=0)
 
 pot = np.concatenate(pot_list, axis=0)

@@ -28,10 +28,16 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
-rm -rf frame_output3
-mkdir -p frame_output3
-for i in {0..20}; do
+mkdir -p janusRelax
+  python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 1 janusRelax 30
+for i in {0..18}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output3 25
+  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 1 janusRelax 30
 done
-python3.11 plotting/plot_positions.py 6 75 frame_output3 output3
+echo "BEGINNNING TO SHEAR"
+mkdir -p angelRelax
+for i in {0...9}; do
+  echo "Started simulation run $i"
+  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 1 janusRelax 30
+done
+python3.11 plotting/plot_positions.py 30 0 janusRelax janusRelax

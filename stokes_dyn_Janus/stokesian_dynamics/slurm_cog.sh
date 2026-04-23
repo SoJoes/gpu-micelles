@@ -28,16 +28,16 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 
-rm -rf frame_output4
-mkdir -p frame_output4
-mkdir -p output4
-python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 3 output4 25
+mkdir -p cogRelax
+  python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 1 cogRelax 30
 for i in {0..18}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 3 output4 25
+  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 1 cogRelax 30
 done
-for i in {0...19}; do
+echo "BEGINNNING TO SHEAR"
+mkdir -p cogRelax
+for i in {0...9}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 3 output4 25
+  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 1 cogRelax 30
 done
-python3.11 plotting/plot_positions.py 40 0 frame_output4 output4
+python3.11 plotting/plot_positions.py 30 0 cogRelax cogRelax

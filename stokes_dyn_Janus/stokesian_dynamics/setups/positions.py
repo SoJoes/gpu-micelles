@@ -426,8 +426,8 @@ def pos_setup(n):
 
     elif n == 17:
         # grid of particles (nxn)
-        n = 5  # grid size (n x n)
-        spacing = 3.75  # distance between particles
+        n = 7  # grid size (n x n)
+        spacing = 3  # distance between particles
 
         # create grid coordinates
         x = np.linspace(-(n - 1) / 2, (n - 1) / 2, n) * spacing

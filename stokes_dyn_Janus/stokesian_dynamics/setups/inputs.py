@@ -330,7 +330,7 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
              Ot_infinity, Et_infinity) = constant_shear(
                 gammadot=0.05, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.1"
+            desc="shear0.05"
 
     elif n >= 14 and n < 17:
         # amphilic potentials
