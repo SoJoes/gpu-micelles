@@ -134,6 +134,7 @@ for frame in range(frameno):
     previous_step_posdata = posdata
 
     # Pictures initialise
+    '''
     rcParams.update({'font.size': 11})
     rcParams.update({'figure.dpi': 120, 'figure.figsize': [6, 6],
                      'savefig.dpi': 140})
@@ -165,6 +166,7 @@ for frame in range(frameno):
     ax.set_zlabel("$z$")
     fig.tight_layout()
 
+    
     # Pictures
     if num_spheres > 0:
         (spheres, sphere_lines, sphere_trace_lines) = plot_all_spheres(
@@ -183,6 +185,7 @@ for frame in range(frameno):
     ax.set_title(graph_title, loc='center', y=1.055, fontsize=11)
     plt.savefig(frame_folder + "/frame"+str(start_frame + frame)+".png")
     plt.close()
+    '''
 
 
     fplot.write_vtk_file(frame_folder + "/frame"+str(start_frame + frame)+".vts", [
