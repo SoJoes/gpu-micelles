@@ -114,7 +114,7 @@ T_yy = np.concatenate(T_yy_list, axis=0)
 
 num_frames = positions_centres.shape[0]
 num_particles = positions_centres.shape[1]
-num_spheres = num_particles - num_dumbbells
+num_spheres = num_particles
 
 fplot = FieldPlotter(np.zeros(2), extent=5, npoints=500)
 frameno = T_xx.shape[0]
