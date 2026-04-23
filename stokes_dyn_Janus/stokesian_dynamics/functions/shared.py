@@ -307,15 +307,11 @@ def same_setup_as(filename, frameno=0, sphere_size=1.25, dumbbell_size=0.1,
     dumbbell_deltax = np.empty([0, 3])
 
     num_particles = positions_centres.shape[1]
-    num_spheres = num_particles - num_dumbbells
+    num_spheres = num_particles - 0
 
     sphere_rotations = particle_rotations[frameno, 0:num_spheres, :]
 
     sphere_sizes = np.array([sphere_size for _ in range(num_spheres)])
-
-    num_particles = positions_centres.shape[1]
-    num_dumbbells = 0
-    num_spheres = num_particles - num_dumbbells
     sphere_positions = positions_centres[frameno, 0:num_spheres, :]
 
     return (sphere_sizes, sphere_positions, sphere_rotations,
