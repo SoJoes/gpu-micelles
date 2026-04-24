@@ -8,6 +8,8 @@
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
 #SBATCH --job-name=angelGrid
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user dbxl46@durham.ac.uk
 
 #SBATCH -e stderr-file2
 #SBATCH -o stdout-file2
@@ -27,16 +29,8 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
-
-mkdir -p angelRelax
-python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 2 angelRelax 30
-for i in {0..18}; do
-  echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 2 angelRelax 30
-done
 echo "BEGINNNING TO SHEAR"
-mkdir -p angelRelax
-for i in {0...9}; do
+for i in {0...8}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 2 angelRelax 30
 done

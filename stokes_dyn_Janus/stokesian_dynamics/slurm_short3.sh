@@ -8,6 +8,8 @@
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
 #SBATCH --job-name=grid
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user dbxl46@durham.ac.uk
 
 #SBATCH -e stderr-file3
 #SBATCH -o stdout-file3
