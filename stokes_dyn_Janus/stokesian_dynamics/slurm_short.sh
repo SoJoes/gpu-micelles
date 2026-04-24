@@ -29,7 +29,7 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
-for i in {0..7}; do
+for i in {0..3}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 2 angelShear/009 30
 done
