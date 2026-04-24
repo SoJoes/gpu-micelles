@@ -32,8 +32,8 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 mkdir cogShear/009
 echo "BEGINNNING TO SHEAR"
 python3.11 -u -O run_simulation.py 22 14 0.1 50 fte 5 1 cogShear/009 30
-for i in {0..9}; do
+for i in {0..3}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 1 cogShear/009 30
 done
-python3.11 plotting/plot_positions.py 30 0 cogShear/009 cogShear/009
+python3.11 plotting/plot_positions.py 5 0 cogShear/009 cogShear/009
