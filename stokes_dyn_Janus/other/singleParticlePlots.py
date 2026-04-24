@@ -83,6 +83,9 @@ class AmphilicsSolver:
                 + sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
         )
 
+        self.S_sym = sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+        self.D_sym = sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs)
+
 
         # --- gradient ---
         from pytential.symbolic.primitives import grad
@@ -331,14 +334,16 @@ class AmphilicsSolver:
         self.T_yy = actx.to_numpy(
             bind(self.places, self.T_sym_components[3])(actx, sigma=solution, k=self.k))
 
-        self.S = actx.to_numpy(
-            bind(self.places, sym.S(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, qbx_forced_limit=+1))(actx, sigma=solution, k=self.k)
-        )
-        self.D = actx.to_numpy(
-            bind(self.places, sym.D(self.kernel, self.inv_sqrt_w_sigma, lam=self.k_sym, **self.repr_kwargs))(actx,
-                                                                                                              sigma=solution,
-                                                                                                              k=self.k)
-        )
+
+        self.fld = actx.to_numpy(
+            bind(self.places, self.S_sym)(
+                actx, sigma=solution, k=self.k)
+        ).astype(np.float64)
+
+        self.fld = actx.to_numpy(
+            bind(self.places, self.D_sym)(
+                actx, sigma=solution, k=self.k)
+        ).astype(np.float64)
 
         hydro_out = np.array([
             self.fld.flatten(),
