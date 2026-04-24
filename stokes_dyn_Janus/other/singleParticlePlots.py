@@ -335,12 +335,12 @@ class AmphilicsSolver:
             bind(self.places, self.T_sym_components[3])(actx, sigma=solution, k=self.k))
 
 
-        self.fld = actx.to_numpy(
+        self.S = actx.to_numpy(
             bind(self.places, self.S_sym)(
                 actx, sigma=solution, k=self.k)
         ).astype(np.float64)
 
-        self.fld = actx.to_numpy(
+        self.D = actx.to_numpy(
             bind(self.places, self.D_sym)(
                 actx, sigma=solution, k=self.k)
         ).astype(np.float64)
