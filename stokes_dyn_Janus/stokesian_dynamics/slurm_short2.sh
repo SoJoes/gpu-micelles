@@ -36,4 +36,4 @@ for i in {0..3}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 15 0.1 50 fte 5 2 angelShear/002 30
 done
-python3.11 plotting/plot_positions.py 5 0 janusShear/009 janusShear/009
+python3.11 plotting/plot_positions.py 5 0 angelShear/002 angelShear/002
