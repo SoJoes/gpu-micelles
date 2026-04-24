@@ -29,14 +29,8 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
-
-python3.11 -u -O run_simulation.py 17 11 0.1 50 fte 5 1 janusRelax 30
-for i in {0..18}; do
-  echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 1 janusRelax 30
-done
 echo "BEGINNNING TO SHEAR"
-for i in {0..9}; do
+for i in {0..8}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 1 janusRelax 30
 done
