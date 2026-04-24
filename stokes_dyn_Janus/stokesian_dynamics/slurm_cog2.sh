@@ -3,16 +3,16 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --gres=gpu:1g.10gb:1
-#SBATCH -t 01-00
+#SBATCH -t 02-00
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=highShear
+#SBATCH --job-name=cogGrid
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
-#SBATCH -e stderr-file
-#SBATCH -o stdout-file
+#SBATCH -e cog2-err
+#SBATCH -o cog2-out
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
@@ -29,8 +29,11 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
+echo "BEGINNNING TO SHEAR"
+mkdir cogShear/002
+python3.11 -u -O run_simulation.py 22 15 0.1 50 fte 5 3 cogShear/002 30
 for i in {0..3}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 2 angelShear/009 30
+  python3.11 -u -O run_simulation.py 12 15 0.1 50 fte 5 3 cogShear/002 30
 done
-python3.11 plotting/plot_positions.py 10 0 angelShear/009 angelShear/009
+python3.11 plotting/plot_positions.py 5 0 angelShear/002 cogShear/002
