@@ -353,15 +353,33 @@ class AmphilicsSolver:
 
         self.qbx.qbx_fmm_geometry_data.clear_cache(self.qbx)
 
+        hydro_out = np.array([
+            self.fld.flatten(),
+            indicator.flatten(),
+            grad_x.flatten(),
+            grad_y.flatten(),
+            self.T_xx.flatten(),
+            self.T_yy.flatten(),
+            self.T_xy.flatten()
+        ], dtype=np.float64)
+
         return (forces_x, forces_y, torques), hydro_out
 
-filename = "Janus"
+filenames = ["JanusAll", "Angel", "Cog"]
 mySolver = AmphilicsSolver(np.atleast_2d([0,0]), np.array([0]), 1/5, field_extent=5,cogs=1)
 fplot = FieldPlotter(np.zeros(2), extent=5, npoints=500)
-mySolver.update_particles(np.atleast_2d([0,0]), np.array([0]))
-hydrophobic_forces, hydro_out = mySolver.solve()
-fplot.write_vtk_file(filename+".vts", [
+
+for i in range(3):
+    mySolver.cogs = i + 1
+    mySolver.update_particles(np.atleast_2d([0,0]), np.array([0]))
+
+    hydrophobic_forces, hydro_out = mySolver.solve()
+    fplot.write_vtk_file(filenames[i] + ".vts", [
         ("potential", hydro_out[0]),
-    ("S", hydro_out[1]),
-    ("D", hydro_out[2])
-        ])
+        ("indicator", hydro_out[1]),
+        ("nabla_pot_x", hydro_out[2]),
+        ("nabla_pot_y", hydro_out[3]),
+        ("T_xx_component", hydro_out[4]),
+        ("T_xy_component", hydro_out[5]),
+        ("T_yy_component", hydro_out[6]),
+    ]
