@@ -343,7 +343,7 @@ class AmphilicsSolver:
         hydro_out = np.array([
             self.fld.flatten(),
             self.S.flatten(),
-            self.D.flatten()
+            self.D.flatten(),
         ], dtype=np.float64)
 
         self.qbx.qbx_fmm_geometry_data.clear_cache(self.qbx)
