@@ -351,11 +351,8 @@ class AmphilicsSolver:
         return (forces_x, forces_y, torques), hydro_out
 
 filename = "Janus"
-
 mySolver = AmphilicsSolver(np.array([[0,0,0]]), np.array([0]), 1/5, field_extent=5,cogs=1)
-
 fplot = FieldPlotter(np.zeros(2), extent=5, npoints=500)
-
 mySolver.update_particles(np.array([[0,0,0]]), np.array([0]))
 hydrophobic_forces, hydro_out = mySolver.solve()
 fplot.write_vtk_file(filename+".vts", [

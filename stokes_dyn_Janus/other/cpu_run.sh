@@ -2,11 +2,11 @@
 
 #SBATCH -N 1
 #SBATCH -c 1
-#SBATCH -t 00-30
+#SBATCH --gres=gpu:1g.10gb:1
 
-#SBATCH -p cpu
+#SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=relaxation
+#SBATCH --job-name=singleParticle
 
 #SBATCH -e stderr-file
 #SBATCH -o stdout-file
