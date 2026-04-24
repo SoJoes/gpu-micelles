@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=highShearJanus
+#SBATCH --job-name=janusGrid
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
@@ -31,8 +31,9 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 # Run your script
 mkdir janusShear/009
 echo "BEGINNNING TO SHEAR"
+python3.11 -u -O run_simulation.py 20 14 0.1 50 fte 5 1 janusShear/009 30
 for i in {0..9}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 1 janusRelax 30
+  python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 1 janusShear/009 30
 done
-python3.11 plotting/plot_positions.py 30 0 janusRelax janusRelax
+python3.11 plotting/plot_positions.py 30 0 janusShear/009 janusShear/009

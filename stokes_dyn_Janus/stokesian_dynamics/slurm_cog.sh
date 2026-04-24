@@ -29,10 +29,11 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
+mkdir cogShear/009
 echo "BEGINNNING TO SHEAR"
-mkdir -p cogRelax
-for i in {0..8}; do
+python3.11 -u -O run_simulation.py 22 14 0.1 50 fte 5 1 cogShear/009 30
+for i in {0..9}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 3 cogRelax 30
+  python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 1 cogShear/009 30
 done
-python3.11 plotting/plot_positions.py 30 0 cogRelax cogRelax
+python3.11 plotting/plot_positions.py 30 0 cogShear/009 cogShear/009
