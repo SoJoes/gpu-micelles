@@ -10,21 +10,9 @@ from meshmode.dof_array import DOFArray
 from pytential import bind, sym
 from pytential.target import PointsTarget
 
-# my file
-from pytential_handling.my_laplace_kernel import ScreenedLaplaceKernel
 import sys
 from os import devnull
 from sumpy.visualization import FieldPlotter
-
-
-# Disable
-def blockPrint():
-    sys.stdout = open(devnull, 'w')
-
-
-# Restore
-def enablePrint():
-    sys.stdout = sys.__stdout__
 
 # {{{ set some constants for use below
 
