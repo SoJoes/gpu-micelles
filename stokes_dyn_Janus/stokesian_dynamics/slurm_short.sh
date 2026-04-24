@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=relaxation
+#SBATCH --job-name=highShear
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
@@ -29,18 +29,9 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
-
-rm -rf frame_output
-mkdir -p frame_output
-python3.11 -u -O run_simulation.py 19 14 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 2 1 output
-
-python3.11 plotting/plot_positions.py 10 0 frame_output output
+python3.11 -u -O run_simulation.py 21 14 0.1 50 fte 5 2 angelShear/009 30
+for i in {0..8}; do
+  echo "Started simulation run $i"
+  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 2 angelShear/009 30
+done
+python3.11 plotting/plot_positions.py 30 0 angelShear/009 angelShear/009

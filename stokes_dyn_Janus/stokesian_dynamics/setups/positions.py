@@ -587,6 +587,64 @@ def pos_setup(n):
         dumbbell_positions = np.empty([0, 3])
         dumbbell_deltax = np.empty([0, 3])
 
+    elif n == 20:
+        # JANUS RELAXED GRID
+
+        from os import listdir, path
+        grid_folder = "janusRelaxFin"
+
+        # Get all the files in the folder
+        files = listdir(grid_folder)
+
+        # Sort the files by their last modified time
+        files.sort(key=lambda x: path.getmtime(path.join(grid_folder, x)))
+
+        # Get the latest file
+        latest_file = files[-1]
+        filename = grid_folder + '/' + latest_file
+
+        (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
+            same_setup_as(filename, frameno=-1))
+
+
+    elif n == 21:
+        # ANGEL RELAXED GRID
+
+        from os import listdir, path
+        grid_folder = "angelRelaxFin"
+
+        # Get all the files in the folder
+        files = listdir(grid_folder)
+
+        # Sort the files by their last modified time
+        files.sort(key=lambda x: path.getmtime(path.join(grid_folder, x)))
+
+        # Get the latest file
+        latest_file = files[-1]
+        filename = grid_folder + '/' + latest_file
+
+        (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
+            same_setup_as(filename, frameno=-1))
+
+    elif n == 22:
+        # COG RELAXED GRID
+
+        from os import listdir, path
+        grid_folder = "cogRelaxFin"
+
+        # Get all the files in the folder
+        files = listdir(grid_folder)
+
+        # Sort the files by their last modified time
+        files.sort(key=lambda x: path.getmtime(path.join(grid_folder, x)))
+
+        # Get the latest file
+        latest_file = files[-1]
+        filename = grid_folder + '/' + latest_file
+
+        (sphere_sizes, sphere_positions, sphere_rotations, dumbbell_sizes, dumbbell_positions, dumbbell_deltax) = (
+            same_setup_as(filename, frameno=-1))
+
     else:
         throw_error("The position setup number you have requested (" + str(n) +
                     ") is not listed in setups/positions.py.")
