@@ -31,7 +31,7 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 # Run your script
 echo "BEGINNNING TO SHEAR"
 mkdir -p cogRelax
-for i in {0...8}; do
+for i in {0..8}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 3 cogRelax 30
 done

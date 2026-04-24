@@ -36,7 +36,7 @@ for i in {0..18}; do
   python3.11 -u -O run_simulation.py 12 11 0.1 50 fte 5 1 janusRelax 30
 done
 echo "BEGINNNING TO SHEAR"
-for i in {0...9}; do
+for i in {0..9}; do
   echo "Started simulation run $i"
   python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 1 janusRelax 30
 done
