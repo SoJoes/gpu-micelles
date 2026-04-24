@@ -29,9 +29,8 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
-python3.11 -u -O run_simulation.py 21 14 0.1 50 fte 5 2 angelShear/009 30
-for i in {0..8}; do
+for i in {0..7}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 13 0.1 50 fte 5 2 angelShear/009 30
+  python3.11 -u -O run_simulation.py 12 14 0.1 50 fte 5 2 angelShear/009 30
 done
-python3.11 plotting/plot_positions.py 30 0 angelShear/009 angelShear/009
+python3.11 plotting/plot_positions.py 10 0 angelShear/009 angelShear/009
