@@ -10,6 +10,7 @@ plot_particle_positions_video.py.
 """
 
 # Useful command:  scp -r dbxl46@ncc1.clients.dur.ac.uk:pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/frame_output /mnt/c/Users/sj000/Desktop/frame_output
+# another:  rsync -a --info=progress2 dbxl46@ncc1.clients.dur.ac.uk:pytential_stokes/pytential_stokes/stokes_dyn_Janus/stokesian_dynamics/*Shear /mnt/c/Users/sj000/Desktop/frame_output
 
 import matplotlib.pyplot as plt
 import numpy as np
