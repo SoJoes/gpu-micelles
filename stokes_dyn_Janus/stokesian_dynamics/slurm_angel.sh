@@ -11,8 +11,8 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
-#SBATCH -e stderr-file2
-#SBATCH -o stdout-file2
+#SBATCH -e stderr-angel
+#SBATCH -o stdout-angel
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
@@ -30,10 +30,10 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 echo "BEGINNNING TO SHEAR"
-mkdir angelShear/0076
-python3.11 -u -O run_simulation.py 21 17 0.1 50 fte 5 2 angelShear/0076 30
+mkdir angelShear/0038
+python3.11 -u -O run_simulation.py 21 19 0.1 50 fte 5 2 angelShear/0038 30
 for i in {0..3}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 17 0.1 50 fte 5 2 angelShear/0076 30
+  python3.11 -u -O run_simulation.py 12 19 0.1 50 fte 5 2 angelShear/0038 30
 done
-python3.11 plotting/plot_positions.py 5 0 angelShear/0076 angelShear/0076
+python3.11 plotting/plot_positions.py 5 0 angelShear/0038 angelShear/0038

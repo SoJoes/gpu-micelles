@@ -7,7 +7,7 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=cogGrid
+#SBATCH --job-name=cogGrid2
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
@@ -30,10 +30,10 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 echo "BEGINNNING TO SHEAR"
-mkdir cogShear/0013
-python3.11 -u -O run_simulation.py 22 18 0.1 50 fte 5 3 cogShear/0013 30
+mkdir cogShear/0059
+python3.11 -u -O run_simulation.py 22 20 0.1 50 fte 5 3 cogShear/0059 30
 for i in {0..3}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 18 0.1 50 fte 5 3 cogShear/0013 30
+  python3.11 -u -O run_simulation.py 12 20 0.1 50 fte 5 3 cogShear/0059 30
 done
-python3.11 plotting/plot_positions.py 5 0 angelShear/0013 cogShear/0013
+python3.11 plotting/plot_positions.py 5 0 cogShear/0059 cogShear/0059
