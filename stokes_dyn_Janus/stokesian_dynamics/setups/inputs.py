@@ -360,6 +360,13 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
                 gammadot=0.076, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
             desc="shear0.076"
+        elif n == 18:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.013, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.013"
 
 
 
