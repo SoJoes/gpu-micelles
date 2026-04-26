@@ -453,6 +453,41 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
                 gammadot=0.067, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
             desc="shear0.067"
+        elif n ==31:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0439, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0439"
+        elif n ==32:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0871, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0871"
+        elif n ==33:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0824, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0824"
+        elif n ==34:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.038, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.038"
+        elif n ==35:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.046, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.046"
 
 
 

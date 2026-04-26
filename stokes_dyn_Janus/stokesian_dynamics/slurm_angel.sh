@@ -29,15 +29,11 @@ export PYOPENCL_CTX='0'
 export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
-echo "drawing plots"
-python3.11 plotting/plot_positions.py 20 0 janusRelax janusRelax
-python3.11 plotting/plot_positions.py 20 0 cogRelax cogRelax
-python3.11 plotting/plot_positions.py 20 0 angelRelax angelRelax
 echo "BEGINNNING TO SHEAR"
-mkdir angelShear/0098
-python3.11 -u -O run_simulation.py 21 26 0.1 50 fte 5 2 angelShear/0098 30
+mkdir angelShear/00348
+python3.11 -u -O run_simulation.py 21 28 0.1 50 fte 5 2 angelShear/00348 30
 for i in {0..3}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 26 0.1 50 fte 5 2 angelShear/0098 30
+  python3.11 -u -O run_simulation.py 12 28 0.1 50 fte 5 2 angelShear/00348 30
 done
-python3.11 plotting/plot_positions.py 5 0 angelShear/0098 angelShear/0098
+python3.11 plotting/plot_positions.py 5 0 angelShear/00348 angelShear/00348

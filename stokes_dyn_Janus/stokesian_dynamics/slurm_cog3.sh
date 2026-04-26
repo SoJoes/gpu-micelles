@@ -7,12 +7,12 @@
 
 #SBATCH -p ug-gpu-small
 #SBATCH --qos=short
-#SBATCH --job-name=cogGrid
+#SBATCH --job-name=cogGrid3
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user dbxl46@durham.ac.uk
 
-#SBATCH -e stderr-file4
-#SBATCH -o stdout-file4
+#SBATCH -e cog3-err
+#SBATCH -o cog3-out
 
 source /etc/profile
 module load intel-oneapi/2022.1.2/vtune
@@ -30,10 +30,10 @@ export PYOPENCL_COMPILER_OUTPUT='1'
 
 # Run your script
 echo "BEGINNNING TO SHEAR"
-mkdir cogShear/00824
-python3.11 -u -O run_simulation.py 22 33 0.1 50 fte 5 3 cogShear/00824 30
+mkdir cogShear/0046
+python3.11 -u -O run_simulation.py 22 35 0.1 50 fte 5 3 cogShear/0046 30
 for i in {0..3}; do
   echo "Started simulation run $i"
-  python3.11 -u -O run_simulation.py 12 33 0.1 50 fte 5 3 cogShear/00824 30
+  python3.11 -u -O run_simulation.py 12 35 0.1 50 fte 5 3 cogShear/0046 30
 done
-python3.11 plotting/plot_positions.py 5 0 cogShear/00824 cogShear/00824
+python3.11 plotting/plot_positions.py 5 0 cogShear/0046 cogShear/0046
