@@ -488,6 +488,48 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
                 gammadot=0.046, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
             desc="shear0.046"
+        elif n ==36:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0677, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0677"
+        elif n ==37:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0628, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0628"
+        elif n ==38:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0700, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0700"
+        elif n ==39:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.029, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.029"
+        elif n ==40:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.0315, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.0315"
+        elif n ==41:
+            # Constant shear
+            (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
+             Ot_infinity, Et_infinity) = constant_shear(
+                gammadot=0.034, frameno=frameno, timestep=timestep,
+                num_spheres=num_spheres)
+            desc="shear0.034"
 
 
 
