@@ -321,45 +321,45 @@ def input_ftsuoe(n, posdata, frameno, timestep, last_velocities,
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
              Ot_infinity, Et_infinity) = constant_shear(
-                gammadot=0.005, frameno=frameno, timestep=timestep,
+                gammadot=0.00796, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.005"
+            desc="shear0.00796"
         elif n == 13:
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
              Ot_infinity, Et_infinity) = constant_shear(
-                gammadot=0.05, frameno=frameno, timestep=timestep,
+                gammadot=0.0925, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.05"
+            desc="shear0.0925"
 
         elif n == 14:
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
              Ot_infinity, Et_infinity) = constant_shear(
-                gammadot=0.09, frameno=frameno, timestep=timestep,
+                gammadot=0.0842, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.09"
+            desc="shear0.0842"
         elif n == 15:
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
              Ot_infinity, Et_infinity) = constant_shear(
-                gammadot=0.02, frameno=frameno, timestep=timestep,
+                gammadot=0.0351, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.02"
+            desc="shear0.0351"
         elif n == 16:
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
              Ot_infinity, Et_infinity) = constant_shear(
-                gammadot=0.04, frameno=frameno, timestep=timestep,
+                gammadot=0.037, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.04"
+            desc="shear0.037"
         elif n == 17:
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
              Ot_infinity, Et_infinity) = constant_shear(
-                gammadot=0.076, frameno=frameno, timestep=timestep,
+                gammadot=0.039, frameno=frameno, timestep=timestep,
                 num_spheres=num_spheres)
-            desc="shear0.076"
+            desc="shear0.039"
         elif n == 18:
             # Constant shear
             (Ea_in, U_infinity, O_infinity, centre_of_background_flow,
