@@ -246,6 +246,9 @@ class AmphilicsSolver:
             theta = actx.np.arctan2(rot_y, rot_x)
             bc = (actx.np.cos(self.cogs*theta)+1)/2
 
+            if self.cogs == 4:
+                bc = (actx.np.cos(3*theta) + actx.np.cos(theta) +2)/4
+
             bc_data.append(bc)
 
         return DOFArray(actx, tuple(bc_data))
